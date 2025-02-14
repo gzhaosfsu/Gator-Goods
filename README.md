@@ -16,7 +16,7 @@
 | Student Name | School Email | GitHub Username |
 |    :---:     |     :---:     |     :---:       |
 | member1      |        amingus@sfsu.edu       |     AnthonyMingus            |
-| member2      |               |                 |
+|  923578939   |        gzhao@sfsu.edu           |   Garvin Zhao
 | member3      |               |                 |
 | member4      |               |                 |
 | member5      |               |                 |
