@@ -17,7 +17,7 @@
 |    :---:     |     :---:     |     :---:       |
 | member1      |        amingus@sfsu.edu       |     AnthonyMingus            |
 |  923578939   |        gzhao@sfsu.edu           |   Garvin Zhao
-| member3      |               |                 |
+| Martha Martin      | mmartinpablo@sfsu.edu           |    mmartin440            |
 | member4      |               |                 |
 | member5      |               |                 |
 
