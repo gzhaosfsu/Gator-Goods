@@ -7,16 +7,19 @@
 
 # Below is a list of items required. Missing items will causes points to be deducted from multiple milestone submissions.
 
-1. Server URL or IP
-2. SSH username
-3. SSH password or key.
+1. 54.174.99.172
+2. ubuntu
+3. SSH password or key. asouza-rsa key
     <br> If a ssh key is used please upload the key to the credentials folder.
-4. Database URL or IP and port used.
+4. csc648-database-1.c7mu6oi60tbe.us-east-1.rds.amazonaws.com
+5. port - 3306
     <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-5. Database username
-6. Database password
-7. Database name (basically the name that contains all your tables)
+5. db_manager
+6. AKIAS6J7QBONDK7EYEKW
+7. csc648-database-1 (basically the name that contains all your tables)
 8. Instructions on how to use the above information.
+To connect to server:
+   ssh -i (asouza-rsa key) ubuntu@54.174.99.172
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
