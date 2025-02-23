@@ -12,24 +12,23 @@ const AboutGarvin= ({}) => {
         <>
         <div className="App"> 
                 <Header/>
-                <h1>Garvin here: Delete this h1 after updating</h1>
+                <h1>Garvin here:</h1>
                 <div className="about-container">
                     <div className="about-info">
                         <div className='team-heading-container'>
-                            <div className='team-heading'>MARTHA MARTIN</div>
+                            <div className='team-heading'>Garvin Zhao</div>
                             <div className='highlight-2'></div>
                         </div>
                         <div className="about-description">
                             <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                                It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                Hi everyone my name is Garvin Zhao and I will be your Database Manager as well as all associated roles
+                                with our server side operations for the most part. I'm a senior in Computer Science. I hope you all enjoy our services and that it
+                                made your life as a student/member in SFSU a bit more convenient.
+                            </p>
                         </div>
                         <div className="social-media"> 
-                            <a href="https://www.linkedin.com/in/martha-martin-pablo/" target="_blank"><img src={linkedin} alt="" /></a>
-                            <a href="https://github.com/mmartin440" target="_blank"><img src={github} alt="" /></a>
+                            <a href="https://www.linkedin.com/in/garvin-zhao/" target="_blank"><img src={linkedin} alt="" /></a>
+                            <a href="https://github.com/gzhaosfsu" target="_blank"><img src={github} alt="" /></a>
                             
                         </div>
                     </div>
