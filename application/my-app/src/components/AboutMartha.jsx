@@ -1,7 +1,7 @@
 import React from "react"
 import Header from "./Header"
 import Footer from "./Footer"
-import portrait from "./images/portrait.png"
+import portrait from "./images/marthaPortrait.jpeg"
 import linkedin from "./images/linkedin1.png"
 import github from "./images/github1.png"
 
@@ -20,12 +20,14 @@ const AboutMartha = ({}) => {
                             <div className='highlight-2'></div>
                         </div>
                         <div className="about-description">
+                            <p> <em> Vanilla Javascript | React | HTML | CSS | Java  </em></p>
                             <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                                It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                From a young age, I have always been passionate about technology, constantly exploring and learning
+                                on my own. As a self-taught learner, I developed a strong foundation in tech, which ultimately led me
+                                to pursue a degree in Computer Science at San Francisco State University. My goal is to deepen my knowledge, 
+                                refine my skills and use technology to create meaningful solutions. I aspire to find a career that aligns with
+                                my values, allowing me to make a positive impact in my community through innovation and problem-solving. 
+                            </p>
                         </div>
                         <div className="social-media"> 
                             <a href="https://www.linkedin.com/in/martha-martin-pablo/" target="_blank"><img src={linkedin} alt="" /></a>
@@ -34,7 +36,7 @@ const AboutMartha = ({}) => {
                         </div>
                     </div>
                     <div className="about-img" > 
-                        <img src={portrait} alt="" />
+                        <img src={portrait} alt="" style={{width:"100%", height: "95%"}}/>
                     </div>
                     
                 </div>

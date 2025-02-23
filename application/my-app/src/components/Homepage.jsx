@@ -26,16 +26,16 @@ const Homepage = ({}) => {
                             <Link to="/aboutMartha" className="about-text">Martha Martin</Link>
                         </div>
                         <div className="about-card">
-                            <Link to="/aboutAnthony" className="about-text">Anthony</Link>
+                            <Link to="/aboutAnthony" className="about-text">Anthony Mingus</Link>
                         </div>
                         <div className="about-card">
-                            <Link to="/aboutGarvin" className="about-text">Garvin</Link>
+                            <Link to="/aboutGarvin" className="about-text">Garvin Zhao</Link>
                         </div>
                         <div className="about-card">
-                            <Link to="/aboutJace" className="about-text">Jace</Link>
+                            <Link to="/aboutJace" className="about-text">Jaideen-Jace Bondoc</Link>
                         </div>
                         <div className="about-card">
-                            <Link to="/aboutVansh" className="about-text">Vansh</Link>
+                            <Link to="/aboutVansh" className="about-text">Vansh Virani</Link>
                         </div>
                     </div>
                 </div>

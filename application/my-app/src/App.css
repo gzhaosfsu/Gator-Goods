@@ -11,10 +11,15 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+.body-container{
+  height: 65vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95vw;
+}
 .header{
   background-color: #231161;
-  height: 150px;
+  height: 12vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -39,7 +44,11 @@ body {
 
 .logo-container{
   align-self: flex-start;
-  padding: 0px 0px 20px 48px; 
+  /* padding: 0px 0px 20px 48px;  */
+  margin-left: auto;
+  margin-right: auto;
+  width: 92vw;
+  padding-bottom: 20px;
   
 }
 .logo-style{
@@ -136,7 +145,7 @@ body {
   bottom: 0;
   right: 0;
   background-color: #71717A;
-  height: 8%;
+  height: 10vh;
   display: flex;
   align-items: center;
 }
@@ -150,6 +159,10 @@ body {
   padding-top: 100px;
   display: flex;
   flex-direction: row;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95vw;
+  height: 70vh;
 }
 
 .about-info{
@@ -160,7 +173,8 @@ body {
   /* padding-left: 50px;
   padding-top: 25px;
   padding-right: 50px; */
-  padding: 20px 50px 50px 50px;
+  padding: 20px 100px 50px 50px;
+  line-height: 1.5;
 }
 
 .social-media{

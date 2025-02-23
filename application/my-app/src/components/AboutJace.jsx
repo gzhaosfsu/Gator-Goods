@@ -33,7 +33,7 @@ const AboutJace= ({}) => {
                         </div>
                     </div>
                     <div className="about-img" > 
-                        <img src={portrait} alt="" />
+                        <img src={portrait} alt="" style={{width:"100%", height: "95%"}}/>
                     </div>
                     
                 </div>
