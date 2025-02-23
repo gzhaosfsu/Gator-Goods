@@ -1,0 +1,28 @@
+import { useState } from 'react'
+import './App.css'
+import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
+import AboutMartha from './components/AboutMartha'
+import Homepage from "./components/Homepage"
+import AboutAnthony from './components/AboutAnthony'
+import AboutGarvin from './components/AboutGarvin'
+import AboutJace from './components/AboutJace'
+import AboutVansh from './components/AboutVansh'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage/>}/>
+        <Route path="/aboutMartha" element={<AboutMartha/>}/>
+        <Route path="/aboutAnthony" element={<AboutAnthony/>}/>
+        <Route path="/aboutGarvin" element={<AboutGarvin/>}/>
+        <Route path="/aboutJace" element={<AboutJace/>}/>
+        <Route path="/aboutVansh" element={<AboutVansh/>}/>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
