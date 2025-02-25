@@ -12,7 +12,7 @@ const AboutGarvin= ({}) => {
         <>
         <div className="App"> 
                 <Header/>
-                <h1>Garvin here:</h1>
+                <h1>Hola</h1>
                 <div className="about-container">
                     <div className="about-info">
                         <div className='team-heading-container'>
@@ -27,7 +27,7 @@ const AboutGarvin= ({}) => {
                             </p>
                         </div>
                         <div className="social-media"> 
-                            <a href="https://www.linkedin.com/in/garvin-zhao/" target="_blank"><img src={linkedin} alt="" /></a>
+                            <a href="https://www.linkedin.com/in/garvin-zhao-2a4106305" target="_blank"><img src={linkedin} alt="" /></a>
                             <a href="https://github.com/gzhaosfsu" target="_blank"><img src={github} alt="" /></a>
                             
                         </div>
