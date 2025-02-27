@@ -1,10 +1,36 @@
+require('dotenv').config();
 const express = require('express');
-const db = require('./db');
+const mysql = require('mysql2');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Route to fetch data from MySQL
+app.use(cors());
+app.use(express.json())
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+// MySQL Database Connection
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 3306
+});
+
+db.connect(err => {
+    if (err) {
+        console.error("Database connection failed:", err.stack);
+        return;
+    }
+    console.log("Connected to MySQL Database.");
+});
+
+// Sample API Route
 app.get('/users', (req, res) => {
     db.query('SELECT * FROM users', (err, results) => {
         if (err) {
@@ -16,5 +42,5 @@ app.get('/users', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
