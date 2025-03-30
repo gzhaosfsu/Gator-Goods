@@ -1,17 +1,37 @@
 import React from "react"
-const Header = ({}) => {
-  
+import SearchBar from "./SearchBar"
+import Categories from "./Categories"
+import logo from "./images/LogoGG.png"
+import {Link } from 'react-router-dom'
 
+
+
+const Header = ({setSearchResults}) => {
+  
+    
+    
     return (
        <>
-       <div className="header">
-            <div className="btn-logIn-container">
-                <button className="btn-logIn">Login</button>
+        <div className="header-container">
+            <div className="header">
+                <div className="inner-header" > 
+                    <div className="logo">
+                        <Link to="/">
+                            <img src={logo} alt="Gator Goods logo" style={{width:"100%", height:"100%"}} />
+                        </Link>
+                    </div>
+                    <div className="header-box">
+                        <div className="filter-container">
+                            <Categories/>
+                            <SearchBar setSearchResults={setSearchResults} />
+                        </div>
+                        <div className="logIn-container">
+                            <button className="btn-logIn">Login</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="logo-container">
-                <a href="/"><div className="logo-style">SFSU SELL N BUY LOGO</div></a>
-            </div>
-       </div>
+        </div>
        </>
     )
 }
