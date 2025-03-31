@@ -6,9 +6,7 @@ import {Link } from 'react-router-dom'
 
 
 
-const Header = ({setSearchResults}) => {
-  
-    
+const Header = ({setSearchResults, setSelectedCategory}) => {
     
     return (
        <>
@@ -22,7 +20,7 @@ const Header = ({setSearchResults}) => {
                     </div>
                     <div className="header-box">
                         <div className="filter-container">
-                            <Categories/>
+                            <Categories setSelectedCategory={setSelectedCategory} />
                             <SearchBar setSearchResults={setSearchResults} />
                         </div>
                         <div className="logIn-container">

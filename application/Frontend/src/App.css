@@ -248,3 +248,49 @@ body {
 .social-media img:hover{
   transform: scale(1.2)
 }
+
+
+
+
+/* CSS for Categories */
+.categories-container {
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  text-align: center;
+  max-width: 100px;
+  margin: 0 auto;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.categories-title {
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.categories-label {
+  font-size: 12px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.categories-dropdown {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 10px;
+  margin-bottom: 5px;
+}
+
+.categories-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}

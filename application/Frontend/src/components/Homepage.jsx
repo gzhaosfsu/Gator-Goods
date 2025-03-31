@@ -12,8 +12,10 @@ import homePageImg from "./images/homePage.png"
 const Homepage = ({}) => {
   
     // const [filteredData, setFilteredData] = useState([]); 
-    const [searchResults, setSearchResults] = useState ([]); 
+    const [searchResults, setSearchResults] = useState ([]);
     
+    // <Header setSelectedCategory={setSelectedCategory} />
+    // const [selectedCategory, setSelectedCategory] = useState("");
 
     return (
         <>
