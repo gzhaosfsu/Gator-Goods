@@ -10,7 +10,7 @@ const Categories = ({ setSelectedCategory }) => {
     const [selected, setSelected] = useState("");
 
     // useEffect(() => {
-    //     fetch("http://localhost:3000/api/categories") // GET request to the backend
+    //     fetch("http://localhost:5000/api/categories") // GET request to the backend
     //       .then((response) => response.json())
     //       .then((data) => setCategories(data))
     //       .catch((error) => console.error("Error fetching categories:", error)); // used to handle errors
