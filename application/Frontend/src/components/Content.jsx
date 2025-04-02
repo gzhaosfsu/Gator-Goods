@@ -1,20 +1,22 @@
-import React from "react"
-import {Link } from 'react-router-dom'
-import homePageImg from "./images/homePage.png"
+// Content.jsx
+import React from "react";
+import homePageImg from "./images/homePage.png";
+import FeaturedProducts from "../FeaturedProducts"; // Adjust path if needed
 
+const Content = () => {
+  return (
+    <div className="content-container">
+      {/* Software Engineering Banner Image */}
+      <img
+        className="homepage-img"
+        src={homePageImg}
+        alt="Software Engineering Class SFSU"
+      />
 
-const Content = ({searchResults}) => {
-  
+      {/* Render the Featured Products section below the banner */}
+      <FeaturedProducts />
+    </div>
+  );
+};
 
-    return (
-        <>
-        <img className="homepage-img" src={homePageImg} />
-        {
-            (searchResults.length === 0 ? "Old products" : " We have products")
-        }
-        
-        </>
-    )
-
-}
-export default Content
+export default Content;
