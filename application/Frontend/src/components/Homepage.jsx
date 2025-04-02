@@ -16,17 +16,17 @@ const Homepage = ({}) => {
   
     // const [filteredData, setFilteredData] = useState([]); 
     const [searchResults, setSearchResults] = useState ([]);
-    
-    // <Header setSelectedCategory={setSelectedCategory} />
-    // const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+
+
     const featuredProducts = dummyData.filter(product => product.isFeatured);
     console.log("Featured Products:", featuredProducts);
 
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults}/>
-                <Content searchResults={searchResults}/>
+                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory}/>
+                <Content searchResults={searchResults} selectedCategory={selectedCategory} />
                 <Footer/>
             </div>  
         </>
