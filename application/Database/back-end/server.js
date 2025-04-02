@@ -30,17 +30,54 @@ db.connect(err => {
     console.log("Connected to MySQL Database.");
 });
 
-// Sample API Route
-app.get('/users', (req, res) => {
-    db.query('SELECT * FROM users', (err, results) => {
+
+// Search Listings by Title
+app.get('/search.title', (req, res) => {
+    const searchTerm = req.query.q; // will come after /search.category?q=...
+    if (!searchTerm) {
+        return res.status(400).json({ error: "Missing search term" });
+    }
+
+    const query = "SELECT * FROM listing WHERE product_id IN (SELECT product_id FROM product WHERE title LIKE ?)";
+    const searchValue = `%${searchTerm}%`;
+
+    db.query(query, [searchValue], (err, results) => {
         if (err) {
-            console.error(err);
+            console.error("Database query failed:", err);
             return res.status(500).json({ error: "Database query failed" });
         }
         res.json(results);
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+// Search Listings by Category
+app.get('/search.category', (req, res) => {
+    const searchTerm = req.query.q; // will come after /search.category?q=...
+    if (!searchTerm) {
+        return res.status(400).json({ error: "Missing search term" });
+    }
+
+    const query = "SELECT * FROM listing WHERE product_id IN (SELECT product_id FROM product WHERE category LIKE ?)";
+    const searchValue = `%${searchTerm}%`;
+
+    db.query(query, [searchValue], (err, results) => {
+        if (err) {
+            console.error("Database query failed:", err);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+        res.json(results);
+    });
+});
+
+// Search for all Listings
+app.get('/search.all', (req, res) => {
+    const query = ' SELECT * FROM listing'
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Database query failed:", err);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+        res.json(results);
+    });
 });
