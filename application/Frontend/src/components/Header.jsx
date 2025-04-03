@@ -6,7 +6,7 @@ import {Link } from 'react-router-dom'
 
 
 
-const Header = ({setSearchResults, setSelectedCategory}) => {
+const Header = ({setSearchResults, setSelectedCategory, selectedCategory}) => {
     
     return (
        <>
