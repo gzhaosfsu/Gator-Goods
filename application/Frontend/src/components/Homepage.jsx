@@ -25,8 +25,8 @@ const Homepage = ({}) => {
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory}/>
-                <Content searchResults={searchResults} selectedCategory={selectedCategory} />
+                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
+                <Content searchResults={searchResults} />
                 <Footer/>
             </div>  
         </>
