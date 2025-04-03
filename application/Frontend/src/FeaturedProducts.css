@@ -37,7 +37,7 @@
   
   .featured-product-image {
     width: 100%;
-    height: auto;
+    height: 180px; 
     object-fit: cover;
     margin-bottom: 0.5rem;
     border-radius: 4px;
