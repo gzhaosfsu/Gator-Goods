@@ -41,18 +41,32 @@ app.get('/search.title', (req, res) => {
     const query = "SELECT * FROM listing WHERE product_id IN (SELECT product_id FROM product WHERE title LIKE ?)";
     const searchValue = `%${searchTerm}%`;
 
-    db.query(query, [searchValue], (err, results) => {
-        if (err) {
-            console.error("Database query failed:", err);
-            return res.status(500).json({ error: "Database query failed" });
+    const [rows] = db.query(query, [listingId]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Listing not found" });
         }
-        res.json(results);
+
+        const listing = rows[0];
+
+        // Convert BLOB (thumbnail) to Base64 if it exists
+        if (listing.thumbnail) {
+            listing.thumbnail = `data:image/png;base64,${listing.thumbnail.toString("base64")}`;
+        }
+
+        res.json(listing);
+        // db.query(query, [searchValue], (err, results) => {
+        // if (err) {
+        //     console.error("Database query failed:", err);
+        //     return res.status(500).json({ error: "Database query failed" });
+        // }
+        // res.json(results);
     });
-});
+// });
 
 
 // Search Listings by Category
-app.get('/search.category', (req, res) => {
+app.get('/category', (req, res) => {
     const searchTerm = req.query.q; // will come after /search.category?q=...
     if (!searchTerm) {
         return res.status(400).json({ error: "Missing search term" });
@@ -81,3 +95,19 @@ app.get('/search.all', (req, res) => {
         res.json(results);
     });
 });
+
+/*        const [rows] = await db.query(query, [listingId]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Listing not found" });
+        }
+
+        const listing = rows[0];
+
+        // Convert BLOB (thumbnail) to Base64 if it exists
+        if (listing.thumbnail) {
+            listing.thumbnail = `data:image/png;base64,${listing.thumbnail.toString("base64")}`;
+        }
+
+        res.json(listing); */
+

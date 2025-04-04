@@ -24,7 +24,7 @@ const Categories = ({ setSelectedCategory }) => {
       console.log("Searching for:", selectedCategory);
       
       // THIS FETCH CALLS THE BACKEND TO GET PRODUCTS BASED ON SELECTED CATEGORY
-      // fetch(`http://localhost:5000/api/products/${selectedCategory}`)
+      // fetch(`http://localhost:5000/api/category/${selectedCategory}`)
       //   .then((response) => response.json())
       //   .then((data) => console.log("Products:", data))
       //   .catch((error) => console.error("Error fetching products:", error));
