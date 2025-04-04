@@ -16,18 +16,34 @@ const Homepage = ({}) => {
   
     // const [filteredData, setFilteredData] = useState([]); 
     const [searchResults, setSearchResults] = useState ([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [isSearching, setIsSearching] = useState(""); 
+
+    // console.log("Jace clicked option "  + selectedCategory); 
+    const productsTitle  = searchResults.map(i => i.title); 
+    console.log("MARTHA return array : " + productsTitle); 
+
+    
+
+    useEffect(() => {
+        setIsSearching("SerachBarResult"); 
+
+    },[searchResults]); 
+    useEffect(() => {
+        setIsSearching("selectedCategory"); 
+
+    },[selectedCategory]); 
 
 
-    const featuredProducts = dummyData.filter(product => product.isFeatured);
-    console.log("Featured Products:", featuredProducts);
+    // const featuredProducts = dummyData.filter(product => product.isFeatured);
+    // console.log("Featured Products:", featuredProducts);
 
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
-                <Content searchResults={searchResults} />
-                <Footer/>
+                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching}/>
+                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching}/>
+                <Footer />
             </div>  
         </>
     )

@@ -6,22 +6,27 @@ import {Link } from 'react-router-dom'
 
 
 
-const Header = ({setSearchResults, setSelectedCategory, selectedCategory}) => {
+const Header = ({setSearchResults, setSelectedCategory, setIsSearching}) => {
     
+    const featuredItems = ()=> {
+        setIsSearching(""); 
+        setSearchResults([]); 
+        setSelectedCategory([]); 
+    }    
     return (
        <>
         <div className="header-container">
             <div className="header">
                 <div className="inner-header" > 
                     <div className="logo">
-                        <Link to="/">
+                        <Link onClick={featuredItems} to="/" >
                             <img src={logo} alt="Gator Goods logo" style={{width:"100%", height:"100%"}} />
                         </Link>
                     </div>
                     <div className="header-box">
                         <div className="filter-container">
-                            <Categories setSelectedCategory={setSelectedCategory} />
-                            <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory} />
+                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults}/>
+                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory}/>
                         </div>
                         <div className="logIn-container">
                             <button className="btn-logIn">Login</button>
