@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import "../App.css" // CSS file for styling
 import { dummyData } from "../dummyData";
 
-const Categories = ({ setSelectedCategory, setSearchResults}) => {
+const Categories = ({ setSelectedCategory, setSearchResults, setIsSearching}) => {
     // // stores fetched categories
     // const [categories, setCategories] = useState([]); 
 
@@ -15,10 +15,11 @@ const Categories = ({ setSelectedCategory, setSearchResults}) => {
     const submitCategory = (selectedCategory) => {
       if (!selectedCategory) return; // prevents an empty selection
       setSearchResults([]); 
+      setIsSearching("selectedCategory"); 
   
       setSelectedCategory(dummyData); 
       // setSelectedCategory(selectedCategory);
-      // console.log("Searching for:", selectedCategory);
+      console.log("Searching for:", selectedCategory);
       
       // THIS FETCH CALLS THE BACKEND TO GET PRODUCTS BASED ON SELECTED CATEGORY
       // fetch(`http://localhost:5000/api/category/${selectedCategory}`)

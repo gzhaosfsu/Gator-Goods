@@ -4,31 +4,9 @@ import homePageImg from "./images/homePage.png";
 import FeaturedProducts from "./FeaturedProducts"; // Adjust path if needed
 
 const Content = ({ searchResults, selectedCategory, isSearching}) => {
-  // Filter the products based on search term and category
-  // let filteredProducts = searchResults;
 
+  console.log("Vansh got martha data  " + searchResults.length)
 
-
-
-
-  // if (searchTerm && searchTerm.trim() !== "") {
-  //   filteredProducts = filteredProducts.filter(
-  //     (product) =>
-  //       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  // }
-
-  // if (selectedCategory && selectedCategory.trim() !== "") {
-  //   filteredProducts = filteredProducts.filter(
-  //     (product) => product.category === selectedCategory
-  //   );
-  // }
-
-  // Determine if we are in a "search state"
-  // const isSearching =
-  //   (searchTerm && searchTerm.trim() !== "") ||
-  //   (selectedCategory && selectedCategory.trim() !== "");
 
   if (isSearching == "selectedCategory") {
     if (selectedCategory.length > 0) {
@@ -53,20 +31,11 @@ const Content = ({ searchResults, selectedCategory, isSearching}) => {
           </div>
         </div>
       );
-    } else {
-      return (
-        <div className="content-container">
-          <img
-            className="homepage-img"
-            src={homePageImg}
-            alt="Software Engineering Class SFSU"
-          />
-          <FeaturedProducts />
-        </div>
-      );
-    }
-  } 
-  if (isSearching === "SerachBarResult") {
+    } 
+  }
+    
+  
+  if (isSearching === "SearchBarResult") {
   
     if (searchResults.length > 0) {
       return (
@@ -90,18 +59,9 @@ const Content = ({ searchResults, selectedCategory, isSearching}) => {
           </div>
         </div>
       );
-    } else {
-      return (
-        <div className="content-container">
-          <img
-            className="homepage-img"
-            src={homePageImg}
-            alt="Software Engineering Class SFSU"
-          />
-          <FeaturedProducts />
-        </div>
-      );
-  }
+    } 
+  }  
+
   return (
     <div className="content-container">
       <img
@@ -114,6 +74,6 @@ const Content = ({ searchResults, selectedCategory, isSearching}) => {
   );
   // Default homepage view: banner image + featured products
  
-}};
+};
 
 export default Content;

@@ -25,8 +25,8 @@ const Header = ({setSearchResults, setSelectedCategory, setIsSearching}) => {
                     </div>
                     <div className="header-box">
                         <div className="filter-container">
-                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults}/>
-                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory}/>
+                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults} setIsSearching={setIsSearching}/>
+                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching}/>
                         </div>
                         <div className="logIn-container">
                             <button className="btn-logIn">Login</button>

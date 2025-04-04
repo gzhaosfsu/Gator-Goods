@@ -25,14 +25,17 @@ const Homepage = ({}) => {
 
     
 
-    useEffect(() => {
-        setIsSearching("SerachBarResult"); 
+    // useEffect(() => {
+    //     console.log(isSearching); 
+    //     setIsSearching("SearchBarResult"); 
 
-    },[searchResults]); 
-    useEffect(() => {
-        setIsSearching("selectedCategory"); 
+    // },[searchResults]); 
 
-    },[selectedCategory]); 
+    // useEffect(() => {
+    //     console.log(isSearching); 
+    //     setIsSearching("selectedCategory"); 
+
+    // },[selectedCategory]); 
 
 
     // const featuredProducts = dummyData.filter(product => product.isFeatured);
@@ -42,7 +45,7 @@ const Homepage = ({}) => {
         <>
             <div className='App'>
                 <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching}/>
-                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching}/>
+                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching} setIsSearching={setIsSearching}/>
                 <Footer />
             </div>  
         </>
