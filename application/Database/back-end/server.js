@@ -1,26 +1,36 @@
-require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 
+const buyerRoutes = require('./routes/buyer');
+const courierRoutes = require('./routes/courier');
+const deliveryInstructionsRoutes = require('./routes/delivery_instruction');
+const deliveryRequestRoutes = require('./routes/delivery_request');
+const messageRoutes = require('./routes/direct_message');
+const listingRoutes = require('./routes/listing');
+const productRoutes = require('./routes/product');
+const reviewRoutes = require('./routes/review');
+const userRoutes = require('./routes/user');
+const vendorRoutes = require('./routes/vendor');
+
 const app = express();
-const PORT = process.env.PORT || 5000;
-
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Register routes
+app.use('/api/buyers', buyerRoutes);
+app.use('/api/couriers', courierRoutes);
+app.use('/api/deliveryInstructions', deliveryInstructionsRoutes);
+app.use('/api/deliveryRequests', deliveryRequestRoutes);
+app.use('/api/listings', listingRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/vendors', vendorRoutes);
 
-// MySQL Database Connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT || 3306
-});
+app.listen(3001, () => console.log('API running on port 3001'));
+
+
 
 db.connect(err => {
     if (err) {
