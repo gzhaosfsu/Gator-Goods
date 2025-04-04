@@ -13,14 +13,17 @@ const Categories = ({ setSelectedCategory, setSearchResults, setIsSearching}) =>
     const [selected, setSelected] = useState("");
 
     const submitCategory = (selectedCategory) => {
+      console.log(selectedCategory);
+      console.log("This is the target value" + selectedCategory);
       if (!selectedCategory) return; // prevents an empty selection
       setSearchResults([]); 
       setIsSearching("selectedCategory"); 
   
-    fetch('http://localhost:3306/api/category?=${selectedCategory}')
+    fetch(`http://localhost:5000/api/category?category=${selectedCategory}`)
     .then((response) => response.json())
     .then((data) => {
-        setSearchResults(data); 
+        console.log(data.length);
+        setSelectedCategory(data); 
     })
       // setSelectedCategory(dummyData); 
       // setSelectedCategory(selectedCategory);

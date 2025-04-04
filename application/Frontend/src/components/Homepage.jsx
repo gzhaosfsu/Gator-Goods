@@ -20,8 +20,8 @@ const Homepage = ({}) => {
     const [isSearching, setIsSearching] = useState(""); 
 
     // console.log("Jace clicked option "  + selectedCategory); 
-    const productsTitle  = searchResults.map(i => i.title); 
-    console.log("MARTHA return array : " + productsTitle); 
+    // const productsTitle  = searchResults.map(i => i.title); 
+    // console.log("MARTHA return array : " + productsTitle); 
 
     
 
