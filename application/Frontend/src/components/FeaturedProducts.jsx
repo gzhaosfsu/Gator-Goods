@@ -5,7 +5,7 @@ import "../FeaturedProducts.css";
 
 export const FeaturedProducts = () => {
   // Filter for featured items
-  const featuredItems = dummyData.filter(product => product.isFeatured);
+  // const featuredItems = dummyData.filter(product => product.isFeatured);
   //const [products, setProducts] = useState([]);
   //const [loading, setLoading] = useState(true);
   //const [error, setError] = useState(null);
@@ -36,6 +36,28 @@ export const FeaturedProducts = () => {
 //  if (error) {
 //    return <div>Error: {error}</div>;
 //  }
+
+
+const [featuredItems, setFeaturedItems] = useState([]);
+
+useEffect(() => {
+  fetch('http://localhost:5000/api/all')
+    .then((response) => response.json())
+    .then((data) => {
+      setFeaturedItems(data); // Set state once data is fetched
+    })
+    .catch((error) => {
+      console.error("Error fetching featured items:", error);
+    });
+}, []); 
+
+// fetch('http://localhost:5000/api/all')
+//     .then((response) => response.json())
+//     .then((data) => {
+        
+//         setFeaturedItems(data); 
+//         console.log(featuredItems.length);
+//     })
   return (
     <div className="featured-container">
       <h2>Shop Our Most Popular Products</h2>
