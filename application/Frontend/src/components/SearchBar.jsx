@@ -7,6 +7,7 @@ import { dummyData } from "../dummyData";
 
 const SearchBar= ({setSearchResults}) => {
 
+    
   const [searching, setSearcheding] = useState(false); 
   const [wordEntered, setWordEntered] = useState(""); 
   const [searchWord, setSearchWord] = useState(""); 

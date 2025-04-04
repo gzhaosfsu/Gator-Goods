@@ -3,7 +3,7 @@ import React from "react"
 import { useState, useEffect } from "react"
 import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 import Header from "./Header"
-import FeaturedProducts from "../FeaturedProducts";
+import FeaturedProducts from "./FeaturedProducts";
 import Content from "./Content"
 import Footer from "./Footer"
 import homePageImg from "./images/homePage.png"
@@ -25,8 +25,8 @@ const Homepage = ({}) => {
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory}/>
-                <Content searchResults={searchResults} selectedCategory={selectedCategory} />
+                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
+                <Content searchResults={searchResults} />
                 <Footer/>
             </div>  
         </>

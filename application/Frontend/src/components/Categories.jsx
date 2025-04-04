@@ -3,19 +3,13 @@ import { useState, useEffect } from "react"
 import "../App.css" // CSS file for styling
 
 const Categories = ({ setSelectedCategory }) => {
-    // stores fetched categories
-    const [categories, setCategories] = useState([]); 
+    // // stores fetched categories
+    // const [categories, setCategories] = useState([]); 
+
+    const categoryList = ["Food", "Furniture", "Clothing", "Stationary", "Books"];
   
     // tracks the selected category from dropdown
     const [selected, setSelected] = useState("");
-
-    //THIS FETCH CALLS THE BACKEND TO GET CATEGORIES FROM DATABASE
-    // useEffect(() => {
-    //     fetch("http://localhost:5000/api/categories") // GET request to the backend
-    //       .then((response) => response.json())
-    //       .then((data) => setCategories(data))
-    //       .catch((error) => console.error("Error fetching categories:", error)); // used to handle errors
-    //   }, []);
 
     const submitCategory = (selectedCategory) => {
       if (!selectedCategory) return; // prevents an empty selection
@@ -30,7 +24,6 @@ const Categories = ({ setSelectedCategory }) => {
       //   .catch((error) => console.error("Error fetching products:", error));
     };
 
-
       return (
         <div className="categories-container">
     
@@ -43,7 +36,7 @@ const Categories = ({ setSelectedCategory }) => {
             className="categories-dropdown"
           >
             <option value=""> -- Categories -- </option>
-            {categories.map((category, index) => ( // maps over the categories array to display each category in the dropdown
+            {categoryList.map((category, index) => ( // maps over the categories array to display each category in the dropdown
               <option key={index} value={category}>  {/* option elements for each category */}
                 {category}
               </option>
