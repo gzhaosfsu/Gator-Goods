@@ -18,14 +18,14 @@ const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching}) => {
   const handleSearch = () => { 
     setSelectedCategory([]); 
     setIsSearching("SearchBarResult"); 
-    setSearchResults(dummyData); 
+    // setSearchResults(dummyData); 
 
-    // Handle Get Request
-    // fetch('http://localhost:5000/api/products/${title}')
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     setSearchResults(data); 
-    // })
+    //Handle Get Request
+    fetch('http://localhost:3306/api/title?=${searchTitle}')
+    .then((response) => response.json())
+    .then((data) => {
+        setSearchResults(data); 
+    })
   }; 
 
 

@@ -17,7 +17,12 @@ const Categories = ({ setSelectedCategory, setSearchResults, setIsSearching}) =>
       setSearchResults([]); 
       setIsSearching("selectedCategory"); 
   
-      setSelectedCategory(dummyData); 
+    fetch('http://localhost:3306/api/category?=${selectedCategory}')
+    .then((response) => response.json())
+    .then((data) => {
+        setSearchResults(data); 
+    })
+      // setSelectedCategory(dummyData); 
       // setSelectedCategory(selectedCategory);
       console.log("Searching for:", selectedCategory);
       
