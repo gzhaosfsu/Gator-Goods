@@ -32,33 +32,52 @@ db.connect(err => {
 
 
 // Search Listings by Title
-app.get('/search.title', (req, res) => {
-    const searchTerm = req.query.q; // will come after /search.category?q=...
+app.get('/api/title', (req, res) => {
+    const searchTerm = req.query.q; // will come after /api/title?q=...
     if (!searchTerm) {
         return res.status(400).json({ error: "Missing search term" });
     }
 
-    const query = "SELECT * FROM listing WHERE product_id IN (SELECT product_id FROM product WHERE title LIKE ?)";
+    const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'"
     const searchValue = `%${searchTerm}%`;
 
-    db.query(query, [searchValue], (err, results) => {
+    db.query(query, [searchValue], (err, results) => { 
         if (err) {
             console.error("Database query failed:", err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        res.json(results);
+
+        const listingsWithImages = results.map(row => {
+            const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
+            console.log("Row image:", row.thumbnail);
+
+            return {
+                listing_id: row.listing_id,
+                price: row.price,
+                discount: row.discount,
+                listing_date: row.listing_date,
+                title: row.title,
+                description: row.description,
+                product_id: row.product_id,
+                category: row.category,
+                // image: row.image,
+                vendor_id: row.vendor_id,
+                thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
+            };
+        });
+        res.json(listingsWithImages);
     });
 });
 
 
 // Search Listings by Category
-app.get('/search.category', (req, res) => {
-    const searchTerm = req.query.q; // will come after /search.category?q=...
+app.get('/api/category', (req, res) => {
+    const searchTerm = req.query.q; // will come after /api/category?q=...
     if (!searchTerm) {
         return res.status(400).json({ error: "Missing search term" });
     }
 
-    const query = "SELECT * FROM listing WHERE product_id IN (SELECT product_id FROM product WHERE category LIKE ?)";
+    const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.category LIKE ? AND listing.listing_status = 'Active'"
     const searchValue = `%${searchTerm}%`;
 
     db.query(query, [searchValue], (err, results) => {
@@ -66,18 +85,60 @@ app.get('/search.category', (req, res) => {
             console.error("Database query failed:", err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        res.json(results);
+
+        const listingsWithImages = results.map(row => {
+            const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
+            console.log("Row image:", row.thumbnail);
+
+            return {
+                listing_id: row.listing_id,
+                price: row.price,
+                discount: row.discount,
+                listing_date: row.listing_date,
+                title: row.title,
+                description: row.description,
+                product_id: row.product_id,
+                category: row.category,
+                // image: row.image,
+                vendor_id: row.vendor_id,
+                thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
+            };
+        });
+
+        res.json(listingsWithImages);
     });
 });
 
 // Search for all Listings
-app.get('/search.all', (req, res) => {
-    const query = ' SELECT * FROM listing'
+app.get('/api/all', (req, res) => {
+    const query = " SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.listing_status = 'Active'"
     db.query(query, (err, results) => {
         if (err) {
             console.error("Database query failed:", err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        res.json(results);
+
+
+        const listingsWithImages = results.map(row => {
+            const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
+            console.log("Row image:", row.thumbnail);
+
+            return {
+                listing_id: row.listing_id,
+                price: row.price,
+                discount: row.discount,
+                listing_date: row.listing_date,
+                title: row.title,
+                description: row.description,
+                product_id: row.product_id,
+                category: row.category,
+                // image: row.image,
+                vendor_id: row.vendor_id,
+                thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
+            };
+        });
+        res.json(listingsWithImages);
     });
 });
+
+
