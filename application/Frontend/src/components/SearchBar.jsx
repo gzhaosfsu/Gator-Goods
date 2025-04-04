@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 
 
-const SearchBar= ({setSearchResults, setSelectedCategory}) => {
+const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching}) => {
 
     
   const [searching, setSearcheding] = useState(false); 
@@ -16,7 +16,8 @@ const SearchBar= ({setSearchResults, setSelectedCategory}) => {
 
   
   const handleSearch = () => { 
-    // setSelectedCategory([]); 
+    setSelectedCategory([]); 
+    setIsSearching("SearchBarResult"); 
     setSearchResults(dummyData); 
 
     // Handle Get Request
