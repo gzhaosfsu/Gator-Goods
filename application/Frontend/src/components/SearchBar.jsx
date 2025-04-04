@@ -21,7 +21,7 @@ const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching}) => {
     // setSearchResults(dummyData); 
 
     //Handle Get Request
-    fetch(`http://localhost/5000/api/title?q=${searchWord}`)
+    fetch(`http://localhost:5000/api/title?q=${searchWord}`)
     .then((response) => response.json())
     .then((data) => {
         console.log(data.isarray);
