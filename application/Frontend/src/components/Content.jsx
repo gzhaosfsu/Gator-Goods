@@ -3,7 +3,7 @@ import React from "react";
 import homePageImg from "./images/homePage.png";
 import FeaturedProducts from "./FeaturedProducts"; // Adjust path if needed
 
-const Content = ({ searchResults, selectedCategory, isSearching}) => {
+const Content = ({ searchResults, selectedCategory, isSearching, selectedCategoryName}) => {
 
   console.log("Vansh got martha data  " + searchResults.length)
 
@@ -13,11 +13,14 @@ const Content = ({ searchResults, selectedCategory, isSearching}) => {
       return (
         <div className="content-container">
           <h2>
-            Jaces data is chaning this area
+            Jaces data is changing this area
             {/* {selectedCategory && `in ${selectedCategory}`} */}
           </h2>
+          <p> 
+            Showing {searchResults.length} item{searchResults.length !== 1 && "s"} in "{selectedCategoryName}"
+            </p>
           <div className="products-list">
-            {selectedCategory.map((product) => (
+            {searchResults.map((product) => (
               <div key={product.product_id} className="product-card">
                 <img
                   src={product.image} // Assumes each product has an "image" property

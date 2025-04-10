@@ -5,28 +5,40 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 
 
-const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching}) => {
+const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching, selectedCategory}) => {
 
     
-  const [searching, setSearcheding] = useState(false); 
-  const [wordEntered, setWordEntered] = useState(""); 
-  const [searchWord, setSearchWord] = useState(""); 
+  const [searching, setSearcheding] = useState(false);
+  const [wordEntered, setWordEntered] = useState("");
+  const [searchWord, setSearchWord] = useState(""); // this is the word that is being searched for
 
   const handleSubmit = (e) => e.preventDefault(); 
 
   
   const handleSearch = () => { 
-    setSelectedCategory([]); 
-    setIsSearching("SearchBarResult"); 
-    // setSearchResults(dummyData); 
+
+  
+    const filteredResults = dummyData.filter((product) => { // filters the dummy data based on the search word and selected category
+    const matchesTitle = product.title.toLowerCase().includes(wordEntered.toLowerCase()); // checks if the product title includes the search word
+    const matchesCategory = selectedCategory // checks if the product category matches the selected category
+      ? product.category.toLowerCase() === selectedCategory.toLowerCase() // checks if the product category matches the selected category
+      : true; // if no category, match all
+
+    return matchesTitle && matchesCategory; // checks if both title and category match
+    });
+    setSelectedCategory([]); // clears the selected category
+    setIsSearching("SearchBarResult"); // sets the search state to SearchBarResult
+    setSearchResults(filteredResults); // sets the search results to the filtered results
 
     //Handle Get Request
-    fetch(`http://localhost:5000/api/title?q=${searchWord}`)
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data.isarray);
-        setSearchResults(data); 
-    })
+    // fetch(`http://localhost:5000/api/title?q=${searchWord}`)
+    // .then((response) => response.json())
+    // .then((data) => {
+    //     console.log(data.isarray);
+    //     setSearchResults(data); 
+    // })
+
+
   }; 
 
 

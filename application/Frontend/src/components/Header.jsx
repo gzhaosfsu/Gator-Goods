@@ -6,12 +6,14 @@ import {Link } from 'react-router-dom'
 
 
 
-const Header = ({setSearchResults, setSelectedCategory, setIsSearching}) => {
+const Header = ({setSearchResults, setSelectedCategory, setIsSearching, setSelectedCategoryName, selectedCategory}) => {
     
     const featuredItems = ()=> {
         setIsSearching(""); 
         setSearchResults([]); 
-        setSelectedCategory([]); 
+        setSelectedCategory([]);
+        selectedCategory([]); // sets the selected category to an empty array
+        setSelectedCategoryName(""); // sets the selected category name to an empty string
     }    
     return (
        <>
@@ -25,8 +27,8 @@ const Header = ({setSearchResults, setSelectedCategory, setIsSearching}) => {
                     </div>
                     <div className="header-box">
                         <div className="filter-container">
-                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults} setIsSearching={setIsSearching}/>
-                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching}/>
+                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName}/>
+                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName} selectedCatgeory={selectedCategory}/>
                         </div>
                         <div className="logIn-container">
                             <button className="btn-logIn">Login</button>

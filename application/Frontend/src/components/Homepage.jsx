@@ -17,7 +17,12 @@ const Homepage = ({}) => {
     // const [filteredData, setFilteredData] = useState([]); 
     const [searchResults, setSearchResults] = useState ([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
-    const [isSearching, setIsSearching] = useState(""); 
+    const [isSearching, setIsSearching] = useState("");
+
+    //adding for Number Display 4/9/25
+    const [selectedCategoryName, setSelectedCategoryName] = useState("");
+    //adding for SearchBar usage 4/9/25
+    const [searchWord, setSearchWord] = useState(""); 
 
     // console.log("Jace clicked option "  + selectedCategory); 
     // const productsTitle  = searchResults.map(i => i.title); 
@@ -44,8 +49,8 @@ const Homepage = ({}) => {
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching}/>
-                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching} setIsSearching={setIsSearching}/>
+                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName} setSearchWord={setSearchWord}/>
+                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching} setIsSearching={setIsSearching} selectedCategoryName={selectedCategoryName} searchWord={searchWord} />
                 <Footer />
             </div>  
         </>
