@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 
 
-const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching}) => {
+const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching, setSelectedCategoryName}) => {
 
     
   const [searching, setSearching] = useState(false); // Toggles the Close ("x") Icon
@@ -43,6 +43,8 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 // })
 
       setIsSearching(true)
+      setSelectedCategoryName(selectedCategory); // only update when search is performed
+
     } else if(searchWord && !selectedCategory ) { // text in search bar but NO category selected
           
       console.log("text in search bar but NO category selected");
@@ -64,6 +66,8 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 // })
       
       setIsSearching(true)
+      setSelectedCategoryName(selectedCategory); // no category selected, so clear it
+
     } else if (searchWord && selectedCategory) { // text and selected category 
 
       console.log("text and selected category ");
@@ -92,6 +96,7 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 //     setDataReturned(data); 
                 // })
     setIsSearching(true)
+    setSelectedCategoryName(selectedCategory); // set only after valid combo search
 
     } else if(!searchWord && !selectedCategory) {
 
@@ -100,10 +105,11 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       console.log("NO serach word in serach bar and No catergory selected"); 
       setDataReturned([]);
       setIsSearching(false); 
-      setSearchWord(""); 
+      setSearchWord("");
+      setSelectedCategoryName(selectedCategory); // clear if nothing selected
       // console.log("User not searching for any item")
     }
-
+    
       console.log("User selected a catergory: " + selectedCategory);
       console.log("User keyword from search bar HELLO: " + searchWord);
     
