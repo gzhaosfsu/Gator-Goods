@@ -13,44 +13,24 @@ import { dummyData } from "../dummyData";
 
 
 const Homepage = ({}) => {
+
+    // I dont want homepage dealing with alot of logic
   
-    // const [filteredData, setFilteredData] = useState([]); 
-    const [searchResults, setSearchResults] = useState ([]);
-    const [selectedCategory, setSelectedCategory] = useState([]);
-    const [isSearching, setIsSearching] = useState("");
+    const [isSearching, setIsSearching] = useState(false); // deals with toggeling the display body if we using Category or Search bar or Both or none 
+    const [dataReturned, setDataReturned] = useState([]); // This is returns an array of data from fetch request that Header.jsx deals with
+
+     
 
     //adding for Number Display 4/9/25
     const [selectedCategoryName, setSelectedCategoryName] = useState("");
     //adding for SearchBar usage 4/9/25
     const [searchWord, setSearchWord] = useState(""); 
 
-    // console.log("Jace clicked option "  + selectedCategory); 
-    // const productsTitle  = searchResults.map(i => i.title); 
-    // console.log("MARTHA return array : " + productsTitle); 
-
-    
-
-    // useEffect(() => {
-    //     console.log(isSearching); 
-    //     setIsSearching("SearchBarResult"); 
-
-    // },[searchResults]); 
-
-    // useEffect(() => {
-    //     console.log(isSearching); 
-    //     setIsSearching("selectedCategory"); 
-
-    // },[selectedCategory]); 
-
-
-    // const featuredProducts = dummyData.filter(product => product.isFeatured);
-    // console.log("Featured Products:", featuredProducts);
-
     return (
         <>
             <div className='App'>
-                <Header setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName} setSearchWord={setSearchWord}/>
-                <Content searchResults={searchResults} selectedCategory={selectedCategory} isSearching={isSearching} setIsSearching={setIsSearching} selectedCategoryName={selectedCategoryName} searchWord={searchWord} />
+                <Header  setSelectedCategoryName={setSelectedCategoryName} setDataReturned={setDataReturned} setIsSearching={setIsSearching}/>
+                <Content dataReturned={dataReturned} selectedCategoryName={selectedCategoryName} isSearching={isSearching}/>
                 <Footer />
             </div>  
         </>

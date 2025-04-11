@@ -3,68 +3,49 @@ import React from "react";
 import homePageImg from "./images/homePage.png";
 import FeaturedProducts from "./FeaturedProducts"; // Adjust path if needed
 
-const Content = ({ searchResults, selectedCategory, isSearching, selectedCategoryName}) => {
+const Content = ({dataReturned,selectedCategoryName, isSearching}) => {
+ 
+  // This shows when it toggles on displaying data or not 
+  console.log("is Searching: " + isSearching); 
+   
 
-  console.log("Vansh got martha data  " + searchResults.length)
-
-
-  if (isSearching == "selectedCategory") {
-    if (selectedCategory.length > 0) {
-      return (
-        <div className="content-container">
-          <h2>
-            Jaces data is changing this area
-            {/* {selectedCategory && `in ${selectedCategory}`} */}
-          </h2>
-          <p> 
-            Showing {searchResults.length} item{searchResults.length !== 1 && "s"} in "{selectedCategoryName}"
-            </p>
-          <div className="products-list">
-            {searchResults.map((product) => (
-              <div key={product.product_id} className="product-card">
-                <img
-                  src={product.image} // Assumes each product has an "image" property
-                  alt={product.title}
-                  className="product-image"
-                />
-                <h3>{product.title}</h3>
-                <p>{product.description}</p>
-              </div>
-            ))}
+  // will only diplay if the we are clicking Search Icon
+  if(isSearching === true ) {
+    // we check if we found any items
+      if (dataReturned.length > 0) {
+        return (
+          <div className="content-container">
+            <h2> 
+              {/* JACE: This is were I were you display number of resuls and amazon display search bar result and not category*/}
+              {dataReturned.length} result{dataReturned.length !== 1 && "s"} for item{dataReturned.length !== 1 && "s"} in "{selectedCategoryName}"
+            </h2>
+            <div className="products-list">
+              {dataReturned.map((product) => (
+                <div key={product.product_id} className="product-card">
+                  <img
+                    src={product.image} // Assumes each product has an "image" property
+                    alt={product.title}
+                    className="product-image"
+                  />
+                  <h3>{product.title}</h3>
+                  <p>{product.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      );
-    } 
-  }
+        );
+      } else {
+        return (
+          <>
+            <div>No item Found</div>
+          </>
+        )
+    }
     
+  }
   
-  if (isSearching === "SearchBarResult") {
-  
-    if (searchResults.length > 0) {
-      return (
-        <div className="content-container">
-          <h2>
-            Martha is searhc is happening 
-            {/* {selectedCategory && `in ${selectedCategory}`} */}
-          </h2>
-          <div className="products-list">
-            {searchResults.map((product) => (
-              <div key={product.product_id} className="product-card">
-                <img
-                  src={product.image} // Assumes each product has an "image" property
-                  alt={product.title}
-                  className="product-image"
-                />
-                <h3>{product.title}</h3>
-                <p>{product.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    } 
-  }  
 
+  // Default content displayed 
   return (
     <div className="content-container">
       <img
@@ -75,7 +56,7 @@ const Content = ({ searchResults, selectedCategory, isSearching, selectedCategor
       <FeaturedProducts />
     </div>
   );
-  // Default homepage view: banner image + featured products
+
  
 };
 

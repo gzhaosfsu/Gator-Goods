@@ -4,7 +4,7 @@ export const dummyData = [
     {
       product_id: 1,
       description: "This is a brand new book",
-      category: "school material",
+      category: "books",
       title: "Math Book",
       vendor_id: 1,
       image: MathBookImg,
