@@ -13,7 +13,7 @@ export const FeaturedProducts = () => {
    // const fetchFeaturedProducts = async () => {
     //  try {
         // Using the /search.all endpoint to get all listings.
-     //   const response = await fetch('http://localhost:5000/search.all');
+     //   const response = await fetch('http://localhost:3001/search.all');
      //   if (!response.ok) {
      //     throw new Error('Network response was not ok');
      //   }
@@ -41,7 +41,7 @@ export const FeaturedProducts = () => {
 const [featuredItems, setFeaturedItems] = useState([]);
 
 useEffect(() => {
-  fetch('http://localhost:5000/api/all')
+  fetch('http://localhost:3001/api/all')
     .then((response) => response.json())
     .then((data) => {
       setFeaturedItems(data); // Set state once data is fetched
@@ -51,7 +51,7 @@ useEffect(() => {
     });
 }, []); 
 
-// fetch('http://localhost:5000/api/all')
+// fetch('http://localhost:3001/api/all')
 //     .then((response) => response.json())
 //     .then((data) => {
         

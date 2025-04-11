@@ -1,42 +1,42 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const db = require('../server/DB');
 
-// GET all buyers
+// GET all vendors
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM buyer', (err, results) => {
+    db.query('SELECT * FROM vendor', (err, results) => {
         if (err) return res.status(500).json({ error: err });
         res.json(results);
     });
 });
 
-// GET buyer by ID
+// GET vendor by ID
 router.get('/:id', (req, res) => {
-    db.query('SELECT * FROM buyer WHERE buyer_id = ?', [req.params.id], (err, results) => {
+    db.query('SELECT * FROM vendor WHERE vendor_id = ?', [req.params.id], (err, results) => {
         if (err) return res.status(500).json({ error: err });
         res.json(results[0]);
     });
 });
 
-// POST a new buyer
+// POST a new vendor
 router.post('/', (req, res) => {
-    const { image, user_id } = req.body;
+    const { rating, image, user_id } = req.body;
     db.query(
-        'INSERT INTO buyer (image, user_id) VALUES (?, ?)',
-        [image, user_id],
+        'INSERT INTO vendor (rating, image, user_id) VALUES (?, ?, ?)',
+        [rating, image, user_id],
         (err, result) => {
             if (err) return res.status(500).json({ error: err });
-            res.status(201).json({ buyer_id: result.insertId });
+            res.status(201).json({ vendor_id: result.insertId });
         }
     );
 });
 
-// UPDATE a buyer by ID
+// UPDATE a vendor by ID
 router.put('/:id', (req, res) => {
-    const { image, user_id } = req.body;
+    const { rating, image, user_id } = req.body;
     db.query(
-        'UPDATE buyer SET image = ?, user_id = ? WHERE buyer_id = ?',
-        [image, user_id, req.params.id],
+        'UPDATE vendor SET rating = ?, image = ?, user_id = ? WHERE vendor_id = ?',
+        [rating, image, user_id, req.params.id],
         (err) => {
             if (err) return res.status(500).json({ error: err });
             res.sendStatus(204);
@@ -44,9 +44,9 @@ router.put('/:id', (req, res) => {
     );
 });
 
-// DELETE a buyer by ID
+// DELETE a vendor by ID
 router.delete('/:id', (req, res) => {
-    db.query('DELETE FROM buyer WHERE buyer_id = ?', [req.params.id], (err) => {
+    db.query('DELETE FROM vendor WHERE vendor_id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err });
         res.sendStatus(204);
     });

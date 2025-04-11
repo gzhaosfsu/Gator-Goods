@@ -31,12 +31,12 @@ const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching, select
     setSearchResults(filteredResults); // sets the search results to the filtered results
 
     //Handle Get Request
-    // fetch(`http://localhost:5000/api/title?q=${searchWord}`)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     console.log(data.isarray);
-    //     setSearchResults(data); 
-    // })
+    fetch(`http://localhost:3001/api/title?q=${searchWord}`)
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data.isarray);
+        setSearchResults(data); 
+    })
 
 
   }; 

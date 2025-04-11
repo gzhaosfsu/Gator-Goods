@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../DB');
+const db = require('../server/DB');
 // GET all users
 router.get('/', (req, res) => {
     db.query('SELECT * FROM user', (err, results) => {

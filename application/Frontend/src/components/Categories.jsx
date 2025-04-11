@@ -28,16 +28,16 @@ const Categories = ({ setSelectedCategory, setSearchResults, setIsSearching, set
       setSelectedCategory(selectedCategory); // sets the selected category for further processing
 
     // THIS FETCH CALLS THE BACKEND TO GET CATEGORIES  
-    // fetch(`http://localhost:5000/api/category?category=${selectedCategory}`)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     console.log(data.length);
-    //     setSelectedCategory(data); 
-    // })
+    fetch(`http://localhost:3001/api/category?category=${selectedCategory}`)
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data.length);
+        setSelectedCategory(data); 
+    })
 
-      // setSelectedCategory(dummyData); 
-      // setSelectedCategory(selectedCategory);
-      // console.log("Searching for:", selectedCategory);
+      setSelectedCategory(dummyData); 
+      setSelectedCategory(selectedCategory);
+      console.log("Searching for:", selectedCategory);
 
     };
 
