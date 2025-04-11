@@ -51,7 +51,7 @@ useEffect(() => {
     });
 }, []); 
 
-// fetch('http://localhost:3001/api/all')
+// fetch('http://localhost:5000/api/all')
 //     .then((response) => response.json())
 //     .then((data) => {
         
