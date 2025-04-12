@@ -3,17 +3,26 @@ import SearchBar from "./SearchBar"
 import Categories from "./Categories"
 import logo from "./images/LogoGG.png"
 import {Link } from 'react-router-dom'
+import { useState, useEffect } from "react"
+import { dummyData } from "../dummyData";
+
+
+const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching}) => {
+
+    const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
+    const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category
+       
 
 
 
-const Header = ({setSearchResults, setSelectedCategory, setIsSearching, setSelectedCategoryName, selectedCategory}) => {
     
+    // When user clicks on logo it resets the entire values of search bar and categories
     const featuredItems = ()=> {
-        setIsSearching(""); 
-        setSearchResults([]); 
-        setSelectedCategory([]);
-        selectedCategory([]); // sets the selected category to an empty array
-        setSelectedCategoryName(""); // sets the selected category name to an empty string
+        setSearchResults(""); 
+        setSelectedCategory("");
+        setSelectedCategoryName("");
+        setDataReturned([]); 
+        setIsSearching(false);
     }    
     return (
        <>
@@ -27,8 +36,8 @@ const Header = ({setSearchResults, setSelectedCategory, setIsSearching, setSelec
                     </div>
                     <div className="header-box">
                         <div className="filter-container">
-                            <Categories setSelectedCategory={setSelectedCategory} setSearchResults={setSearchResults} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName}/>
-                            <SearchBar setSearchResults={setSearchResults} setSelectedCategory={setSelectedCategory} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName} selectedCatgeory={selectedCategory}/>
+                            <Categories setSelectedCategory={setSelectedCategory} setSelectedCategoryName={setSelectedCategoryName} />
+                            <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory} setDataReturned={setDataReturned} setIsSearching={setIsSearching} />
                         </div>
                         <div className="logIn-container">
                             <button className="btn-logIn">Login</button>

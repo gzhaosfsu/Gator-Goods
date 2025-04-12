@@ -5,63 +5,144 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 
 
-const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching, selectedCategory}) => {
+const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching}) => {
 
     
-  const [searching, setSearcheding] = useState(false);
-  const [wordEntered, setWordEntered] = useState("");
-  const [searchWord, setSearchWord] = useState(""); // this is the word that is being searched for
+  const [searching, setSearching] = useState(false); // Toggles the Close ("x") Icon
+  const [wordEntered, setWordEntered] = useState(""); // so we can updated the value in serach bar parameter
+  const [searchWord, setSearchWord] = useState(""); // this is the word that is being searched user is ready to search
 
   const handleSubmit = (e) => e.preventDefault(); 
 
+ 
+  // OnClick "Search Icon" or press Enter, this should handle all fetch request based on category only, Search Text Only, both or none 
+  const handleSearch = (e) => { 
   
-  const handleSearch = () => { 
+    e.preventDefault();
 
-  
-    const filteredResults = dummyData.filter((product) => { // filters the dummy data based on the search word and selected category
-    const matchesTitle = product.title.toLowerCase().includes(wordEntered.toLowerCase()); // checks if the product title includes the search word
-    const matchesCategory = selectedCategory // checks if the product category matches the selected category
-      ? product.category.toLowerCase() === selectedCategory.toLowerCase() // checks if the product category matches the selected category
-      : true; // if no category, match all
+    setDataReturned([]); // make sure I empty the any value before adding a value
 
-    return matchesTitle && matchesCategory; // checks if both title and category match
-    });
-    setSelectedCategory([]); // clears the selected category
-    setIsSearching("SearchBarResult"); // sets the search state to SearchBarResult
-    setSearchResults(filteredResults); // sets the search results to the filtered results
+    if(!searchWord && selectedCategory) { // NO text entered in search bar but selected category
+      console.log("NO text entered in search bar but selected category"); 
+      
+      // this is temp dummy data for now but will change with fetch request
+      const filteredResults = dummyData.filter((product) => { 
+        const productCategory = product.category.toLowerCase(); 
+        return productCategory === selectedCategory.toLowerCase()
+      });
+      // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      setDataReturned(filteredResults); 
+      
 
-    //Handle Get Request
-    // fetch(`http://localhost:5000/api/title?q=${searchWord}`)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     console.log(data.isarray);
-    //     setSearchResults(data); 
-    // })
+                //handles Get Request for category
+                // fetch(`http://localhost:5000/api/category?category=${selectedCategory}`)
+                // .then((response) => response.json())
+                // .then((data) => {
+        
+                //     setDataReturned(data); 
+                // })
+
+      setIsSearching(true)
+    } else if(searchWord && !selectedCategory ) { // text in search bar but NO category selected
+          
+      console.log("text in search bar but NO category selected");
+
+      // this is temp dummy data for now but will change with fetch request
+      const filteredResults = dummyData.filter((product) => { 
+        const productTitle = product.title.toLowerCase(); 
+        return productTitle.includes(searchWord.toLowerCase());
+      });
+       // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      setDataReturned(filteredResults); 
 
 
+                //handles Get Request for Title
+                // fetch(`http://localhost:5000/api/title?q=${searchWord}`)
+                // .then((response) => response.json())
+                // .then((data) => {
+                //     setDataReturned(data); 
+                // })
+      
+      setIsSearching(true)
+    } else if (searchWord && selectedCategory) { // text and selected category 
+
+      console.log("text and selected category ");
+
+
+      // this is temp dummy data for now but will change with fetch request
+      const filteredResults = dummyData.filter((product) => { 
+        const productCategory = product.category.toLowerCase();
+        const productTitle = product.title.toLowerCase();
+                  
+        const categoryMatches = productCategory === selectedCategory.toLowerCase();
+        const searchMatches = searchWord
+        ? productTitle.includes(searchWord.toLowerCase())
+        : true;
+                  
+        return categoryMatches && searchMatches;
+      });
+       // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      setDataReturned(filteredResults); 
+
+
+                //handles Get Request for category and title 
+                // fetch(`http://localhost:5000/api/`)
+                // .then((response) => response.json())
+                // .then((data) => {
+                //     setDataReturned(data); 
+                // })
+    setIsSearching(true)
+
+    } else if(!searchWord && !selectedCategory) {
+
+      // NO serach word in serach bar and No catergory selected
+      // Reset all info
+      console.log("NO serach word in serach bar and No catergory selected"); 
+      setDataReturned([]);
+      setIsSearching(false); 
+      setSearchWord(""); 
+      // console.log("User not searching for any item")
+    }
+
+      console.log("User selected a catergory: " + selectedCategory);
+      console.log("User keyword from search bar HELLO: " + searchWord);
+    
+      // sets a string of the search bar input and returns back to Header.jsx
+      setSearchResults(searchWord); 
+      
   }; 
 
 
+  // if the the user decides to press enter instead of search Icon
   const handleSearchEnter = (e) => {
+  
     if(e.key == 'Enter') {
-        handleSearch(); 
+      
+      e.preventDefault(); // prevents from submitting form
+        handleSearch(e); 
     }
   };
 
+
+ 
   const handleTextSearch = (e) => {
-    setSearchWord(wordEntered); 
-    setWordEntered(e.target.value); 
-    if(searchWord === "") {
-        setSearcheding(false); 
-    } else {
-        setSearcheding(true); 
-    }
+
+    const newWord = e.target.value;
+
+    setWordEntered(newWord);     // updates the search bar input
+    setSearchWord(newWord);      // keeps the same value for searching later
+  
+    setSearching(newWord.trim() !== ""); // toggle "x" icon
+
+
+
   }
 
+  // this is to clear the text from search bar
   const clearInput = (e)=> {
     // e.preventDefault(); 
-    setWordEntered(""); 
-    setSearcheding(false); 
+    setWordEntered(""); // reset search bar to empty
+    setSearching(false); // toggle "x" icon
   }
 
     return (
@@ -80,12 +161,18 @@ const SearchBar= ({setSearchResults, setSelectedCategory, setIsSearching, select
                     { searching ? 
                         (
                             <>
-                                <CloseIcon onClick={clearInput}/>
-                                <SearchIcon onClick={handleSearch}/>
+                              <CloseIcon onClick={clearInput} />
+                              <div onClick={handleSearch} style={{ cursor: 'pointer' }}>
+                                <SearchIcon />
+                              </div>
                             </>
                         )
                         : 
-                        ( <SearchIcon/>)
+                        ( 
+                          <div onClick={handleSearch} style={{ cursor: 'pointer' }}>
+                            <SearchIcon />
+                          </div>
+                        )
                     }
                     
                 </span>
