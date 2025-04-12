@@ -1,0 +1,14 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "DB.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CSC-648-SFSU/csc648-fa25-0104-team16.git"
+  },
+  "private": true
+}
