@@ -2,7 +2,7 @@ import React from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react"
-import { dummyData } from "../dummyData";
+// import { dummyData } from "../dummyData";
 
 
 const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching, setSelectedCategoryName}) => {
@@ -26,20 +26,20 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       console.log("NO text entered in search bar but selected category"); 
       
       // this is temp dummy data for now but will change with fetch request
-      const filteredResults = dummyData.filter((product) => { 
-        const productCategory = product.category.toLowerCase(); 
-        return productCategory === selectedCategory.toLowerCase()
-      });
-      // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
-      setDataReturned(filteredResults); 
+      // const filteredResults = dummyData.filter((product) => { 
+      //   const productCategory = product.category.toLowerCase(); 
+      //   return productCategory === selectedCategory.toLowerCase()
+      // });
+      // // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      // setDataReturned(filteredResults); 
       
 
       // 4/11/25 JACE COMMENT: Replaces above, adding for fetch request for category only*
-      // fetch(`http://localhost:3001/api/combined?category=${encodeURIComponent(selectedCategory)}`)
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //   setDataReturned(data);
-      // });
+      fetch(`http://localhost:3001/api/category?category=${selectedCategory}`)
+        .then((response) => response.json())
+        .then((data) => {
+        setDataReturned(data);
+      });
 
 
                 //OLD VERSION: handles Get Request for category
@@ -58,20 +58,20 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       console.log("text in search bar but NO category selected");
 
       // this is temp dummy data for now but will change with fetch request
-      const filteredResults = dummyData.filter((product) => { 
-        const productTitle = product.title.toLowerCase(); 
-        return productTitle.includes(searchWord.toLowerCase());
-      });
-       // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
-      setDataReturned(filteredResults); 
+      // const filteredResults = dummyData.filter((product) => { 
+      //   const productTitle = product.title.toLowerCase(); 
+      //   return productTitle.includes(searchWord.toLowerCase());
+      // });
+      //  // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      // setDataReturned(filteredResults); 
 
 
       // **4/11/25 JACE COMMENT: Replaces above, adding for fetch request for text in search but NO category selected
-      // fetch(`http://localhost:3001/api/combined?title=${encodeURIComponent(searchWord)}`)
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //   setDataReturned(data);
-      // });
+      fetch(`http://localhost:3001/api/title?title=${searchWord}`)
+        .then((response) => response.json())
+        .then((data) => {
+        setDataReturned(data);
+      });
 
 
                 //OLD VERSION: handles Get Request for Title
@@ -90,26 +90,26 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
 
 
       // this is temp dummy data for now but will change with fetch request ***
-      const filteredResults = dummyData.filter((product) => { 
-        const productCategory = product.category.toLowerCase();
-        const productTitle = product.title.toLowerCase();
+      // const filteredResults = dummyData.filter((product) => { 
+      //   const productCategory = product.category.toLowerCase();
+      //   const productTitle = product.title.toLowerCase();
                   
-        const categoryMatches = productCategory === selectedCategory.toLowerCase();
-        const searchMatches = searchWord
-        ? productTitle.includes(searchWord.toLowerCase())
-        : true;
+      //   const categoryMatches = productCategory === selectedCategory.toLowerCase();
+      //   const searchMatches = searchWord
+      //   ? productTitle.includes(searchWord.toLowerCase())
+      //   : true;
                   
-        return categoryMatches && searchMatches;
-      });
-       // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
-      setDataReturned(filteredResults); 
+      //   return categoryMatches && searchMatches;
+      // });
+      //  // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
+      // setDataReturned(filteredResults); 
 
       // ***4/11/25 JACE COMMENT: Replaces above, adding for fetch request for BOTH text in entered AND category selected
-      // fetch(`http://localhost:3001/api/combined?category=${encodeURIComponent(selectedCategory)}&title=${encodeURIComponent(searchWord)}`)
-      // .then((response) => response.json())
-      // .then((data) => {
-      //   setDataReturned(data);
-      // });
+      fetch(`http://localhost:3001/api/combined?category=${selectedCategory}&title=${searchWord}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setDataReturned(data);
+      });
     
 
 
@@ -119,8 +119,8 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 // .then((data) => {
                 //     setDataReturned(data); 
                 // })
-    setIsSearching(true)
-    setSelectedCategoryName(selectedCategory); // set only after valid combo search
+      setIsSearching(true)
+      setSelectedCategoryName(selectedCategory); // set only after valid combo search
 
     } else if(!searchWord && !selectedCategory) {
 

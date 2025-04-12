@@ -7,23 +7,23 @@ export const FeaturedProducts = () => {
  
 
 
-// const [featuredItems, setFeaturedItems] = useState([]);
+const [featuredItems, setFeaturedItems] = useState([]);
 
-// useEffect(() => {
-//   fetch('http://localhost:5000/api/all')
-//     .then((response) => response.json())
-//     .then((data) => {
-//       setFeaturedItems(data); // Set state once data is fetched
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching featured items:", error);
-//     });
-// }, []); 
+useEffect(() => {
+  fetch('http://localhost:3001/api/all')
+    .then((response) => response.json())
+    .then((data) => {
+      setFeaturedItems(data); // Set state once data is fetched
+    })
+    .catch((error) => {
+      console.error("Error fetching featured items:", error);
+    });
+}, []); 
 
 
 
 // dummy data for now 
-const featuredItems = dummyData.filter(product => product.isFeatured);
+// const featuredItems = dummyData.filter(product => product.isFeatured);
 
   return (
     <div className="featured-container">
