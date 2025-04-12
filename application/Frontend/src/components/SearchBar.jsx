@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 
 
-const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching}) => {
+const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching, setSelectedCategoryName}) => {
 
     
   const [searching, setSearching] = useState(false); // Toggles the Close ("x") Icon
@@ -22,7 +22,7 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
 
     setDataReturned([]); // make sure I empty the any value before adding a value
 
-    if(!searchWord && selectedCategory) { // NO text entered in search bar but selected category
+    if(!searchWord && selectedCategory) { // NO text entered in search bar but selected category*
       console.log("NO text entered in search bar but selected category"); 
       
       // this is temp dummy data for now but will change with fetch request
@@ -34,7 +34,15 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       setDataReturned(filteredResults); 
       
 
-                //handles Get Request for category
+      // 4/11/25 JACE COMMENT: Replaces above, adding for fetch request for category only*
+      // fetch(`http://localhost:3001/api/combined?category=${encodeURIComponent(selectedCategory)}`)
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //   setDataReturned(data);
+      // });
+
+
+                //OLD VERSION: handles Get Request for category
                 // fetch(`http://localhost:5000/api/category?category=${selectedCategory}`)
                 // .then((response) => response.json())
                 // .then((data) => {
@@ -43,7 +51,9 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 // })
 
       setIsSearching(true)
-    } else if(searchWord && !selectedCategory ) { // text in search bar but NO category selected
+      setSelectedCategoryName(selectedCategory); // only update when search is performed
+
+    } else if(searchWord && !selectedCategory ) { // text in search bar but NO category selected**
           
       console.log("text in search bar but NO category selected");
 
@@ -56,7 +66,15 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       setDataReturned(filteredResults); 
 
 
-                //handles Get Request for Title
+      // **4/11/25 JACE COMMENT: Replaces above, adding for fetch request for text in search but NO category selected
+      // fetch(`http://localhost:3001/api/combined?title=${encodeURIComponent(searchWord)}`)
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //   setDataReturned(data);
+      // });
+
+
+                //OLD VERSION: handles Get Request for Title
                 // fetch(`http://localhost:5000/api/title?q=${searchWord}`)
                 // .then((response) => response.json())
                 // .then((data) => {
@@ -64,12 +82,14 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                 // })
       
       setIsSearching(true)
+      setSelectedCategoryName(selectedCategory); // no category selected, so clear it
+
     } else if (searchWord && selectedCategory) { // text and selected category 
 
       console.log("text and selected category ");
 
 
-      // this is temp dummy data for now but will change with fetch request
+      // this is temp dummy data for now but will change with fetch request ***
       const filteredResults = dummyData.filter((product) => { 
         const productCategory = product.category.toLowerCase();
         const productTitle = product.title.toLowerCase();
@@ -84,14 +104,23 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
        // An array of data and return back to Homepage.jsx to pass in Content.jsx aka body to use display products 
       setDataReturned(filteredResults); 
 
+      // ***4/11/25 JACE COMMENT: Replaces above, adding for fetch request for BOTH text in entered AND category selected
+      // fetch(`http://localhost:3001/api/combined?category=${encodeURIComponent(selectedCategory)}&title=${encodeURIComponent(searchWord)}`)
+      // .then((response) => response.json())
+      // .then((data) => {
+      //   setDataReturned(data);
+      // });
+    
 
-                //handles Get Request for category and title 
+
+                //OLD VERSION: handles Get Request for category and title 
                 // fetch(`http://localhost:5000/api/`)
                 // .then((response) => response.json())
                 // .then((data) => {
                 //     setDataReturned(data); 
                 // })
     setIsSearching(true)
+    setSelectedCategoryName(selectedCategory); // set only after valid combo search
 
     } else if(!searchWord && !selectedCategory) {
 
@@ -100,10 +129,11 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       console.log("NO serach word in serach bar and No catergory selected"); 
       setDataReturned([]);
       setIsSearching(false); 
-      setSearchWord(""); 
+      setSearchWord("");
+      setSelectedCategoryName(selectedCategory); // clear if nothing selected
       // console.log("User not searching for any item")
     }
-
+    
       console.log("User selected a catergory: " + selectedCategory);
       console.log("User keyword from search bar HELLO: " + searchWord);
     

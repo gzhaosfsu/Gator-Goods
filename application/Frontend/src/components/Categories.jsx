@@ -19,7 +19,7 @@ const Categories = ({ setSelectedCategory, setSelectedCategoryName}) => {
       if (!selectedCategory) return; // prevents an empty selection
 
       //This stores a string of what the user selected from the categoryList
-      setSelectedCategoryName(selectedCategory);
+      // setSelectedCategoryName(selectedCategory);
       setSelectedCategory(selectedCategory);
 
 
