@@ -31,6 +31,6 @@ router.get('/', (req, res) => {
         });
         res.json(listingsWithImages);
     });
-});
+}); 
 
 module.exports = router;

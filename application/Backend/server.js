@@ -1,21 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('../server/DB');
+const db = require('./server/DB');
 
-const buyerRoutes = require('../routes/buyer');
-const courierRoutes = require('../routes/courier');
-const deliveryInstructionsRoutes = require('../routes/delivery_instruction');
-const deliveryRequestRoutes = require('../routes/delivery_request');
-const messageRoutes = require('../routes/direct_message');
-const listingRoutes = require('../routes/listing');
-const productRoutes = require('../routes/product');
-const reviewRoutes = require('../routes/review');
-const userRoutes = require('../routes/user');
-const vendorRoutes = require('../routes/vendor');
-const titleSearch = require('../routes/title_search');
-const categorySearch = require('../routes/category_search');
-const allSearch = require('../routes/all_search');
-const combinedSearch = require('../routes/combined_search');
+const buyerRoutes = require('./routes/buyer');
+const courierRoutes = require('./routes/courier');
+const deliveryInstructionsRoutes = require('./routes/delivery_instruction');
+const deliveryRequestRoutes = require('./routes/delivery_request');
+const messageRoutes = require('./routes/direct_message');
+const listingRoutes = require('./routes/listing');
+const productRoutes = require('./routes/product');
+const reviewRoutes = require('./routes/review');
+const userRoutes = require('./routes/user');
+const vendorRoutes = require('./routes/vendor');
+const titleSearch = require('./routes/title_search');
+const categorySearch = require('./routes/category_search');
+const allSearch = require('./routes/all_search');
+const combinedSearch = require('./routes/combined_search');
 
 const app = express();
 app.use(cors());
@@ -27,7 +27,7 @@ app.use('/api/couriers', courierRoutes);
 app.use('/api/deliveryInstructions', deliveryInstructionsRoutes);
 app.use('/api/deliveryRequests', deliveryRequestRoutes);
 app.use('/api/listings', listingRoutes);
-app.use('/api/messages', messageRoutes);
+app.use('/api/messages', messageRoutes)
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
@@ -36,6 +36,7 @@ app.use('/api/title', titleSearch);
 app.use('/api/category', categorySearch);
 app.use('/api/all', allSearch);
 app.use('/api/combined', combinedSearch);
+
 
 app.listen(3001, () => console.log('API running on port 3001'));
 
