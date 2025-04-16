@@ -22,12 +22,20 @@ const Content = ({dataReturned,selectedCategoryName, isSearching}) => {
             <div className="products-list">
               {dataReturned.map((product) => (
                 <div key={product.product_id} className="product-card">
+                  {product.thumbnail ? (
                   <img
-                    src={product.image} // Assumes each product has an "image" property
+                    src={product.thumbnail} // Assumes each product has an "image" property
                     alt={product.title}
                     className="product-image"
                   />
+                  ) : ( 
+                    <div className="no-image">No Image</div>
+                  )}   
                   <h3>{product.title}</h3>
+                  <p>Price: ${product.price}</p>
+                  {product.discount > 0 && (
+                    <p>Discount: {product.discount}% off</p>
+                )}
                   <p>{product.description}</p>
                 </div>
               ))}
@@ -36,9 +44,9 @@ const Content = ({dataReturned,selectedCategoryName, isSearching}) => {
         );
       } else {
         return (
-          <>
+          <div className="content-container">
             <div>No item Found</div>
-          </>
+          </div>
         )
     }
     
