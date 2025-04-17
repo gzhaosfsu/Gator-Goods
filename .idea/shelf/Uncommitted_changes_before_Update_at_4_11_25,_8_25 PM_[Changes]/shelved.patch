@@ -1,0 +1,18 @@
+Index: application/Frontend/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># See https://help.github.com/articles/ignoring-files/ for more about ignoring files.\n\n# dependencies\n/node_modules\n/.pnp\n.pnp.js\n\n# testing\n/coverage\n\n# production\n/build\n\n# misc\n.DS_Store\n.env.local\n.env.development.local\n.env.test.local\n.env.production.local\n\nnpm-debug.log*\nyarn-debug.log*\nyarn-error.log*\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Frontend/.gitignore b/application/Frontend/.gitignore
+--- a/application/Frontend/.gitignore	(revision 8e5705384ef41a502f6e6ef73305b87de4d17b00)
++++ b/application/Frontend/.gitignore	(date 1744425169326)
+@@ -4,6 +4,7 @@
+ /node_modules
+ /.pnp
+ .pnp.js
++package-lock.json
+ 
+ # testing
+ /coverage
