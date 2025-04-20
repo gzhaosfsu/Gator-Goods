@@ -8,6 +8,8 @@ import AboutGarvin from './components/AboutGarvin'
 import AboutJace from './components/AboutJace'
 import AboutVansh from './components/AboutVansh'
 import AboutTeam from './components/AboutTeam'
+import Login from './components/Login'
+import Register from './components/Register'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +24,8 @@ function App() {
         <Route path="/aboutJace" element={<AboutJace/>}/>
         <Route path="/aboutVansh" element={<AboutVansh/>}/>
         <Route path='/aboutTeam' element={<AboutTeam/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
       </Routes>
     </BrowserRouter>
   )
