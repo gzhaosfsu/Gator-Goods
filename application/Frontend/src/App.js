@@ -9,6 +9,7 @@ import AboutJace from './components/AboutJace'
 import AboutVansh from './components/AboutVansh'
 import AboutTeam from './components/AboutTeam'
 import Chats from './components/Chats'
+import CourierPage from './components/CourierPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +25,7 @@ function App() {
         <Route path="/aboutVansh" element={<AboutVansh/>}/>
         <Route path='/aboutTeam' element={<AboutTeam/>}/>
         <Route path='/chats' element={<Chats/>} />
+        <Route path='/courierPage' element={<CourierPage/>} />
       </Routes>
     </BrowserRouter>
   )
