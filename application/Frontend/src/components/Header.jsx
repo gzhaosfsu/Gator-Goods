@@ -5,9 +5,9 @@ import logo from "./images/LogoGG.png"
 import {Link } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
+import Filters from "./Filters"
 
-
-const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching}) => {
+const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
 
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
     const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category
@@ -21,7 +21,10 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching}) => 
         setSelectedCategoryName("");
         setDataReturned([]); 
         setIsSearching(false);
-    }    
+        setFilters({ condition: "", priceSort: "" })
+    }  
+    console.log("🔍 Filters import is:", Filters)
+  
     return (
        <>
         <div className="header-container">
@@ -46,6 +49,17 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching}) => 
                 </div>
             </div>
         </div>
+        {isSearching && (
+                        <div className="filters-row">
+                            <Filters
+                                filters={filters}
+                                setFilters={newFilters => {
+                                    setFilters(newFilters)
+                                    setIsSearching(true)    // keep us in “search mode”
+                                }}
+                            />
+                        </div>
+                    )}    
        </>
     )
 }

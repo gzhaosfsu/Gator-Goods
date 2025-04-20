@@ -46,14 +46,6 @@ body {
   padding: 0 14px;
 
 }
-.filter-container{
-  display: flex;
-  flex-direction:row;
-  justify-content: space-around;
-  width: 100%;
-  box-sizing: border-box;
-
-}
 
 
 .search{
@@ -529,3 +521,41 @@ body {
 .close-btn:hover {
   background-color: #a30000;
 } */
+/* 1) Make the filter row sit just below your search bar */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;       /* wrap to next line if window is narrow */
+  gap: 0.75rem;          /* space between controls */
+  margin-top: 0.75rem;   /* push filters down under the bar */
+  justify-content: center; /* center them horizontally */
+}
+
+/* 3) (Optional) add a little down‑arrow icon */
+.filters-container select {
+  background-color: #FFD447;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,…"); /* your caret */
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.6rem;
+  padding-right: 2rem;
+}
+
+/* 4) Remove blue outline on focus (if you prefer) */
+.filter-container select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 212, 71, 0.6);
+}
+.filters-row {
+  display: flex;
+  justify-content: center;   /* center under the bar */
+  gap: 0.75rem;              /* space between pills */
+  margin-top: 0.5rem;        /* a little gap from the purple bar */
+}
