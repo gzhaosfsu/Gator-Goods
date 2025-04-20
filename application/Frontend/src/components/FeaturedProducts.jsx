@@ -31,12 +31,25 @@ useEffect(() => {
       <div className="featured-products-list">
         {featuredItems.map((item) => (
           <div key={item.product_id} className="featured-product-card">
-            <img 
-              src={item.image} 
-              alt={item.title} 
-              className="featured-product-image" 
-            />
+            {item.thumbnail ? (
+              <img 
+                src={item.thumbnail} 
+                alt={item.title} 
+                className="featured-product-image" 
+              />
+            ) : (
+              <div className="no-image">No Image</div>
+            )}
             <h3>{item.title}</h3>
+            <p>Price: ${item.price}</p>
+            {item.discount && item.discount > 0 && (
+              <p>
+                Discount:{" "}
+                {item.discount > 1 
+                  ? `${item.discount}% off` 
+                  : `${(item.discount * 100).toFixed(0)}% off`}
+              </p>
+            )}
             <p>{item.description}</p>
           </div>
         ))}

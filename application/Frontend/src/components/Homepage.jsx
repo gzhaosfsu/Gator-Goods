@@ -1,13 +1,11 @@
-import React from "react"
-
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 import Header from "./Header"
 import FeaturedProducts from "./FeaturedProducts";
 import Content from "./Content"
 import Footer from "./Footer"
 import homePageImg from "./images/homePage.png"
-import { dummyData } from "../dummyData";
+//import { dummyData } from "../dummyData";
 
 
 
@@ -26,11 +24,15 @@ const Homepage = ({}) => {
     //adding for SearchBar usage 4/9/25
     const [searchWord, setSearchWord] = useState(""); 
 
+    const [filters, setFilters] = useState({
+        condition: "",
+        priceSort: ""
+    })
     return (
         <>
             <div className='App'>
-                <Header  setSelectedCategoryName={setSelectedCategoryName} setDataReturned={setDataReturned} setIsSearching={setIsSearching}/>
-                <Content dataReturned={dataReturned} selectedCategoryName={selectedCategoryName} isSearching={isSearching}/>
+                <Header  setSelectedCategoryName={setSelectedCategoryName} setDataReturned={setDataReturned} setIsSearching={setIsSearching} isSearching={isSearching} filters={filters} setFilters={setFilters}/>
+                <Content dataReturned={dataReturned} selectedCategoryName={selectedCategoryName} isSearching={isSearching} filters={filters}/>
                 <Footer />
             </div>  
         </>
