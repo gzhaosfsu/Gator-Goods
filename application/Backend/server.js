@@ -16,6 +16,8 @@ const titleSearch = require('./routes/title_search');
 const categorySearch = require('./routes/category_search');
 const allSearch = require('./routes/all_search');
 const combinedSearch = require('./routes/combined_search');
+const login = require('./routes/login');
+const register = require('./routes/register');
 
 const app = express();
 app.use(cors());
@@ -36,6 +38,8 @@ app.use('/api/title', titleSearch);
 app.use('/api/category', categorySearch);
 app.use('/api/all', allSearch);
 app.use('/api/combined', combinedSearch);
+app.use('/api/login', login);
+app.use('/api/register', register);
 
 
 app.listen(3001, () => console.log('API running on port 3001'));
