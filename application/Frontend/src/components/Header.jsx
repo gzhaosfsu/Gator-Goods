@@ -38,7 +38,9 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching}) => 
                             <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory} setDataReturned={setDataReturned} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName}/>
                         </div>
                         <div className="logIn-container">
-                            <button className="btn-logIn">Login</button>
+                            <Link to={`/login`}>
+                                <botton classname="btn-logIn">Login</botton>
+                            </Link>
                         </div>
                     </div>
                 </div>
