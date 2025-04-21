@@ -1,0 +1,126 @@
+/* Create Listing Button */
+.center {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+  
+  .create-button {
+    background-color: #FFD966;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 83px;
+    width: 865px;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px; 
+    text-align: center;
+  }
+  
+  .create-button:hover {
+    filter: brightness(0.95);
+  }
+  
+  /* Sections */
+  .section {
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;  
+    margin: 0 auto;
+    max-width: 1800px;         
+    width: 100%;
+  }
+  
+  .section-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 5rem;
+    text-align: center;
+    display: inline-block;
+    border-bottom: 4px solid transparent;
+    padding-bottom: 4px;
+  }
+  
+  .overview-title {
+    border-color: #1E1066;
+  }
+  
+  .stats-title {
+    border-color: #FFD966;
+  }
+  
+  /* Overview cards */
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 63px;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background-color: #f2f2f2;
+    padding: 16px 20px;
+    border-radius: 8px;
+    width: 450px;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-icon {
+    height: 30px;
+    width: 30px;
+  }
+  
+  .card-title {
+    font-weight: bold;
+    font-size: 35px;
+  }
+  
+  /* Stat cards */
+  .stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 63px;
+    margin: 0 auto;
+  }
+  
+  .stat-card {
+    background-color: #f2f2f2;
+    padding: 16px 20px;
+    border-radius: 8px;
+    width: 450px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .stat-label {
+    font-size: 35px;
+    font-weight: bold;
+  }
+  
+  .stat-value {
+    font-weight: bold;
+    font-size: 35px;
+    color: #1E1066;
+    font-weight: bold;
+  }

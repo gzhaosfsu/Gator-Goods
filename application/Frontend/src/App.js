@@ -12,6 +12,7 @@ import Chats from './components/Chats'
 import Login from './components/Login'
 import Register from './components/Register'
 import CourierPage from './components/CourierPage'
+import VendorPage from './components/VendorPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -30,6 +31,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/courierPage' element={<CourierPage/>} />
+        <Route path="/vendorPage" element={<VendorPage/>} />
       </Routes>
     </BrowserRouter>
   )
