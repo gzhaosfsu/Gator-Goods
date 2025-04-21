@@ -24,8 +24,8 @@ const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
         <>
             
             <div className="chat-log-title" >
-                <img src={image} alt="imgae" width={80} height={80}/>
-                <h2>
+                <img src={image} alt="imgae" width={70} height={70}/>
+                <h2 className="reciever-username">
                     {usernameReceiver}
                 </h2>
             </div>
@@ -39,7 +39,7 @@ const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
                 }
             </div>
             <div className="message-box" >
-                <input className="message-text"/>
+                <input className="message-text" placeholder="Message...."/>
                 <span className="sendIcon" >
                     <SendIcon/>
                 </span>

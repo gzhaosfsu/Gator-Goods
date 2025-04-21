@@ -71,7 +71,7 @@ const Chats = () => {
                         {
                             uniqueChats.map((chat) => (
                                 <div className="individual-chat" key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.receiverUsername, chat.userId)}>
-                                    <img src={image} alt="imgae" width={100} height={100}/>
+                                    <img src={image} alt="imgae" width={65} height={65}/>
                                     <div className="indv-chat-name">
                                         <h4>
                                             {chat.receiverUsername}
@@ -92,7 +92,11 @@ const Chats = () => {
                 {ischatting ? (
                         <ChatLog receiverID={receiverID} listingID={listingID} usernameReceiver={usernameReceiver} senderID={senderID}/>
                     ) : (
-                        <div>Click to chat</div>
+                        <div>
+                            <h1>
+                                Click to start a chat
+                            </h1>
+                        </div>
                     )}
                     
                 </div>

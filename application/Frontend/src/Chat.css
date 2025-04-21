@@ -25,7 +25,9 @@
     align-content: flex-end;
 }
 
-
+.sender-listings{
+  padding: 25px 10px 25px 10px;
+}
 
 
 .Chat-log-container{
@@ -39,6 +41,8 @@
     border-bottom: 2px solid rgb(199, 199, 199);
     display: flex;
     flex-direction: row;
+    align-items: center;
+    padding-left: 30px;
 }
 
 .chat-log-title img{
@@ -46,9 +50,32 @@
     object-fit: cover;
 }
 
+.chat-log-title h2{
+  padding-left: 20px;
+}
+
 .individual-chat {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    padding-bottom: 50px;
+}
+
+.individual-chat img{
+  border-radius: 50%;
+    object-fit: cover;
+}
+
+.indv-chat-name{
+  padding-left: 10px;
+ 
+}
+.indv-chat-name p{
+  margin: 0;
+}
+
+.indv-chat-name h4{
+  margin: 10px 0px 10px 0px;
 }
 
 .chat-message {
