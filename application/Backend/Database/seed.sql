@@ -42,10 +42,11 @@ INSERT INTO product (description, category, title, image, thumbnail, vendor_id) 
 );
 
 -- Insert Listings
-INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status) VALUES
-('Active', 1, 1, 'In Stock', 20.00, 2.00, 'Approved'),
-('Active', 2, 2, 'In Stock', 800.00, 50.00, 'Approved'),
-('Delisted', 3, 2, 'In Stock', 2.00, 0.00, 'Denied');
+INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions) VALUES
+('Active', 1, 1, 'In Stock', 20.00, 2.00, 'Approved', 'New'),
+('Active', 2, 2, 'In Stock', 800.00, 50.00, 'Approved', 'New'),
+('Delisted', 3, 2, 'In Stock', 2.00, 0.00, 'Denied', 'New'),
+('Active', 1, 1, 'In Stock', 250.00, 2.00, 'Approved', 'New');
 
 -- Insert Reviews
 INSERT INTO review (author_id, vendor_id, rating, comment) VALUES

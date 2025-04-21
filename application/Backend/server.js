@@ -46,10 +46,39 @@ app.listen(3001, () => console.log('API running on port 3001'));
 
 // MySQL Database Connection
 
-db.connect(err => {
-    if (err) {
-        console.error("Database connection failed:", err.stack);
-        return;
+// db.connect(err => {
+//     if (err) {
+//         console.error("Database connection failed:", err.stack);
+//         return;
+//     }
+//     console.log("Connected to MySQL Database.");
+// });
+console.log('Trying to connect to DB...');
+// db.getConnection((err, connection) => {
+
+//     console.log("Callback reached");
+//     if (err) {
+//       console.error('Error connecting to database:', err);
+//     } else {
+//       console.log('Successfully connected to the database!');
+//       connection.release(); // release back to the pool
+//     }
+//   });
+
+//   db.query('SELECT 1', (err, results) => {
+//     if (err) {
+//       console.error('Query failed:', err);
+//     } else {
+//       console.log('DB connection validated with test query!');
+//     }
+//   });
+
+  (async () => {
+    try {
+      console.log('Trying to connect to DB...');
+      const [rows] = await db.query('SELECT 1');
+      console.log('DB connection validated with test query!');
+    } catch (err) {
+      console.error('Error connecting to database:', err);
     }
-    console.log("Connected to MySQL Database.");
-});
+  })();
