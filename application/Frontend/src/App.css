@@ -521,6 +521,24 @@ body {
 .close-btn:hover {
   background-color: #a30000;
 } */
+
+.whoosh-out {
+  animation: slideOut 0.5s ease forwards;
+}
+
+@keyframes slideOut {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
 /* 1) Make the filter row sit just below your search bar */
 .filter-container {
   display: flex;

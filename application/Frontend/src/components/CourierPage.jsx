@@ -14,7 +14,7 @@ const CourierPage = () => {
     setSelectedDelivery(null);
   };
 
-  const dummyDeliveryRequest = [
+  const [dummyDeliveryRequests, setDummyRequests] = useState ([
 
     {
       id: 1,
@@ -43,7 +43,21 @@ const CourierPage = () => {
       sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
       buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
     }
-  ];
+  ]);
+
+  const [removingId, setRemovingId] = useState(null);
+  
+  const handleStartDelivery = () => {
+    setRemovingId(selectedDelivery.id);
+    setSelectedDelivery(null);
+    setTimeout(() => {
+      setDummyRequests(prev =>
+        prev.filter(req => req.id !== selectedDelivery.id)
+      );
+      setRemovingId(null);
+    }, 500); // 500 used to match animation duration
+  }
+
 
   // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
   // THE CONST BELOW WILL REPLACE THE DUMMY DATA ABOVE ONCE THE BACKEND IS READY
@@ -75,9 +89,12 @@ const CourierPage = () => {
 
         <h2>Delivery Requests</h2>
         <div className="yellow-divider"></div>
-        {/* Replace dummyDeliveryRequest with deliveryRequests when ready */}
-        {onShift && dummyDeliveryRequest.map((deliveryReq) => (
-        <div className="delivery-request" key={deliveryReq.id}>
+        {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
+        {onShift && (dummyDeliveryRequests.length > 0 ? (dummyDeliveryRequests.map((deliveryReq) => (
+        <div
+        className={`delivery-request ${removingId === deliveryReq.id ? "whoosh-out" : ""}`}
+        key={deliveryReq.id}
+        >
         <h3 className="delivery-title">{deliveryReq.title}</h3>
         <div className="delivery-content">
           <img 
@@ -95,7 +112,10 @@ const CourierPage = () => {
             </div>
           </div>
         </div>
-        ))}
+        ))) : (
+        <p>No more delivery requests at this time. Please check again later.</p>
+      )
+    )}
         
         {selectedDelivery && (
           <div className="delivery-popup">
@@ -116,7 +136,7 @@ const CourierPage = () => {
                 <p>{selectedDelivery.pickupAddress}</p>
                 <button className="details-btn">Details</button>
               </div>
-              <button className="start-btn" onClick={() => setSelectedDelivery(null)}>Start Delivery</button>
+              <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
             </div>
           </div>
         )}
