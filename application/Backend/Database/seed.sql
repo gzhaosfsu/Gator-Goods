@@ -7,8 +7,8 @@ INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_veri
 
 -- Insert Vendors
 INSERT INTO vendor (rating, user_id) VALUES
-(4.5, 1),
-(4.8, 2);
+(1, 1),
+(2, 2);
 
 -- Insert Buyers
 INSERT INTO buyer (user_id) VALUES
@@ -46,7 +46,7 @@ INSERT INTO listing (listing_status, product_id, vendor_id, availability, price,
 ('Active', 1, 1, 'In Stock', 20.00, 20.00, 'Approved', 'New'),
 ('Active', 2, 2, 'In Stock', 800.00, 50.00, 'Approved', 'New'),
 ('Delisted', 3, 2, 'In Stock', 2.00, 0.00, 'Denied', 'New'),
-('Active', 1, 1, 'In Stock', 250.00, 2.00, 'Approved', 'New');
+('Active', 1, 1, 'In Stock', 250.00, 2.00, 'Approved', 'Used - Like New');
 
 -- Insert Reviews
 INSERT INTO review (author_id, vendor_id, rating, comment) VALUES

@@ -1,0 +1,58 @@
+.user-profile-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-title {
+    display: flex;
+    flex-direction: row;
+    height: 150px;
+    align-items: center;
+    padding-left: 50px;
+    border-bottom: 1px solid black;
+}
+.profile-title img{
+    border-radius: 50px;
+}
+
+.user-info-container {
+    margin: 0px 50px 0px 50px;
+}
+
+.extension-container {
+    margin: 0px 50px 0px 50px;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.deleiver-extension {
+    height: 100px;
+    width: 200px;
+    background-color: lightgrey;
+    /* padding-right: 30px; */
+    margin: 20px 0px 20px 0px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.chat-extension {
+    height: 100px;
+    width: 200px;
+    background-color: lightgrey;
+    /* padding-right: 30px; */
+    margin: 20px 0px 20px 20px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+.info-name-update input{
+    margin: 20px 20px 20px 0px;
+}
+
+/* .user-email-update input{
+    widows: 100px;
+} */

@@ -23,7 +23,7 @@ const Filters = ({
     <div className="filters-container">
       <select value={filters.condition} onChange={handleCondition}>
         <option value="">All Conditions</option>
-        <option value="New">New</option>
+        <option value='New'>New</option>
         <option value="Used - Like New">Used - Like New</option>
         <option value="Used - Good">Used - Good</option>
         <option value="Used - Fair">Used - Fair</option>
