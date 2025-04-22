@@ -21,7 +21,7 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
         setSelectedCategoryName("");
         setDataReturned([]); 
         setIsSearching(false);
-        setFilters({ condition: "", priceSort: "" })
+        setFilters({ condition: "", priceSort: "", datePosted: "", minDiscount: "", minRating: "" });
     }  
     console.log("🔍 Filters import is:", Filters)
   
