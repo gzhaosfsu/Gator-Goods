@@ -521,16 +521,34 @@ body {
 .close-btn:hover {
   background-color: #a30000;
 } */
-/* 1) Make the filter row sit just below your search bar */
-.filter-container {
-  display: flex;
-  flex-wrap: wrap;       /* wrap to next line if window is narrow */
-  gap: 0.75rem;          /* space between controls */
-  margin-top: 0.75rem;   /* push filters down under the bar */
-  justify-content: center; /* center them horizontally */
+
+.whoosh-out {
+  animation: slideOut 0.5s ease forwards;
 }
 
-/* 3) (Optional) add a little down‑arrow icon */
+@keyframes slideOut {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+/* CSS for Filters */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;       
+  gap: 0.75rem;          
+  margin-top: 0.75rem;   
+  justify-content: center; 
+}
+
+
 .filters-container select {
   background-color: #FFD447;
   border: none;
@@ -541,21 +559,22 @@ body {
   color: #333;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,…"); /* your caret */
+  background-image: url("data:image/svg+xml,…"); 
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 0.6rem;
   padding-right: 2rem;
+  min-width: 140px;
 }
 
-/* 4) Remove blue outline on focus (if you prefer) */
+
 .filter-container select:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(255, 212, 71, 0.6);
 }
 .filters-row {
   display: flex;
-  justify-content: center;   /* center under the bar */
-  gap: 0.75rem;              /* space between pills */
-  margin-top: 0.5rem;        /* a little gap from the purple bar */
+  justify-content: center;   
+  gap: 0.75rem;              
+  margin-top: 0.5rem;       
 }
