@@ -6,7 +6,6 @@ const UserDropdown = ({ username }) => {
     const navigate = useNavigate();
 
     const handleSignOut = () => {
-        localStorage.removeItem('token'); // Or whatever auth you're using
         navigate('/');
     };
 
