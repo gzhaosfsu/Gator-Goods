@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from "react";
 import Header from './Header';
 import Footer from './Footer';
-import '../App.css';
+import '../courierPage.css';
 
 const CourierPage = () => {
 
@@ -21,7 +21,7 @@ const CourierPage = () => {
       title: "Delivery Request 1",
       pickupAddress: "VENDOR #1'S ADDRESS",
       dropoffAddress: "BUYER #1'S ADDRESS",
-      imageUrl: "https://via.placeholder.com/100",
+      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
       sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
       buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
     },
@@ -30,7 +30,7 @@ const CourierPage = () => {
       title: "Delivery Request 2",
       pickupAddress: "VENDOR #2'S ADDRESS",
       dropoffAddress: "BUYER #2'S ADDRESS",
-      imageUrl: "https://via.placeholder.com/100",
+      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
       sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
       buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
     },
@@ -39,14 +39,20 @@ const CourierPage = () => {
       title: "Delivery Request 3",
       pickupAddress: "VENDOR #3'S ADDRESS",
       dropoffAddress: "BUYER #3'S ADDRESS",
-      imageUrl: "https://via.placeholder.com/100",
+      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
       sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
       buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
     }
   ]);
 
+
+  // this is the ID of the delivery request that is being removed
+  // which is used to trigger the animation when a delivery request is accepted
   const [removingId, setRemovingId] = useState(null);
   
+  // function is called when the "Start Delivery" button is clicked
+  // it sets the removingId to the ID of the selected delivery request
+  // and then sets the selectedDelivery to null to close the popup
   const handleStartDelivery = () => {
     setRemovingId(selectedDelivery.id);
     setSelectedDelivery(null);
@@ -91,24 +97,46 @@ const CourierPage = () => {
         <div className="yellow-divider"></div>
         {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
         {onShift && (dummyDeliveryRequests.length > 0 ? (dummyDeliveryRequests.map((deliveryReq) => (
+
+          // This is how the delivery requests get "whooshed out" when accepted
         <div
         className={`delivery-request ${removingId === deliveryReq.id ? "whoosh-out" : ""}`}
         key={deliveryReq.id}
         >
+
         <h3 className="delivery-title">{deliveryReq.title}</h3>
         <div className="delivery-content">
+
+          {/* // This is the image of the delivery request */}
           <img 
             src={deliveryReq.imageUrl}
             alt="Delivery" 
             className="delivery-image" 
           />
+
           <div className="delivery-details">
             <p>Pickup at: {deliveryReq.pickupAddress}</p>
             <p>Dropoff at: {deliveryReq.dropoffAddress}</p>
+
+            {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button>
-              <button className="message-btn">MESSAGE BUYER</button>
+              <div className="message-bubble">
+                <p className="message-label">Send buyer a message</p>
+                <div className="message-input-row">
+
+                {/* Message Input works, but sending does nothing rn */}
+                  <input
+                    type="text"
+                    className="message-input"
+                    placeholder="I will deliver the item and need payment"
+                  />
+
+                  <button className="send-btn">SEND</button>
+                </div>
+              </div>
             </div>
+
             </div>
           </div>
         </div>
