@@ -36,14 +36,14 @@ INSERT INTO product (description, category, title, image, thumbnail, vendor_id) 
 ('Harry Potter',
     'books',
     'big book',
-    LOAD_FILE('/home/student/Downloads/648BLOBsample.png'),
-    LOAD_FILE('/home/student/Downloads/648BLOBsample.png'),
+    LOAD_FILE('C:\Users\User\Downloads\648BLOBsample.png'),
+    LOAD_FILE('C:\Users\User\Downloads\648BLOBsample.png'),
     1
 );
 
 -- Insert Listings
 INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions) VALUES
-('Active', 1, 1, 'In Stock', 20.00, 2.00, 'Approved', 'New'),
+('Active', 1, 1, 'In Stock', 20.00, 20.00, 'Approved', 'New'),
 ('Active', 2, 2, 'In Stock', 800.00, 50.00, 'Approved', 'New'),
 ('Delisted', 3, 2, 'In Stock', 2.00, 0.00, 'Denied', 'New'),
 ('Active', 1, 1, 'In Stock', 250.00, 2.00, 'Approved', 'New');

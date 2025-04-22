@@ -3,21 +3,23 @@ const router = express.Router();
 const db = require('../DB');
 
 // Search Listings by Category
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const searchTerm = req.query.category; // will come after /api/category?category=...
     if (!searchTerm) {
         return res.status(400).json({ error: "Missing search term" });
     }
 
+    try {
+
     const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.category LIKE ? AND listing.listing_status = 'Active'"
     const searchValue = `%${searchTerm}%`;
     
 
-    db.query(query, [searchValue], (err, results) => {
-        if (err) {
-            console.error("Database query failed:", err);
-            return res.status(500).json({ error: "Database query failed" });
-        }
+    // db.query(query, [searchValue], (err, results) => {
+    //     if (err) {
+    //         console.error("Database query failed:", err);
+    //         return res.status(500).json({ error: "Database query failed" });
+    //     }
         
 
         const listingsWithImages = results.map(row => {
@@ -39,7 +41,12 @@ router.get('/', (req, res) => {
         });
 
         res.json(listingsWithImages);
-    });
+        }
+        catch (err) {
+            console.error("Database query failed:", err);
+            res.status(500).json({ error: "Database query failed" });
+        }
+    // });
 });
 
 module.exports = router;

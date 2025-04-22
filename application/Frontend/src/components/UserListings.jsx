@@ -39,8 +39,8 @@ const UserListings = () => {
         <div className="listings-container">
           {listings.map((item, index) => (
             <div className="listing-card" key={index}>
-              <div className="listing-img" />
-              <img src={item.thumbnail} alt="Thumbnail" />
+              {/* <div className="listing-img" /> */}
+              <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
               <div className="listing-info">
                 <strong>{item.title || "No Title"}</strong>
                 <br /> <br /> <br />
