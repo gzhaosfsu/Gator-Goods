@@ -7,6 +7,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
  
   // This shows when it toggles on displaying data or not 
   console.log("is Searching: " + isSearching); 
+  
    
 
   // will only diplay if the we are clicking Search Icon
@@ -16,7 +17,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
     let filteredData = Array.isArray(dataReturned)
     ? [...dataReturned]
     : []
-
+    
     // condition filter
     if (filters.condition) {
       filteredData = filteredData.filter(
@@ -35,7 +36,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
     if (filters.datePosted) {
       const now = Date.now()
       filteredData = filteredData.filter(item => {
-        const posted = new Date(item.datePosted).getTime()
+        const posted = new Date(item.listing_date).getTime()
         const ageMs  = now - posted
         switch (filters.datePosted) {
           case "24h": return ageMs <= 24 * 60 * 60 * 1000
@@ -62,7 +63,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
     if (filters.minRating) {
       const minR = Number(filters.minRating)
       filteredData = filteredData.filter(item =>
-        (item.averageRating || 0) >= minR
+        (item.rating || 0) >= minR
       )
     }
 
