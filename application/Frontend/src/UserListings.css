@@ -1,152 +1,93 @@
-/* .listings-page {
-    margin: auto;
-  }
-  
-  */.title {
-    font-size: 50px;
-    font-weight: bold;
-    border-bottom: 4px solid gold;
-    display: inline-block;
-    margin-left: 1182px;
-    margin-right: 60px;
-    margin-bottom: 60px;
-  } /*
+.listings-page {
+  margin: 0 auto;
+}
 
-  .custom-wrapper button {
-    width: 100%;
-    padding: 0.8rem;
-    background: #ddd;
-    padding: 1rem;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-top: 200px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-  }
-  
-  .create-button {
-    background: #ddd;
-    padding: 1rem;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-top: 200px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-  }
-  
-  .create-button .plus {
-    margin-left: 10px;
-  }
+.listing-formatting {
+  /* padding: 0 80rem; */
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
-    .listings-container {
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
 
-  
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  border-bottom: 4px solid gold;
+  display: inline-block;
+  text-align: center;
+}
 
-  
 
-  
- */
 
-  .user-listings-page {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: 0;
-  }
-  
-  .listings-header {
-    background-color: #ffe066; 
-    padding: 2rem 0;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .listings-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .button-wrapper {
-    margin-top: 1rem;
-    margin-left: 1182px;
-    margin-right: 60px;
-    margin-bottom: 1rem;
-    width: 1000px;
-    background-color: #d9d9d9;
-  }
-  
-  .button-wrapper button {
-    font-size: 1.2rem;
-    padding: 0.75rem 2rem;
-    background-color: #d9d9d9;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  
-  .listings-container {
-    width: 1045px; 
-    margin: 0 auto;
-    margin-left: 1182px;
-    /* width: 100%; */
-    /* padding: 2rem 4rem;  */
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    font-size: 20px;
-  }
-  
-  .buttons {
-    margin-top: 1rem;
-  }
-  
-  .delete-btn {
-    background: #ff5f5f;
-    border: none;
-    color: white;
-    padding: 0.5rem 1.2rem;
-    font-weight: bold;
-    border-radius: 4px;
-    margin-right: 1rem;
-    cursor: pointer;
-    color: black;
-  }
-  
-  .sold-btn {
-    background: #2f1364;
-    border: none;
-    color: white;
-    padding: 0.5rem 1.2rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.listings-header {
+  background-color: #ffe066;
+  padding: 2rem 1rem;
+  text-align: center;
+  width: 100%;
+}
 
-  .listing-img {
-    width: 100px;
-    height: 100px;
-    background: lightgray;
-    margin-right: 1rem;
-  }
-  
-  .listing-info {
-    flex: 1;
-  }
+.listings-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+}
 
-  .listing-card {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 1rem;
-  }
+.button-wrapper {
+  margin: 1rem auto;
+  background-color: #d9d9d9;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+
+.listings-container {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 20px;
+}
+
+.listing-card {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+}
+
+.listing-img {
+  width: 100px;
+  height: 100px;
+  background: lightgray;
+  margin-right: 1rem;
+}
+
+.listing-info {
+  flex: 1;
+}
+
+.buttons {
+  margin-top: 1rem;
+}
+
+.delete-btn {
+  background: #ff5f5f;
+  border: none;
+  color: black;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.sold-btn {
+  background: #2f1364;
+  border: none;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
