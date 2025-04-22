@@ -181,18 +181,7 @@ body {
 
 }
 
-.footer-container{
-  margin-top: auto;
-  background-color: #71717A;
-  height: 10vh;
-  display: flex;
-  align-items: center;
-}
 
-.footer-text{
-  padding-left: 50px;
-  color: white;
-}
 
 .about-container{
   padding-top: 100px;
