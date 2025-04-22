@@ -17,18 +17,53 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
     ? [...dataReturned]
     : []
 
-    // 1) condition filter
+    // condition filter
     if (filters.condition) {
       filteredData = filteredData.filter(
         (p) => p.condition === filters.condition
       )
     }
 
-    // 2) price sort
+    // price sort
     if (filters.priceSort === "high-to-low") {
       filteredData.sort((a, b) => b.price - a.price)
     } else if (filters.priceSort === "low-to-high") {
       filteredData.sort((a, b) => a.price - b.price)
+    }
+
+    // date posted filter
+    if (filters.datePosted) {
+      const now = Date.now()
+      filteredData = filteredData.filter(item => {
+        const posted = new Date(item.datePosted).getTime()
+        const ageMs  = now - posted
+        switch (filters.datePosted) {
+          case "24h": return ageMs <= 24 * 60 * 60 * 1000
+          case "7d":  return ageMs <= 7  * 24 * 60 * 60 * 1000
+          case "30d": return ageMs <= 30 * 24 * 60 * 60 * 1000
+          default:    return true
+        }
+      })
+    }
+
+    // discount threshold filter
+    if (filters.minDiscount) {
+      const minDisc = Number(filters.minDiscount)
+      filteredData = filteredData.filter(item =>{
+        // (item.discount * 100 || 0) >= minDisc
+        const discValue = item.discount > 1
+          ? item.discount
+          : (item.discount * 100)
+        return discValue >= minDisc
+      })
+    }
+
+    // minimum rating filter
+    if (filters.minRating) {
+      const minR = Number(filters.minRating)
+      filteredData = filteredData.filter(item =>
+        (item.averageRating || 0) >= minR
+      )
     }
 
     if (filteredData.length > 0) {
