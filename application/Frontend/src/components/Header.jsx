@@ -6,6 +6,7 @@ import {Link } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 import Filters from "./Filters"
+import UserDash from "./UserDash";
 const Header = ({ user, setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
 
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
@@ -41,7 +42,7 @@ const Header = ({ user, setDataReturned, setSelectedCategoryName, setIsSearching
                         </div>
                         <div className="logIn-container">
                             {user ? (
-                                <UserDropdown username={user.username}/>
+                                <UserDash username={user.username}/>
                             ) : (
                                 <Link to="/login">
                                     <button className="btn-logIn">Login</button>
