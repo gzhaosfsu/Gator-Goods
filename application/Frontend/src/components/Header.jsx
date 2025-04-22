@@ -47,7 +47,10 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                                           setDataReturned={setDataReturned} setIsSearching={setIsSearching}
                                           setSelectedCategoryName={setSelectedCategoryName}/>
                            </div>
-                           <div className="logIn-container">
+                    </div>
+                </div>
+            </div>
+            <div className="logIn-container">
                                {user ? (
                                    <UserDash username={user.username}/>
                                ) : (
@@ -56,9 +59,6 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                                 </Link>
                             )}
                         </div>
-                    </div>
-                </div>
-            </div>
         </div>
            {isSearching && (
                <div className="filters-row">
