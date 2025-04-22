@@ -36,6 +36,6 @@ export const dummyData = [
       vendor_id: 3,
       image: "https://via.placeholder.com/150?text=Aloha+Food+Vendor",
       isFeatured: false
-    }
+    },
   ];
   

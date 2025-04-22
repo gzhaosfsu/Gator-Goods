@@ -6,8 +6,7 @@ import {Link } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 import Filters from "./Filters"
-
-const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
+const Header = ({ user, setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
 
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
     const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category
@@ -41,19 +40,23 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                             <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory} setDataReturned={setDataReturned} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName}/>
                         </div>
                         <div className="logIn-container">
-                            <Link to={`/login`}>
-                                <botton classname="btn-logIn">Login</botton>
-                            </Link>
+                            {user ? (
+                                <UserDropdown username={user.username}/>
+                            ) : (
+                                <Link to="/login">
+                                    <button className="btn-logIn">Login</button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {isSearching && (
-                        <div className="filters-row">
-                            <Filters
-                                filters={filters}
-                                setFilters={newFilters => {
+           {isSearching && (
+               <div className="filters-row">
+                   <Filters
+                       filters={filters}
+                       setFilters={newFilters => {
                                     setFilters(newFilters)
                                     setIsSearching(true)    // keep us in “search mode”
                                 }}

@@ -66,8 +66,8 @@ const UserDropdown = ({ username }) => {
                 </div>
                 {open && (
                     <div className="dropdown-menu">
-                        <Link to={`/user/${username}`}>Profile</Link>
-                        <Link to="/">Message</Link>
+                        <Link to="/">Profile</Link>
+                        <Link to="/chats">Message</Link>
                         <Link to="/">Vendor</Link>
                         <Link to="/">Courier</Link>
                         <button onClick={handleSignOut}>Sign Out</button>
