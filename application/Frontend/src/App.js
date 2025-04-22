@@ -13,6 +13,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import CourierPage from './components/CourierPage'
 import VendorPage from './components/VendorPage'
+import UserListings from './components/UserListings'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,7 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/courierPage' element={<CourierPage/>} />
         <Route path="/vendorPage" element={<VendorPage/>} />
+        <Route path="/userListings" element={<UserListings/>} />
       </Routes>
     </BrowserRouter>
   )

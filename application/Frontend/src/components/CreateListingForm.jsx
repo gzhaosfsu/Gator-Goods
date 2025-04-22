@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../CreateListingForm.css';
 
+
+
 const CreateListingForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     image: null,
@@ -21,7 +23,7 @@ const CreateListingForm = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send formData to your backend here
+    // post request here
     console.log(formData);
     onClose();
   };
@@ -104,7 +106,6 @@ const CreateListingForm = ({ onClose }) => {
 
           <div className="form-buttons">
             <button type="submit">Submit</button>
-            {/* <button type="button" onClick={onClose}>Cancel</button> */}
           </div>
         </form>
       </div>

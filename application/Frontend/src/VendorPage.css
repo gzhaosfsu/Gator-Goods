@@ -31,6 +31,7 @@
   .section {
     padding: 0 2rem;
     margin-bottom: 3rem;
+    margin-left: 400px;
   }
 
   .section-inner {
@@ -38,8 +39,7 @@
     flex-direction: column;
     align-items: flex-start;  
     margin: 0 auto;
-    max-width: 1800px;         
-    width: 100%;
+    max-width: 1800px;   
   }
   
   .section-title {
@@ -66,7 +66,6 @@
     flex-wrap: wrap;
     gap: 63px;
     justify-content: center;
-    margin: 0 auto;
   }
   
   .card {
@@ -78,6 +77,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
+    color: inherit;
+    user-select: none;
   }
   
   .card-icon {
@@ -96,7 +98,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 63px;
-    margin: 0 auto;
+    margin-left: 0 auto;
   }
   
   .stat-card {

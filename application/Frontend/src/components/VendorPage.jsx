@@ -1,8 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import "../VendorPage.css";
 import Header from './Header';
 import Footer from './Footer';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
 
 const VendorPage = () => {
@@ -29,9 +33,9 @@ const VendorPage = () => {
             <div className="section-inner">
                 <h2 className="section-title overview-title">Overview</h2>
                 <div className="card-grid">
-                    <Card title="Messages" icon="/icons/message.svg" />
-                    <Card title="Active Listings" icon="/icons/box.svg" />
-                    <Card title="Ready for delivery" icon="/icons/delivery.svg" />
+                    <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }} />} />
+                    <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} link="/userListings" />
+                    <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} />
                 </div>
             </div>
         </section>
@@ -52,19 +56,26 @@ const VendorPage = () => {
     );
 };
 
-    const Card = ({ title, icon }) => (
-        <div className="card">
-          <span className="card-title">{title}</span>
-          <img src={icon} alt={title} className="card-icon" />
-        </div>
-    );
-      
-    const StatCard = ({ label, value }) => (
-        <div className="stat-card">
-          <span className="stat-label">{label}</span>
-          <span className="stat-value">{value}</span>
-        </div>
-    );
+const Card = ({ title, icon, link }) => (
+    <Link to={link || "#"} className="card">
+      <span className="card-title">{title}</span>
+      {icon}
+    </Link>
+  );
+
+    // const Card = ({ title, icon }) => (
+    //     <div className="card">
+    //       <span className="card-title">{title}</span>
+    //       <div className="card-icon">{icon}</div>
+    //     </div>
+    // );
+    
+const StatCard = ({ label, value }) => (
+    <div className="stat-card">
+        <span className="stat-label">{label}</span>
+        <span className="stat-value">{value}</span>
+    </div>
+);
 
 
 
