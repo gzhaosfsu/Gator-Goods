@@ -7,10 +7,14 @@ import { useState, useEffect } from "react"
 import { dummyData } from "../dummyData";
 import Filters from "./Filters"
 import UserDash from "./UserDash";
-const Header = ({ user, setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
+import {UserContext} from "../UserContext";
+import {useContext} from "react";
+
+const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
 
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
     const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category
+    const {user} = useContext(UserContext);
 
 
     
@@ -27,25 +31,28 @@ const Header = ({ user, setDataReturned, setSelectedCategoryName, setIsSearching
   
     return (
        <>
-        <div className="header-container">
-            <div className="header">
-                <div className="inner-header" > 
-                    <div className="logo">
-                        <Link onClick={featuredItems} to="/" >
-                            <img src={logo} alt="Gator Goods logo" style={{width:"100%", height:"100%"}} />
-                        </Link>
-                    </div>
-                    <div className="header-box">
-                        <div className="filter-container">
-                            <Categories setSelectedCategory={setSelectedCategory} setSelectedCategoryName={setSelectedCategoryName} />
-                            <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory} setDataReturned={setDataReturned} setIsSearching={setIsSearching} setSelectedCategoryName={setSelectedCategoryName}/>
-                        </div>
-                        <div className="logIn-container">
-                            {user ? (
-                                <UserDash username={user.username}/>
-                            ) : (
-                                <Link to="/login">
-                                    <button className="btn-logIn">Login</button>
+           <div className="header-container">
+               <div className="header">
+                   <div className="inner-header">
+                       <div className="logo">
+                           <Link onClick={featuredItems} to="/">
+                               <img src={logo} alt="Gator Goods logo" style={{width: "100%", height: "100%"}}/>
+                           </Link>
+                       </div>
+                       <div className="header-box">
+                           <div className="filter-container">
+                               <Categories setSelectedCategory={setSelectedCategory}
+                                           setSelectedCategoryName={setSelectedCategoryName}/>
+                               <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory}
+                                          setDataReturned={setDataReturned} setIsSearching={setIsSearching}
+                                          setSelectedCategoryName={setSelectedCategoryName}/>
+                           </div>
+                           <div className="logIn-container">
+                               {user ? (
+                                   <UserDash username={user.username}/>
+                               ) : (
+                                   <Link to="/login">
+                                       <button className="btn-logIn">Login</button>
                                 </Link>
                             )}
                         </div>

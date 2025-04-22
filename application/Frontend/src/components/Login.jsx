@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mascot from './images/LogoGG.png';
 import {dummyUser} from "../dummyUser";
+import {UserContext} from "../UserContext";
 
-const Login = ({setUser}) => {
+const Login = () => {
     const [form, setForm] = useState({ email: '', password: '' });
+    const { login } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleChange = (e) =>
@@ -12,6 +14,7 @@ const Login = ({setUser}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        /*
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -21,17 +24,29 @@ const Login = ({setUser}) => {
 
             const data = await response.json();
 
-            /*if (!response.ok) {
+            if (!response.ok) {
                 alert(data.message || 'Login failed');
                 return;
-            }*/
+            }
 
             alert('Logged in!');
-            setUser(data.user);
+            login(data.user);
             navigate('/');
         } catch (error) {
             console.error('Login error:', error);
             alert('Something went wrong. Please try again.');
+        }
+        */
+        const fakeUser = dummyUser[0];
+        if (
+            form.email === fakeUser.sfsu_email &&
+            form.password === fakeUser.password
+        ) {
+            alert('Logged in as dummy user!');
+            login(fakeUser);
+            setTimeout(() => navigate('/'),0);
+        } else {
+            alert('Invalid email or password.');
         }
     };
 
