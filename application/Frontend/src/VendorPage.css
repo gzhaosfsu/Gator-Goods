@@ -1,8 +1,13 @@
+.vendor-formatting {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
 /* Create Listing Button */
 .center {
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
+    /* margin: 2rem 0; */
   }
   
   .create-button {
@@ -29,17 +34,24 @@
   
   /* Sections */
   .section {
-    padding: 0 2rem;
+    /* padding: 0 2rem; */
     margin-bottom: 3rem;
-    margin-left: 400px;
+    /* margin-left: 400px; */
   }
 
   .section-inner {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: flex-start;  
     margin: 0 auto;
-    max-width: 1800px;   
+    max-width: 1800px;    */
+
+    max-width: 1200px; /* or whatever fits your design */
+    margin: 0 auto;
+    /* padding: 0 250px; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start
   }
   
   .section-title {
@@ -62,10 +74,12 @@
   
   /* Overview cards */
   .card-grid {
-    display: flex;
+    display: grid; /*
     flex-wrap: wrap;
     gap: 63px;
-    justify-content: center;
+    justify-content: center; */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 63px 80px;
   }
   
   .card {

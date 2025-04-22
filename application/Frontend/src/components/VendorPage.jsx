@@ -20,36 +20,37 @@ const VendorPage = () => {
 
     return (
         <div className="vendorPage">
-        <Header />
-        {/* Create Listing */}
-        <div className="center">
-            <button className="create-button" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></button>
+          <Header />
+          <div className="vendor-formatting">
+            {/* Create Listing */}
+            <div className="center">
+                <button className="create-button" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></button>
 
-            {showForm && (<CreateListingForm onClose={() => setShowForm(false)} />
-      )}
+                {showForm && (<CreateListingForm onClose={() => setShowForm(false)} />
+                )}
+            </div>
+            {/* Overview */}
+            <section className="section">
+                <div className="section-inner">
+                    <h2 className="section-title overview-title">Overview</h2>
+                    <div className="card-grid">
+                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }} />} />
+                        <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} link="/userListings" />
+                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} />
+                    </div>
+                </div>
+            </section>
+            {/* Stats */}
+            <section className="section">
+                <div className="section-inner">
+                    <h2 className="section-title stats-title">Stats</h2>
+                    <div className="stat-grid">
+                        <StatCard label="Sold Items" value="5" />
+                        <StatCard label="Rating" value="5/5" />
+                    </div>
+                </div>
+            </section>
         </div>
-        {/* Overview */}
-        <section className="section">
-            <div className="section-inner">
-                <h2 className="section-title overview-title">Overview</h2>
-                <div className="card-grid">
-                    <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }} />} />
-                    <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} link="/userListings" />
-                    <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} />
-                </div>
-            </div>
-        </section>
-        {/* Stats */}
-        <section className="section">
-            <div className="section-inner">
-                <h2 className="section-title stats-title">Stats</h2>
-                <div className="stat-grid">
-                    <StatCard label="Sold Items" value="5" />
-                    <StatCard label="Rating" value="5/5" />
-                </div>
-            </div>
-        </section>
-
         
         <Footer />
         </div>
