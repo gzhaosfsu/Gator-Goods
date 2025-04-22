@@ -16,7 +16,8 @@ import VendorPage from './components/VendorPage'
 import UserListings from './components/UserListings'
 
 function App() {
-  const [count, setCount, user, setUser] = useState(0)
+  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null)
 
   return (
     <BrowserRouter>

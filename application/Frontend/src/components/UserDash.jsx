@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
-const UserDropdown = ({ username }) => {
+const UserDash = ({ username }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const { logout } = useContext(UserContext);
 
     const handleSignOut = () => {
+        logout();
         navigate('/');
     };
 
@@ -32,6 +35,7 @@ const UserDropdown = ({ username }) => {
             background: white;
             color: black;
             border-radius: 5px;
+            border: 1px solid red;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
@@ -65,10 +69,10 @@ const UserDropdown = ({ username }) => {
                 </div>
                 {open && (
                     <div className="dropdown-menu">
-                        <Link to="/">Profile</Link>
-                        <Link to="/chats">Message</Link>
-                        <Link to="/">Vendor</Link>
-                        <Link to="/">Courier</Link>
+                        <Link to="/" onClick={() => setOpen(false)}>Profile</Link>
+                        <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
+                        <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
+                        <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
                         <button onClick={handleSignOut}>Sign Out</button>
                     </div>
                 )}
@@ -77,4 +81,5 @@ const UserDropdown = ({ username }) => {
     );
 };
 
-export default UserDropdown;
+
+export default UserDash;
