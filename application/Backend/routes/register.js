@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const db = require('../server/DB'); // MySQL connection pool
+const db = require('../DB'); // MySQL connection pool
 require('dotenv').config();
 
 router.post('/register', async (req, res) => {

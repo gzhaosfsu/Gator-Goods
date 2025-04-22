@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../server/DB');
+const db = require('../DB');
 
 // GET all reviews
 router.get('/', (req, res) => {

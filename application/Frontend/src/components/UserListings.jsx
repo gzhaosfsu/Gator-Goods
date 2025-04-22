@@ -17,6 +17,7 @@ const UserListings = () => {
           title: item.title,
           price: parseFloat(item.price),
           listing_date: new Date(item.listing_date),
+          thumbnail: item.thumbnail
         }));
         setListings(cleanedData);
     })
@@ -26,6 +27,7 @@ const UserListings = () => {
   return (
     <div className="listings-page">
         <Header />
+        
       <h1 className="title">Active Listings</h1>
       {/* <div className="button-wrapper"> */}
         <div className="create-button button-wrapper" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></div>
@@ -38,6 +40,7 @@ const UserListings = () => {
         {listings.map((item, index) => (
           <div className="listing-card" key={index}>
             <div className="listing-img" />
+            <img src={item.thumbnail} alt="Thumbnail" />
             <div className="listing-info">
               <strong>{item.title || "No Title"}</strong>
               <br /> <br /> <br />

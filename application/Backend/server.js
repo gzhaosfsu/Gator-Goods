@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./server/DB');
+const db = require('./DB');
 
 const buyerRoutes = require('./routes/buyer');
 const courierRoutes = require('./routes/courier');
@@ -53,7 +53,6 @@ app.listen(3001, () => console.log('API running on port 3001'));
 //     }
 //     console.log("Connected to MySQL Database.");
 // });
-console.log('Trying to connect to DB...');
 // db.getConnection((err, connection) => {
 
 //     console.log("Callback reached");
