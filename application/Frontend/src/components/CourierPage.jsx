@@ -121,7 +121,8 @@ const CourierPage = () => {
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button>
-              <div className="message-bubble">
+              <div className="message-section">
+                <div className="message-bubble">
                 <p className="message-label">Send buyer a message</p>
                 <div className="message-input-row">
 
@@ -134,9 +135,9 @@ const CourierPage = () => {
 
                   <button className="send-btn">SEND</button>
                 </div>
-              </div>
+                </div>
             </div>
-
+            </div>
             </div>
           </div>
         </div>
