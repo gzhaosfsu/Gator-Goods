@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mascot from './images/LogoGG.png';
+import {dummyUser} from "../dummyUser";
 
-const Login = () => {
+const Login = ({setUser}) => {
     const [form, setForm] = useState({ email: '', password: '' });
     const navigate = useNavigate();
 
@@ -20,12 +21,13 @@ const Login = () => {
 
             const data = await response.json();
 
-            if (!response.ok) {
+            /*if (!response.ok) {
                 alert(data.message || 'Login failed');
                 return;
-            }
+            }*/
 
             alert('Logged in!');
+            setUser(data.user);
             navigate('/');
         } catch (error) {
             console.error('Login error:', error);

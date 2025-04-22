@@ -16,7 +16,7 @@ import VendorPage from './components/VendorPage'
 import UserListings from './components/UserListings'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount, user, setUser] = useState(0)
 
   return (
     <BrowserRouter>
@@ -29,7 +29,7 @@ function App() {
         <Route path="/aboutVansh" element={<AboutVansh/>}/>
         <Route path='/aboutTeam' element={<AboutTeam/>}/>
         <Route path='/chats' element={<Chats/>} />
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/login' element={<Login setUser={setUser}/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/courierPage' element={<CourierPage/>} />
         <Route path="/vendorPage" element={<VendorPage/>} />
