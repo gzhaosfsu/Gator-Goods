@@ -26,7 +26,10 @@ const Homepage = ({}) => {
 
     const [filters, setFilters] = useState({
         condition: "",
-        priceSort: ""
+        priceSort: "",
+        datePosted: "",
+        minDiscount: "",
+        minRating: "",
     })
     return (
         <>
