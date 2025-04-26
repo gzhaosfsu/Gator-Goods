@@ -84,18 +84,20 @@ const CourierPage = () => {
   return (
     <div className="courier-page">
       <Header />
-
       <div className="courier-body">
+      <button className={"dashboard-btn"}>BACK TO PROFILE DASHBOARD</button>
+      <div className="courier-header">
+      <h2>List of Open Assignments</h2>
         <button 
             className={onShift ? "end-shift-btn" : "available-btn"} 
             onClick={toggleOnOffShift}
           >
             {onShift ? "END SHIFT" : "Available for Work"}
           </button>
-
-        <h2>Delivery Requests</h2>
+      </div>
         <div className="yellow-divider"></div>
         {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
+        {!onShift && <p>Click button to start shift.</p>}
         {onShift && (dummyDeliveryRequests.length > 0 ? (dummyDeliveryRequests.map((deliveryReq) => (
 
           // This is how the delivery requests get "whooshed out" when accepted
