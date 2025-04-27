@@ -13,18 +13,9 @@ router.get('/', async (req, res) => {
 
     try {
 
-    const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
-    const searchValues = [`%${category}%`, `%${title}%`];
-    const [results] = await db.query(query, searchValues);
-    
-    
-
-    // db.query(query, searchValues, (err, results) => {
-    //     if (err) {
-    //         console.error("Database query failed:", err);
-    //         return res.status(500).json({ error: "Database query failed" });
-    //     }
-        
+        const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
+        const searchValues = [`%${category}%`, `%${title}%`];
+        const [results] = await db.query(query, searchValues);
 
         const listingsWithImages = results.map(row => {
             const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
@@ -47,8 +38,7 @@ router.get('/', async (req, res) => {
         });
 
         res.json(listingsWithImages);
-    // });
-}
+    }
     catch (err){
         console.error("Database query failed:", err);
         res.status(500).json({ error: "Database query failed" });
