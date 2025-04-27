@@ -51,14 +51,14 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                 </div>
             </div>
             <div className="logIn-container">
-                               {user ? (
-                                   <UserDash username={user.username}/>
-                               ) : (
-                                   <Link to="/login">
-                                       <button className="btn-logIn">Login</button>
-                                </Link>
-                            )}
-                        </div>
+                {user ? (
+                    <UserDash username={user.username}/>
+                ) : (
+                    <Link to="/login">
+                        <button className="btn-logIn">Login</button>
+                    </Link>
+                )}
+            </div>
         </div>
            {isSearching && (
                <div className="filters-row">
