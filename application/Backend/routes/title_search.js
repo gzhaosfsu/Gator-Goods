@@ -6,20 +6,17 @@ const db = require('../DB');
 
 
 // Search Listings by Title
-router.get('/', (req, res) => {
-    const searchTerm = req.query.q; // will come after /api/title?q=...
+router.get('/', async (req, res) => {
+    const searchTerm = req.query.title; // will come after /api/title?q=...
     if (!searchTerm) {
         return res.status(400).json({ error: "Missing search term" });
     }
 
-    const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'"
-    const searchValue = `%${searchTerm}%`;
+    try {
 
-    db.query(query, [searchValue], (err, results) => { 
-        if (err) {
-            console.error("Database query failed:", err);
-            return res.status(500).json({ error: "Database query failed" });
-        }
+        const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'"
+        const searchValue = `%${searchTerm}%`;
+        const [results] = await db.query(query, searchValue);
 
         const listingsWithImages = results.map(row => {
             const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
@@ -39,7 +36,11 @@ router.get('/', (req, res) => {
             };
         });
         res.json(listingsWithImages);
-    });
+    }
+    catch (err) {
+        console.error("Database query failed:", err);
+        res.status(500).json({ error: "Database query failed" });
+    }
 });
 
 module.exports = router;

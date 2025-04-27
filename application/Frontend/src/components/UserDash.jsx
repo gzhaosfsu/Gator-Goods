@@ -21,7 +21,7 @@ const UserDash = ({ username }) => {
             </div>
             {open && (
               <div className="dropdown-menu">
-                <Link to="/" onClick={() => setOpen(false)}>Profile</Link>
+                <Link to="/UserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
                 <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
                 <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
