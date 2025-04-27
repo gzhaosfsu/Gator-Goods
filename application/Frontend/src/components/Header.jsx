@@ -47,6 +47,7 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                                           setDataReturned={setDataReturned} setIsSearching={setIsSearching}
                                           setSelectedCategoryName={setSelectedCategoryName}/>
                            </div>
+<<<<<<< HEAD
                     </div>
                 </div>
             </div>
@@ -60,16 +61,31 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                             )}
                         </div>
         </div>
+=======
+                       </div>
+                   </div>
+               </div>
+               <div className="logIn-container">
+                   {user ? (
+                       <UserDash username={user.username}/>
+                   ) : (
+                       <Link to="/login">
+                           <button className="btn-logIn">Login</button>
+                       </Link>
+                   )}
+               </div>
+           </div>
+>>>>>>> 8511d674 (login testing)
            {isSearching && (
                <div className="filters-row">
                    <Filters
                        filters={filters}
                        setFilters={newFilters => {
-                                    setFilters(newFilters)
-                                    setIsSearching(true)    // keep us in “search mode”
-                                }}
-                            />
-                        </div>
+                           setFilters(newFilters)
+                           setIsSearching(true)    // keep us in “search mode”
+                       }}
+                   />
+               </div>
                     )}    
        </>
     )

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import * as JSON from "postcss";
 
 export const UserContext = createContext();
 
@@ -26,11 +27,14 @@ export const UserProvider = ({ children }) => {
         const sessionStart = Date.now();
         const sessionDuration = 30 * 60 * 1000; // 30 minutes
 
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('user', (userData.username));
+        localStorage.setItem('user_id', (userData.id));
+        localStorage.setItem('user_email', (userData.email));
         localStorage.setItem('loginTime', sessionStart.toString());
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
 
         setUser(userData);
+        setToken()
     };
 
     // Log user out

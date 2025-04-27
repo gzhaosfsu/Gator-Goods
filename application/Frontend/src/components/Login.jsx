@@ -14,9 +14,8 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        /*
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch('http://localhost:3001/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(form),
@@ -31,13 +30,13 @@ const Login = () => {
 
             alert('Logged in!');
             login(data.user);
-            navigate('/');
+            navigate('/UserProfile');
         } catch (error) {
             console.error('Login error:', error);
             alert('Something went wrong. Please try again.');
         }
-        */
-        const fakeUser = dummyUser[0];
+    };
+        /*const fakeUser = dummyUser[0];
         if (
             form.email === fakeUser.sfsu_email &&
             form.password === fakeUser.password
@@ -48,7 +47,7 @@ const Login = () => {
         } else {
             alert('Invalid email or password.');
         }
-    };
+    };*/
 
 
     return (
