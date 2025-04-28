@@ -4,18 +4,28 @@ import image from "./images/imageNA.png"
 import React, { useState, useEffect } from "react"
 import "../Chat.css"
 import {directMessage, registeredUsers, listings} from "../chatDummyData"; 
-
+import {UserContext} from "../UserContext"
+import {useContext} from "react"
 
 const Chats = () => {
+
+    const {user} = useContext(UserContext);
+    console.log(user.userId);  
 
     const [ischatting, setIsChatting] = useState(false);
     const [receiverID, setReceiverID] = useState(0);
     const [listingID, setListingID] = useState(0);
     const [senderID, setSenderID] = useState(0);
     const [usernameReceiver, setUsernameReceiver] = useState(""); 
+    //const [userMessages, setUserMessages] = useState([]); 
+    //const [uniqueChats, setUniqueChats] = useState([]); 
+    //const [sender, setSender] = useState([]); 
+    //const [receiver, setReceiver] = useState([]);
+    //const [listing, setListing] = useState([]);
 
 
   const currentUserID = 2; 
+
 
   // Filtering based on current User and unique listing from direct message table 
   const userMessages = directMessage
@@ -23,6 +33,64 @@ const Chats = () => {
   .filter((msg, index, self) =>
     index === self.findIndex(m => m.listing_id === msg.listing_id)
   );
+
+    // request for current User and unique listing from direct message table 
+//   useEffect(() => {
+//     fetch('http://localhost:3001/api/directmessage?q=${user_id}')
+//       .then((response) => response.json())
+//       .then((data) => {
+//          const uniqueMessage = data.filter((index, self) => {
+//          index === self.findIndex(m => m.listing_id === msg.listing_id) })
+//         setUserMessages(uniqueMessage); 
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching featured items:", error);
+//       });
+
+
+    // const chatdisplay = userMessages.map(msg => {
+    
+    //       fetch('http://localhost:3001/api/registerUser?q=${msg.sender_id}')
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         setSender(data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error fetching featured items:", error);
+    //       });
+
+    //       fetch('http://localhost:3001/api/registerUser?q=${msg.receiver_id}')
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         setReceiver(data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error fetching featured items:", error);
+    //       });
+
+    //       fetch('http://localhost:3001/api/listing?q=${msg.listing_id}')
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         setListing(data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error fetching featured items:", error);
+    //       });
+
+        // return{
+        //     message_id: msg.message_id,
+        //     senderUsername: sender?.username || "Unknown",
+        //     userId: sender?.id, 
+        //     receiverUsername: receiver?.username || "Unknown",
+        //     receiverId: receiver?.id,
+        //     productTitle: listing?.title || "Unknown",
+        //     listingId: listing?.product_id
+        // };
+
+    // });
+
+//   }, []); 
+
 
   // I will then return all data needed to display the listing name, username of receiver, and image
   // this will be all from the get request I will be making from listing table, registered user talbe
@@ -42,8 +110,7 @@ const Chats = () => {
   };
 });
 
-    // console.log(userMessages); 
-    console.log(uniqueChats); 
+    
 
     const handleClick = (receiverId, listingId, receiverUsername, userId) => {
         setListingID(listingId);
