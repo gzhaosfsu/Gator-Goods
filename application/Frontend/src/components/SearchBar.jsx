@@ -35,7 +35,7 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       
 
       // 4/11/25 JACE COMMENT: Replaces above, adding for fetch request for category only*
-      fetch(`http://localhost:3001/api/category?category=${selectedCategory}`)
+      fetch(`api/category?category=${selectedCategory}`)
         .then((response) => response.json())
         .then((data) => {
         setDataReturned(data);
@@ -67,7 +67,7 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
 
 
       // **4/11/25 JACE COMMENT: Replaces above, adding for fetch request for text in search but NO category selected
-      fetch(`http://localhost:3001/api/title?title=${searchWord}`)
+      fetch(`api/title?title=${searchWord}`)
         .then((response) => response.json())
         .then((data) => {
         setDataReturned(data);
@@ -105,7 +105,7 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
       // setDataReturned(filteredResults); 
 
       // ***4/11/25 JACE COMMENT: Replaces above, adding for fetch request for BOTH text in entered AND category selected
-      fetch(`http://localhost:3001/api/combined?category=${selectedCategory}&title=${searchWord}`)
+      fetch(`api/combined?category=${selectedCategory}&title=${searchWord}`)
       .then((response) => response.json())
       .then((data) => {
         setDataReturned(data);

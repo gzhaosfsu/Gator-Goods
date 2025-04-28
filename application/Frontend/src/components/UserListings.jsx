@@ -10,7 +10,7 @@ const UserListings = () => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/listings/:id?id=1') 
+    fetch('api/listings/:id?id=1')
       .then(res => res.json())
       .then(data => {
         const cleanedData = data.map(item => ({
