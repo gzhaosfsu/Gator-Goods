@@ -175,6 +175,22 @@
   .send-btn:hover {
     background-color: #5945a1;
   }
+
+  .see-convo-btn {
+    padding: 10px 16px;
+    background-color: #D9D9D9;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .see-convo-btn:hover {
+    background-color: #ebebeb;
+  }
   
   /* Yellow line under the heading */
   .yellow-divider {
@@ -241,15 +257,6 @@
     cursor: pointer;
   }
   
-  .details-btn {
-    background-color: #a7a7f5;
-    color: white;
-  }
-  
-  .details-btn:hover {
-    background-color: #8585e3;
-  }
-  
   .start-btn {
     background-color: #4CAF50;
     color: white;
@@ -279,3 +286,4 @@
       opacity: 0;
     }
   }
+  
