@@ -13,7 +13,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
   // will only diplay if the we are clicking Search Icon
   if(isSearching === true ) {
     // we check if we found any items
-      
+    console.log("🗂 dataReturned:", dataReturned) 
     let filteredData = Array.isArray(dataReturned)
     ? [...dataReturned]
     : []
@@ -21,7 +21,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
     // condition filter
     if (filters.condition) {
       filteredData = filteredData.filter(
-        (p) => p.condition === filters.condition
+        (p) => p.conditions === filters.condition
       )
     }
 
