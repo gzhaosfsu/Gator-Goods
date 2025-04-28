@@ -1,24 +1,31 @@
 // FeaturedProducts.jsx
 import React, { useState, useEffect } from "react";
-import { dummyData } from "../dummyData"; // Adjust path if necessary
+import { dummyData } from "../dummyData";
 import "../FeaturedProducts.css";
 
 export const FeaturedProducts = () => {
- 
+ const [featuredItems, setFeaturedItems] = useState([]);
+ const DISPLAY_COUNT = 8;
 
+ const shuffleArray = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+ };
+  useEffect(() => {
+    fetch('/api/all')
+      .then((response) => response.json())
+      .then((data) => {
+        const featuredOnly = data.filter((p) => p.isFeatured);
+        shuffleArray(featuredOnly);
 
-const [featuredItems, setFeaturedItems] = useState([]);
-
-useEffect(() => {
-  fetch('/api/all')
-    .then((response) => response.json())
-    .then((data) => {
-      setFeaturedItems(data); // Set state once data is fetched
-    })
-    .catch((error) => {
-      console.error("Error fetching featured items:", error);
-    });
-}, []); 
+        setFeaturedItems(featuredOnly.slice(0, DISPLAY_COUNT));
+      })
+      .catch((error) => {
+        console.error("Error fetching featured items:", error);
+      });
+  }, []); 
 
 
 
