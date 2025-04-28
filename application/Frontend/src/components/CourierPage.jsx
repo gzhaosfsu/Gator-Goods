@@ -64,6 +64,55 @@ const CourierPage = () => {
     }, 500); // 500 used to match animation duration
   }
 
+  
+  const [messageStates, setMessageStates] = useState({}); // To track which requests sent a message
+
+  // for backend implementation, comment out the lines below
+  // lines 71 to 74, which are the dummy data for the delivery requests
+  const handleSendMessage = (id) => {
+    setMessageStates((prev) => ({ ...prev, [id]: true }));
+  };
+
+
+// MessageBubble component is used to send a message to the buyer
+const MessageBubble = ({ id, 
+  // handleSendMessage, // for backend implementation, uncomment the line
+  // messageStates // for backend implementation, uncomment the line
+}) => {
+    const [messageText, setMessageText] = useState('');
+  
+    const handleSendClick = () => {
+      if (messageText.trim() !== '') {
+        handleSendMessage(id);
+        // for backend implementation, uncomment the lines below
+        // handleSendMessage(id, messageText); // pass the actual text to the function
+        // setMessageText(''); // Optionally clear the input after sending
+      }
+    };
+
+    return (
+      <div className="message-section">
+        <div className="message-bubble">
+          <p className="message-label">Send buyer a message</p>
+          {!messageStates[id] ? (
+            <div className="message-input-row">
+              <input
+                type="text"
+                className="message-input"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                placeholder="I will deliver the item and need payment"
+              />
+              <button className="send-btn" onClick={handleSendClick}>SEND</button>
+            </div>
+          ) : (
+            <button className="see-convo-btn">See Conversation</button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
 
   // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
   // THE CONST BELOW WILL REPLACE THE DUMMY DATA ABOVE ONCE THE BACKEND IS READY
@@ -71,7 +120,7 @@ const CourierPage = () => {
 
   // useEffect(() => {
   //   if (onShift) {
-  //     fetch("http://localhost:3001/api/deliveries") //THIS IS A TEMP URL, CHANGE LATER
+  //     fetch("http://localhost:3001/api/delivery_requests") //THIS IS A TEMP URL, CHANGE LATER
   //       .then((response) => response.json())
   //       .then((data) => setDeliveryRequests(data))
   //       .catch((error) => console.error("Error fetching deliveries:", error));
@@ -79,6 +128,59 @@ const CourierPage = () => {
   //     setDeliveryRequests([]); // Clear requests when off shift
   //   }
   // }, [onShift]);
+
+  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
+  // THE CONST BELOW WILL MAKE IT SO THAT THE MESSAGE IN THE MESSAGE BOX SENDS TO THE BACKEND
+  // const handleSendMessage = (id, messageText) => {
+  //   fetch(`http://localhost:3001/api/deliveries/${id}/message`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ message: messageText }), // send the actual text
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setMessageStates((prev) => ({ ...prev, [id]: true }));
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error sending message:", error);
+  //     });
+  // };
+
+
+  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
+  // THE CONST BELOW WILL MAKE IT SO THAT THE DELIVERY REQUEST GETS ACCEPTED IN THE BACKEND
+//   const handleAcceptDelivery = (deliveryId) => {
+//     fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}`, {
+//       method: "PUT", // PUT method to update the delivery request
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         id: deliveryId, 
+//         status: "accepted", // Update the status to "accepted" or whatever is appropriate
+//       }),
+//     })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error('Failed to accept delivery');
+//       }
+//       // After successful backend update, trigger your animation
+//       setRemovingId(deliveryId);
+//       setTimeout(() => {
+//         setDeliveryRequests((prevRequests) =>
+//           prevRequests.filter((delivery) => delivery.id !== deliveryId)
+//         );
+//         setRemovingId(null);
+//       }, 500);
+//     })
+//     .catch((error) => {
+//       console.error("Error accepting delivery:", error);
+//     });
+// };
+  
+
 
 
   return (
@@ -122,23 +224,13 @@ const CourierPage = () => {
 
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
+              {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
               <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button>
-              <div className="message-section">
-                <div className="message-bubble">
-                <p className="message-label">Send buyer a message</p>
-                <div className="message-input-row">
-
-                {/* Message Input works, but sending does nothing rn */}
-                  <input
-                    type="text"
-                    className="message-input"
-                    placeholder="I will deliver the item and need payment"
-                  />
-
-                  <button className="send-btn">SEND</button>
-                </div>
-                </div>
-            </div>
+              <MessageBubble id={deliveryReq.id} 
+                // for backend implementation, uncomment the line below
+                // handleSendMessage={handleSendMessage} 
+                // messageStates={messageStates}
+                />       
             </div>
             </div>
           </div>
@@ -163,9 +255,7 @@ const CourierPage = () => {
               <p><strong>Note from Buyer:</strong></p>
               <p>{selectedDelivery.buyerNote}</p>
               <div className="popup-details">
-                <p><strong>Pickup Address:</strong></p>
-                <p>{selectedDelivery.pickupAddress}</p>
-                <button className="details-btn">Details</button>
+                <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
               <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
             </div>
@@ -178,5 +268,4 @@ const CourierPage = () => {
     </div>
   );
 };
-
 export default CourierPage;
