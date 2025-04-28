@@ -10,7 +10,7 @@ export const FeaturedProducts = () => {
 const [featuredItems, setFeaturedItems] = useState([]);
 
 useEffect(() => {
-  fetch('api/all')
+  fetch('http://localhost:3001/api/all')
     .then((response) => response.json())
     .then((data) => {
       setFeaturedItems(data); // Set state once data is fetched
