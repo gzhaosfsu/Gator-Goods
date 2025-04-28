@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
-import "../UserDash.css"
 
 const UserDash = ({ username }) => {
     const [open, setOpen] = useState(false);
@@ -24,9 +23,11 @@ const UserDash = ({ username }) => {
             cursor: pointer;
             user-select: none;
           }
+
           .dropdown-toggle {
             padding: 0.5rem 1rem;
           }
+
           .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -42,6 +43,7 @@ const UserDash = ({ username }) => {
             padding: 0.5rem 0;
             z-index: 1;
           }
+
           .dropdown-menu a,
           .dropdown-menu button {
             padding: 0.5rem 1rem;
@@ -53,6 +55,7 @@ const UserDash = ({ username }) => {
             color: black;
             font-size: 14px;
           }
+
           .dropdown-menu a:hover,
           .dropdown-menu button:hover {
             background: #f0f0f0;
@@ -66,7 +69,7 @@ const UserDash = ({ username }) => {
             </div>
             {open && (
               <div className="dropdown-menu">
-                <Link to="/UserProfileUserProfile" onClick={() => setOpen(false)}>Profile</Link>
+                <Link to="/UserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
                 <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
                 <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
