@@ -9,7 +9,7 @@ CREATE TABLE user (
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     username VARCHAR(50) UNIQUE,
-    password VARCHAR(255);
+    password VARCHAR(255),
     sfsu_email VARCHAR(100) UNIQUE,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
