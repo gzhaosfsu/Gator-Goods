@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const db = require('../DB'); // MySQL connection pool
 require('dotenv').config();
 
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
     const { firstName, lastName, username, sfsu_email, password, confirmPassword } = req.body;
 
     // 1. Enforce @sfsu.edu email

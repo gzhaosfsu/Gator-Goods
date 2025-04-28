@@ -40,7 +40,7 @@ const UserDash = ({ username }) => {
             flex-direction: column;
             min-width: 150px;
             padding: 0.5rem 0;
-            z-index: 1000;
+            z-index: 1;
           }
           .dropdown-menu a,
           .dropdown-menu button {
@@ -62,11 +62,11 @@ const UserDash = ({ username }) => {
             
           <div className="user-dropdown-container">
             <div className="dropdown-toggle" onClick={() => setOpen(!open)}>
-              {username} ▼
+              {username}
             </div>
             {open && (
               <div className="dropdown-menu">
-                <Link to="/UserProfile" onClick={() => setOpen(false)}>Profile</Link>
+                <Link to="/UserProfileUserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
                 <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
                 <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>

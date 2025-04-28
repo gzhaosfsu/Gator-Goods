@@ -65,11 +65,11 @@ const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSe
                    <Filters
                        filters={filters}
                        setFilters={newFilters => {
-                                    setFilters(newFilters)
-                                    setIsSearching(true)    // keep us in “search mode”
-                                }}
-                            />
-                        </div>
+                           setFilters(newFilters)
+                           setIsSearching(true)    // keep us in “search mode”
+                       }}
+                   />
+               </div>
                     )}    
        </>
     )

@@ -27,6 +27,8 @@ export const UserProvider = ({ children }) => {
         const sessionDuration = 30 * 60 * 1000; // 30 minutes
 
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('user_id', userData.user_id);
+        localStorage.setItem('user_email', (userData.email));
         localStorage.setItem('loginTime', sessionStart.toString());
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
 

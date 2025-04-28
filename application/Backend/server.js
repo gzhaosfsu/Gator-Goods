@@ -75,7 +75,8 @@ app.listen(3001, () => console.log('API running on port 3001'));
   (async () => {
     try {
       console.log('Trying to connect to DB...');
-      const [rows] = await db.query('SELECT 1');
+      const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', ['gzhao@sfsu.edu']);
+      console.log(rows);
       console.log('DB connection validated with test query!');
     } catch (err) {
       console.error('Error connecting to database:', err);
