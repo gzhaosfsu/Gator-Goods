@@ -13,7 +13,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
   // will only diplay if the we are clicking Search Icon
   if(isSearching === true ) {
     // we check if we found any items
-    console.log("🗂 dataReturned:", dataReturned) 
+    console.log("dataReturned:", dataReturned)  
     let filteredData = Array.isArray(dataReturned)
     ? [...dataReturned]
     : []
