@@ -15,9 +15,11 @@ export const FeaturedProducts = () => {
  };
   useEffect(() => {
     fetch('/api/all')
-      .then((response) => response.json())
+    
+    
+    .then((response) => response.json())
       .then((data) => {
-        const featuredOnly = data.filter((p) => p.isFeatured);
+        const featuredOnly = data.filter((p) => p.product_id);
         shuffleArray(featuredOnly);
 
         setFeaturedItems(featuredOnly.slice(0, DISPLAY_COUNT));
