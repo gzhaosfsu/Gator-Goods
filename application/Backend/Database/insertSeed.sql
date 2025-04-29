@@ -64,4 +64,4 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) 
 
 -- Insert Delivery Instructions
 INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
-(1, 1, 2, 1, 'Library Annex', 'SCI Building', 1, 'Leave at front desk.', 'Handle with care.', 'Assigned');
+(1, 1, 1, 1, 'Library', 'Student Services', 1, 'Leave at front desk.', 'Assigned');
