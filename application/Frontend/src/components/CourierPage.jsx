@@ -113,6 +113,21 @@ const CourierPage = () => {
       });
   };
 
+  
+  //DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleStartDelivery = () => {
+  //   setRemovingId(selectedDelivery.id);
+  //   setSelectedDelivery(null);
+  //   setTimeout(() => {
+  //     setDeliveryRequests(prev =>
+  //       prev.filter(req => req.id !== selectedDelivery.id)
+  //     );
+  //     setRemovingId(null);
+  //   }, 500); // 500 used to match animation duration
+  // }
+
+
+  // COMMENT OUT THIS FUNCTION WHEN TESTING WITH BACKEND DATA
   // This function is called when the "Accept" button is clicked on a delivery request
   // It updates the delivery request status in the backend and triggers the animation for the delivery request being accepted
   // It also sets the selected delivery request to show the popup with details
@@ -164,13 +179,19 @@ const CourierPage = () => {
       body: JSON.stringify({ message: messageText }), // Send message content
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then((data) => { //NOTE (delete later): YOU ARE THE REASON. YOU AR ETHE CAUSE OF MY PAIN WITH THE SEE CONVERSATION BUTTON.
         setMessageStates((prev) => ({ ...prev, [deliveryId]: true })); // Mark as sent
       })
       .catch((error) => {
         console.error("Error sending message:", error);
       });
   };
+
+
+  // DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleSendMessage = (id) => {
+  //   setMessageStates((prev) => ({ ...prev, [id]: true }));
+  // };
 
 
   return (
@@ -188,7 +209,6 @@ const CourierPage = () => {
           </button>
       </div>
         <div className="yellow-divider"></div>
-        {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
         {!onShift && <p>Click button to start shift.</p>}
         {onShift && (deliveryRequests.length > 0 ? (deliveryRequests.map((deliveryReq) => (
 
@@ -215,6 +235,7 @@ const CourierPage = () => {
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
+              {/* <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button> */}
               <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
