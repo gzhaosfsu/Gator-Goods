@@ -9,7 +9,7 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
 
-const VendorPage = () => {
+const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
 
@@ -20,7 +20,7 @@ const VendorPage = () => {
 
     return (
         <div className="vendorPage">
-          <Header />
+          {/* <Header /> */}
           <div className="vendor-formatting">
             {/* Create Listing */}
             <div className="center">
@@ -34,9 +34,12 @@ const VendorPage = () => {
                 <div className="section-inner">
                     <h2 className="section-title overview-title">Overview</h2>
                     <div className="card-grid">
-                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }} />} />
-                        <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} link="/userListings" />
-                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray', transform: 'translate(-40px)', }}/>} />
+                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
+                        <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
+                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
+                        {isCourier && (
+                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
+                        )}
                     </div>
                 </div>
             </section>
@@ -52,15 +55,17 @@ const VendorPage = () => {
             </section>
         </div>
         
-        <Footer />
+        {/* <Footer /> */}
         </div>
     );
 };
 
-const Card = ({ title, icon, link }) => (
+const Card = ({ title, icon, link, className = "", style = {} }) => (
     <Link to={link || "#"} className="card">
-      <span className="card-title">{title}</span>
-      {icon}
+      <div className={`card ${className}`} style={style}>
+        <span className="card-title">{title}</span>
+        {icon}
+      </div>
     </Link>
   );
 

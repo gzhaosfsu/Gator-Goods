@@ -1,0 +1,68 @@
+.profile-section {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .order-status-btn {
+    background-color: #d9d9d9;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .become-courier-btn {
+    background-color: #3A8659; 
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .center {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .create-listing-btn {
+    background-color: #ffe066;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .plus {
+    font-size: 2rem;
+    margin-left: 0.5rem;
+  }
+  
+  .divider {
+    margin: 2rem 0;
+    border: 1px solid black;
+  }
+  
+  .courier-dashboard-btn {
+    background-color: #388e3c; 
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }

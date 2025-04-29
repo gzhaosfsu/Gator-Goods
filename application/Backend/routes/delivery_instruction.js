@@ -11,11 +11,35 @@ router.get('/', (req, res) => {
 });
 
 // GET Delivery Instruction by ID
-router.get('/:id', (req, res) => {
-    db.query('SELECT * FROM delivery_instruction WHERE delivery_id = ?', [req.params.id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results[0]);
-    });
+// router.get('/:id', (req, res) => {
+//     db.query('SELECT * FROM delivery_instruction WHERE delivery_id = ?', [req.params.id], (err, results) => {
+//         if (err) return res.status(500).json({ error: err });
+//         res.json(results[0]);
+//     });
+// });
+
+// GET Delivery Instruction by Pickup Address
+router.get('/address/pickup', async (req, res) => {
+    try {
+        const [results] = await db.query(
+            'SELECT * FROM delivery_instruction WHERE delivery_instruction.pickup = ?', [req.query.pickup]);
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// GET Delivery Requests by Dropoff Address
+router.get('/dropoff', async (req, res) => {
+    try {
+        const [results] = await db.query(
+            'SELECT * FROM delivery_instruction WHERE delivery_instruction.dropoff = ?', [req.query.dropoff]);
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // POST a new Delivery Instruction

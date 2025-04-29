@@ -7,7 +7,6 @@
 .center {
     display: flex;
     justify-content: center;
-    /* margin: 2rem 0; */
   }
   
   .create-button {
@@ -26,6 +25,7 @@
     align-items: center;
     font-size: 40px; 
     text-align: center;
+    margin-top: 40px;
   }
   
   .create-button:hover {
@@ -46,7 +46,7 @@
     margin: 0 auto;
     max-width: 1800px;    */
 
-    max-width: 1200px; /* or whatever fits your design */
+    max-width: 1200px;
     margin: 0 auto;
     /* padding: 0 250px; */
     display: flex;

@@ -3,23 +3,35 @@ const router = express.Router();
 const db = require('../DB');
 
 // GET all messages
-router.get('/', (req, res) => {
-    db.query('SELECT * FROM direct_message', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+router.get('/', async (req, res) => {
+    try {
+
+        const [results] = await db.query('SELECT * FROM direct_message');
+        
         res.json(results);
-    });
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // GET message by ID
-router.get('/:id', (req, res) => {
-    db.query('SELECT * FROM direct_message WHERE message_id = ?', [req.params.id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results[0]);
-    });
+router.get('/:id', async (req, res) => {
+    try {
+
+        const [results] = await db.query('SELECT direct_message.* FROM direct_message WHERE direct_message.sender_id = ?', [req.query.id]);
+        
+        res.json(results);
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // POST a new message
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { sender_id, receiver_id, listing_id, content } = req.body;
     db.query(
         'INSERT INTO direct_message (sender_id, receiver_id, listing_id, content) VALUES (?, ?, ?, ?)',
@@ -32,7 +44,7 @@ router.post('/', (req, res) => {
 });
 
 // UPDATE a message by ID
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const { sender_id, receiver_id, listing_id, content } = req.body;
     db.query(
         'UPDATE direct_message SET sender_id = ?, receiver_id = ?, listing_id = ?, content = ? WHERE message_id = ?',
@@ -45,7 +57,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE a message by ID
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
     db.query('DELETE FROM direct_message WHERE message_id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err });
         res.sendStatus(204);

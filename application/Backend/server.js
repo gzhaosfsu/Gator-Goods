@@ -12,10 +12,10 @@ const productRoutes = require('./routes/product');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user');
 const vendorRoutes = require('./routes/vendor');
-const titleSearch = require('./routes/title_search');
-const categorySearch = require('./routes/category_search');
-const allSearch = require('./routes/all_search');
-const combinedSearch = require('./routes/combined_search');
+const titleSearch = require('./routes/search/title_search');
+const categorySearch = require('./routes/search/category_search');
+const allSearch = require('./routes/search/all_search');
+const combinedSearch = require('./routes/search/combined_search');
 const login = require('./routes/login');
 const register = require('./routes/register');
 
@@ -24,16 +24,16 @@ app.use(cors());
 app.use(express.json());
 
 // Register routes
-app.use('/api/buyers', buyerRoutes);
-app.use('/api/couriers', courierRoutes);
-app.use('/api/deliveryInstructions', deliveryInstructionsRoutes);
-app.use('/api/deliveryRequests', deliveryRequestRoutes);
-app.use('/api/listings', listingRoutes);
-app.use('/api/messages', messageRoutes)
-app.use('/api/products', productRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/vendors', vendorRoutes);
+app.use('/api/buyer', buyerRoutes);
+app.use('/api/courier', courierRoutes);
+app.use('/api/delivery_instruction', deliveryInstructionsRoutes);
+app.use('/api/delivery_request', deliveryRequestRoutes);
+app.use('/api/listing', listingRoutes);
+app.use('/api/direct_message', messageRoutes)
+app.use('/api/product', productRoutes);
+app.use('/api/review', reviewRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/vendor', vendorRoutes);
 app.use('/api/title', titleSearch);
 app.use('/api/category', categorySearch);
 app.use('/api/all', allSearch);

@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../DB');
 
 // GET all listings
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     db.query('SELECT * FROM listing', (err, results) => {
         if (err) return res.status(500).json({ error: err });
         res.json(results);
@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a new listing
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { listing_status, product_id, vendor_id, availability, price, discount, approval_status } = req.body;
     db.query(
         'INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -62,7 +62,7 @@ router.post('/', (req, res) => {
 });
 
 // UPDATE a listing by ID
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const { listing_status, product_id, vendor_id, availability, price, discount, approval_status } = req.body;
     db.query(
         'UPDATE listing SET listing_status = ?, product_id = ?, vendor_id = ?, availability = ?, price = ?, discount = ?, approval_status = ? WHERE listing_id = ?',
@@ -75,7 +75,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE a listing by ID
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
     db.query('DELETE FROM listing WHERE listing_id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err });
         res.sendStatus(204);

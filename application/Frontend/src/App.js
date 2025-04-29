@@ -15,6 +15,7 @@ import CourierPage from './components/CourierPage'
 import VendorPage from './components/VendorPage'
 import UserListings from './components/UserListings'
 import UserProfile from './components/UserProfile'
+import RealUserProfile from './components/RealUserProfile'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,7 @@ function App() {
         <Route path="/vendorPage" element={<VendorPage/>} />
         <Route path="/userListings" element={<UserListings/>} />
         <Route path="/userProfile" element={<UserProfile/>} />
+        <Route path="/realUserProfile" element={<RealUserProfile/>} />
       </Routes>
     </BrowserRouter>
   )

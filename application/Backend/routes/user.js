@@ -2,23 +2,35 @@ const express = require('express');
 const router = express.Router();
 const db = require('../DB');
 // GET all users
-router.get('/', (req, res) => {
-    db.query('SELECT * FROM user', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+router.get('/', async (req, res) => {
+    try {
+
+        const [results] = await db.query('SELECT * FROM user');
+        
         res.json(results);
-    });
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // GET user by ID
-router.get('/:id', (req, res) => {
-    db.query('SELECT * FROM user WHERE user_id = ?', [req.params.id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results[0]);
-    });
+router.get('/:id', async (req, res) => {
+    try {
+
+        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.query.id]);
+        
+        res.json(results);
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // POST a new user
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { first_name, last_name, username, password, sfsu_email, is_verified } = req.body;
     db.query(
         'INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_verified) VALUES (?, ?, ?, ?, ?, ?)',
@@ -31,7 +43,7 @@ router.post('/', (req, res) => {
 });
 
 // UPDATE a user by ID
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const { first_name, last_name, username, password, sfsu_email, is_verified } = req.body;
     db.query(
         'UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, sfsu_email = ?, is_verified = ? WHERE user_id = ?',
@@ -44,7 +56,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE a user by ID
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
     db.query('DELETE FROM user WHERE user_id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err });
         res.sendStatus(204);
