@@ -10,7 +10,16 @@ import {useContext} from "react"
 const Chats = () => {
 
     const {user} = useContext(UserContext);
-    console.log(user.userId);  
+    
+    console.log(user.id + " user Id "); 
+    Object.entries(user).forEach(([key, value]) => {
+        console.log(`Key: ${key}, Value: ${value}`);
+      });
+
+      
+    console.log(Object.entries(user).length + " number of entries");
+
+
 
     const [ischatting, setIsChatting] = useState(false);
     const [receiverID, setReceiverID] = useState(0);
