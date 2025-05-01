@@ -4,7 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
 import MessageBubble from './MessageBubble';
-import dummyDeliveryRequests from './dummyDeliveryRequests'; // moved dummyData to .js
+import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData to .js
 
 const CourierPage = () => {
 
