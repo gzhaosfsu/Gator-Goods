@@ -29,88 +29,59 @@ const CourierPage = () => {
   };
 
   //UNCOMMENT TO USE BACKEND DATA
-  // This useEffect fetches the delivery requests from the backend when the component mounts and when the onShift state changes
-  // It sets the delivery requests in the state and handles the case when onShift is false by clearing the requests
+  // This useEffect fetches the delivery requests from the backend when the component mounts or when the onShift state changes
+  // It formats the data to match the expected structure and sets it to the deliveryRequests state
+  // It also handles the case when the onShift state is false, in which case it clears the delivery requests
   useEffect(() => {
     if (onShift) {
-      fetch("http://localhost:3001/api/delivery_requests")
+      fetch("http://localhost:3001/api/delivery_request")
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch delivery requests");
-          }
+          if (!response.ok) throw new Error("Failed to fetch delivery requests");
           return response.json();
         })
         .then((data) => {
-          console.log("Fetched delivery requests:", data); // Debugging line
-          setDeliveryRequests(data);
+          const formattedData = data.map((item) => ({
+            id: item.delivery_request_id,
+            title: `Delivery Request #${item.delivery_request_id}`,
+            dropoffAddress: item.dropoff,
+            pickupAddress: item.pickup,
+            imageUrl: "https://via.placeholder.com/150",
+            sellerNote: item.seller_note,
+            buyerNote: item.buyer_note,
+            vendor_id: item.vendor_id,
+            buyer_id: item.buyer_id,
+            listing_id: item.listing_id,
+            status: item.status,
+          }));
+          setDeliveryRequests(formattedData);
         })
-        .catch((error) => console.error("Error fetching deliveries:", error));
+        .catch((err) => console.error("Fetch error:", err));
     } else {
       setDeliveryRequests([]);
     }
   }, [onShift]);
  
-
   
-
-  // IGNORE THIS COMMENTED OUT CODE THIS WAS A TEST RUN ATTEMPT TO FETCH DATA FROM BACKEND
-  // useEffect(() => {
-  //   if (onShift) {
-  //     fetch("http://localhost:3001/api/delivery_requests")
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         const formattedData = data.map((item) => ({
-  //           id: item.delivery_request_id,
-  //           title: `Delivery Request #${item.delivery_request_id}`, // fake title for now
-  //           pickupAddress: "Pickup Address Placeholder", // placeholder
-  //           dropoffAddress: item.dropoff, 
-  //           imageUrl: "https://via.placeholder.com/150", // placeholder image
-  //           sellerNote: "Seller Note Placeholder", // you can fetch this later properly
-  //           buyerNote: "Buyer Note Placeholder",
-  //           status: item.status
-  //         }));
-  //         setDeliveryRequests(formattedData);
-  //       })
-  //       .catch((error) => console.error("Error fetching deliveries:", error));
-  //   } else {
-  //     setDeliveryRequests([]);
-  //   }
-  // }, [onShift]);
-  
-  
- 
-  
-  // This function is called when the "Start Delivery" button is clicked
-  // It updates the delivery request status in the backend, closes the popup,
-  // removes the delivery request from the list,
-  // and triggers the animation for the delivery request being accepted
-  const handleStartDelivery = () => {
-    if (!selectedDelivery) return; // Safety check
-  
-    fetch(`http://localhost:3001/api/delivery_requests/${selectedDelivery.id}`, {
-      //PUT request to update the delivery request
-      method: "PUT",
-      headers: { // headers used to specify the content type of the request
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status: "accepted" }), // Mark as accepted
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to accept delivery");
-        }
-        setRemovingId(selectedDelivery.id); // Trigger the "whoosh-out" animation
-        setSelectedDelivery(null); // Close popup
-        setTimeout(() => {
-          setDeliveryRequests((prevRequests) => // Remove the accepted delivery request from the list
-            prevRequests.filter((delivery) => delivery.id !== selectedDelivery.id) // filter out the accepted delivery request
-          );
-          setRemovingId(null); // Reset removingId after the animation
-        }, 500); // Wait for animation
+  // This function is called when a delivery request is clicked
+  // It fetches the combined delivery request data from the backend and sets it to the selectedDelivery state
+  // It also fetches the pickup address details and adds them to the selected delivery data
+  const handleSelectDelivery = (deliveryId) => {
+    fetch(`http://localhost:3001/api/delivery_request/combined/${deliveryId}?delivery_request_id=${deliveryId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        fetch(`http://localhost:3001/api/delivery_instruction/address/pickup?pickup=${data.pickup}`)
+          .then((pickupRes) => pickupRes.json())
+          .then((pickupData) => {
+            setSelectedDelivery({
+              ...data,
+              pickupDetails: pickupData, // Add pickup details to the selected delivery
+              id: deliveryId,
+              imageUrl: "https://via.placeholder.com/150",
+            });
+          })
+          .catch((err) => console.error("Error fetching pickup address:", err));
       })
-      .catch((error) => {
-        console.error("Error starting delivery:", error);
-      });
+      .catch((err) => console.error("Error fetching combined info:", err));
   };
 
   
@@ -127,64 +98,60 @@ const CourierPage = () => {
   // }
 
 
-  // COMMENT OUT THIS FUNCTION WHEN TESTING WITH BACKEND DATA
-  // This function is called when the "Accept" button is clicked on a delivery request
-  // It updates the delivery request status in the backend and triggers the animation for the delivery request being accepted
-  // It also sets the selected delivery request to show the popup with details
+  // This function is called when the "Start Delivery" button is clicked
+  // It sends a PUT request to the backend to update the delivery request status to "accepted"
+  // It also sets the removingId state to trigger the animation and removes the delivery request from the list after a delay
   const handleAcceptDelivery = (deliveryId) => {
-    // Find the selected delivery in the current state to update it
-    const selectedDelivery = deliveryRequests.find((delivery) => delivery.id === deliveryId);
-    if (!selectedDelivery) return; // Safety check
+    const selected = deliveryRequests.find((d) => d.id === deliveryId);
+    if (!selected) return;
 
-    // Send the full data for update
-    fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}`, {
+    fetch(`http://localhost:3001/api/delivery_request/${deliveryId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        buyer_id: selectedDelivery.buyer_id, // Make sure the full data is included
-        vendor_id: selectedDelivery.vendor_id, // Make sure the full data is included
-        status: "accepted", // Update the status to "accepted"
-        dropoff: selectedDelivery.dropoffAddress, // Use the dropoff address from UI
-        listing_id: selectedDelivery.listing_id // CHECK-IN: If needed
+        status: "accepted",
+        buyer_id: selected.buyer_id,
+        vendor_id: selected.vendor_id,
+        listing_id: selected.listing_id,
+        dropoff: selected.dropoffAddress,
       }),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to accept delivery');
-        }
-        setRemovingId(deliveryId); // Trigger the "whoosh-out" animation
+        if (!response.ok) throw new Error("Failed to update delivery request");
+        setRemovingId(deliveryId);
         setTimeout(() => {
-          setDeliveryRequests((prevRequests) =>
-            prevRequests.filter((delivery) => delivery.id !== deliveryId)
-          );
-          setRemovingId(null); // Reset removingId after the animation
+          setDeliveryRequests((prev) => prev.filter((d) => d.id !== deliveryId));
+          setRemovingId(null);
+          setSelectedDelivery(null);
         }, 500);
       })
-      .catch((error) => {
-        console.error("Error accepting delivery:", error);
-      });
+      .catch((err) => console.error("Accept error:", err));
   };
 
   // This function is called when the "Send" button is clicked in the message bubble
   // It sends the message to the backend and updates the message state to show that it has been sent
   // It also clears the message input field after sending the message
-  const handleSendMessage = (deliveryId, messageText) => {
-    fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}/message`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: messageText }), // Send message content
-    })
-      .then((response) => response.json())
-      .then((data) => { //NOTE (delete later): YOU ARE THE REASON. YOU AR ETHE CAUSE OF MY PAIN WITH THE SEE CONVERSATION BUTTON.
-        setMessageStates((prev) => ({ ...prev, [deliveryId]: true })); // Mark as sent
-      })
-      .catch((error) => {
-        console.error("Error sending message:", error);
-      });
+  // const handleSendMessage = (deliveryId, messageText) => {
+  //   fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}/message`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ message: messageText }), // Send message content
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => { //NOTE (delete later): YOU ARE THE REASON. YOU AR ETHE CAUSE OF MY PAIN WITH THE SEE CONVERSATION BUTTON.
+  //       setMessageStates((prev) => ({ ...prev, [deliveryId]: true })); // Mark as sent
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error sending message:", error);
+  //     });
+  // };
+
+  // This function is a placeholder for the backend implementation of sending a message
+  // It currently just shows an alert with the delivery ID
+  const handleSendMessage = (deliveryId) => {
+    alert(`Message sent to buyer for delivery #${deliveryId}`);
   };
 
 
@@ -234,9 +201,8 @@ const CourierPage = () => {
 
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
-              {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              {/* <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button> */}
-              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.id)}>ACCEPT</button>
+              {/* Replace setSelectedDelivery with with handleSelectDelivery(deliveryReq.id) when ready */}
+              <button className="accept-btn" onClick={() => handleSelectDelivery(deliveryReq.id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
                 handleSendMessage={handleSendMessage} 
@@ -255,20 +221,20 @@ const CourierPage = () => {
           <div className="delivery-popup">
             <div className="popup-content">
             {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
-              <h3>{selectedDelivery.title}</h3>
+              <h3>{selectedDelivery.title || `Delivery Request #${selectedDelivery.id}`}</h3>
                 <img 
                 src={selectedDelivery.imageUrl}
                 alt="Delivery" 
                 className="delivery-image" 
                 />
-              <p><strong>Note from Seller:</strong></p>
+              <p><strong>Note from Seller </strong>{selectedDelivery.vendor_name}:</p>
               <p>{selectedDelivery.sellerNote}</p>
-              <p><strong>Note from Buyer:</strong></p>
+              <p><strong>Note from Buyer </strong>{selectedDelivery.seller_note}:</p>
               <p>{selectedDelivery.buyerNote}</p>
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
+              <button className="start-btn" onClick={() => handleAcceptDelivery(selectedDelivery.id)}>Start Delivery</button>
             </div>
           </div>
         )}
