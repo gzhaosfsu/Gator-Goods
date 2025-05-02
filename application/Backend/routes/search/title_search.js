@@ -30,6 +30,8 @@ router.get('/', async (req, res) => {
                 description: row.description,
                 product_id: row.product_id,
                 category: row.category,
+                conditions: row.conditions,
+                rating: row.rating,
                 // image: row.image,
                 vendor_id: row.vendor_id,
                 thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
