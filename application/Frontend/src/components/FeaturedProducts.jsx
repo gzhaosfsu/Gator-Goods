@@ -14,20 +14,22 @@ export const FeaturedProducts = () => {
   }
  };
   useEffect(() => {
-    fetch('/api/all')
-    
-    
-    .then((response) => response.json())
-      .then((data) => {
-        const featuredOnly = data.filter((p) => p.product_id);
-        shuffleArray(featuredOnly);
-
-        setFeaturedItems(featuredOnly.slice(0, DISPLAY_COUNT));
+    fetch("/api/all")
+      .then((res) => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
       })
-      .catch((error) => {
-        console.error("Error fetching featured items:", error);
-      });
-  }, []); 
+      .then((products) => {
+        // 1) Shuffle all products in-place
+        shuffleArray(products);
+        
+        const pick = (products.slice(0, DISPLAY_COUNT));
+        console.log("Rendering this many:", pick.length);
+        setFeaturedItems(pick);
+      })
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
+
 
 
 
@@ -39,7 +41,7 @@ export const FeaturedProducts = () => {
       <h2>Shop Our Most Popular Products</h2>
       <div className="featured-products-list">
         {featuredItems.map((item) => (
-          <div key={item.product_id} className="featured-product-card">
+          <div key={item.listing_id} className="featured-product-card">
             {item.thumbnail ? (
               <img 
                 src={item.thumbnail} 

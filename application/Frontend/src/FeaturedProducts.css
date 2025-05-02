@@ -12,9 +12,9 @@
   }
   
   .featured-products-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
     gap: 1.5rem;
   }
   
@@ -29,6 +29,7 @@
     background-color: #fff;
     padding: 1rem;
     transition: transform 0.2s;
+    height: 100;
   }
   
   .featured-product-card:hover {
