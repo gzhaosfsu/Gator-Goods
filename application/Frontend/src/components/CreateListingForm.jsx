@@ -31,10 +31,65 @@ const CreateListingForm = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // post request here
-    console.log(formData);
-    onClose();
+
+    try {
+      let base64Data = '';
+      let mimetype = '';
+      let imageName = '';
+  
+      // If a file image, convert to base 64
+      if (formData.image) {
+        const reader = new FileReader();
+  
+        reader.onloadend = async () => {
+          base64Data = reader.result.split(',')[1];
+          mimetype = formData.image.type;
+          imageName = formData.image.name;
+  
+          const payload = {
+            image: {
+              name: imageName,
+              mimetype: mimetype,
+              data: base64Data,
+            },
+            title: formData.title,
+            price: formData.price,
+            description: formData.description,
+            category: formData.category,
+            condition: formData.condition,
+          };
+  
+          const res = await fetch('/create-listing', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+  
+          if (!res.ok) throw new Error('Failed to create listing');
+          const result = await res.json();
+          console.log('Listing created:', result);
+  
+          onClose(); // Close modal on success
+        };
+  
+        reader.readAsDataURL(formData.image);
+      } else {
+        alert('Please upload an image.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Error creating listing. Please try again.');
+    }
   };
+
+  /*     listing_status ENUM('Active', 'Sold', 'Delisted'),
+    product_id INT,
+    vendor_id INT,
+    availability ENUM('In Stock', 'Out of Stock'),
+    price DECIMAL(10,2),
+    discount DECIMAL(5,2),
+    approval_status ENUM('Pending', 'Approved', 'Denied'),
+    conditions ENUM('New', 'Used - Like New', 'Used - Good', 'Used - Fair'), */
 
   return (
     <div className="modal-overlay">

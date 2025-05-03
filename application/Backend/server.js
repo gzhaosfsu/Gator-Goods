@@ -40,7 +40,7 @@ app.use('/api/all', allSearch);
 app.use('/api/combined', combinedSearch);
 app.use('/api/login', login);
 app.use('/api/register', register);
-
+app.use(express.static('public'));
 
 app.listen(3001, () => console.log('API running on port 3001'));
 

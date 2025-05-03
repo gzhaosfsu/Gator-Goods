@@ -58,15 +58,23 @@ router.get('/:id', async (req, res) => {
 
 // POST a new listing
 router.post('/', async (req, res) => {
-    const { listing_status, product_id, vendor_id, availability, price, discount, approval_status } = req.body;
-    db.query(
-        'INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [listing_status, product_id, vendor_id, availability, price, discount, approval_status],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: err });
-            res.status(201).json({ listing_id: result.insertId });
-        }
-    );
+    
+    try {
+
+        const { listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions } = req.body;
+
+        const [result] = await db.query(
+            'INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions]
+        );
+
+        console.log('Insert success:', result.insertId);
+        res.status(201).json({ listing_id: result.insertId });
+
+    } catch (err) {
+        console.error('Error during DB insert:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // UPDATE a listing by ID
