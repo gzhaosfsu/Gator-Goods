@@ -18,6 +18,7 @@ import RealUserProfile from './components/RealUserProfile'
 import UserProfile from './components/UserProfile'
 import CourierNav from "./components/CourierNav";
 import BuyerNav from "./components/BuyerNav";
+import OrderStatus from "./components/OrderStatus";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,6 +44,7 @@ function App() {
         <Route path="/userProfile" element={<UserProfile/>} />
         <Route path="/CourierNav" element={<CourierNav/>} />
         <Route path="/BuyerNav" element={<BuyerNav/>} />
+        <Route path="/OrderStatus" element={<OrderStatus/>} />
       </Routes>
     </BrowserRouter>
   )
