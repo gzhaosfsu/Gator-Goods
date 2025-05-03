@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mascot from './images/LogoGG.png'; // Update path as needed
+import mascot from './images/LogoGG.png';
+import ReturnHome from "./ReturnHome"; // Update path as needed
 
 const Register = () => {
     const navigate = useNavigate();
@@ -193,6 +194,8 @@ const Register = () => {
                 <div className="auth-form-section">
                     <h2>Register</h2>
                     <div className="underline-yellow"></div>
+                    <ReturnHome/>
+
                     <form onSubmit={handleSubmit}>
                         <div className="input-row">
                             <div className="form-group">

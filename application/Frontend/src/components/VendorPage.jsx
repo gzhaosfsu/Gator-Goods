@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "../VendorPage.css";
 import Header from './Header';
 import Footer from './Footer';
@@ -8,10 +8,18 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
+import {UserContext} from "../UserContext";
 
 const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {

@@ -25,12 +25,9 @@ export const UserProvider = ({ children }) => {
     const login = (userData) => {
         const sessionStart = Date.now();
         const sessionDuration = 30 * 60 * 1000; // 30 minutes
-
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('user_id', userData.user_id);
-        localStorage.setItem('user_email', (userData.email));
-        localStorage.setItem('loginTime', sessionStart.toString());
+        localStorage.setItem('user', JSON.stringify(userData)); // Store the full object
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
+
 
         setUser(userData);
     };
