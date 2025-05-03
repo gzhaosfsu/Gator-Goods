@@ -15,12 +15,8 @@ import CourierPage from './components/CourierPage'
 import VendorPage from './components/VendorPage'
 import UserListings from './components/UserListings'
 import UserProfile from './components/UserProfile'
-<<<<<<< HEAD
-import RealUserProfile from './components/RealUserProfile'
-=======
 import CourierNav from "./components/CourierNav";
 import BuyerNav from "./components/BuyerNav";
->>>>>>> gzhao_branch
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,12 +39,8 @@ function App() {
         <Route path="/vendorPage" element={<VendorPage/>} />
         <Route path="/userListings" element={<UserListings/>} />
         <Route path="/userProfile" element={<UserProfile/>} />
-<<<<<<< HEAD
-        <Route path="/realUserProfile" element={<RealUserProfile/>} />
-=======
         <Route path="/CourierNav" element={<CourierNav/>} />
         <Route path="/BuyerNav" element={<BuyerNav/>} />
->>>>>>> gzhao_branch
       </Routes>
     </BrowserRouter>
   )
