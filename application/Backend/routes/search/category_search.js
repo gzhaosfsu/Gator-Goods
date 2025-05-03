@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
     try {
 
-        const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.category LIKE ? AND listing.listing_status = 'Active'"
+        const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active'"
         const searchValue = `%${searchTerm}%`;
         const [results] = await db.query(query, searchValue);
         
@@ -27,8 +27,10 @@ router.get('/', async (req, res) => {
                 description: row.description,
                 product_id: row.product_id,
                 category: row.category,
+                conditions: row.conditions,
                 // image: row.image,
                 vendor_id: row.vendor_id,
+                rating: row.rating,
                 thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
             };
         });
