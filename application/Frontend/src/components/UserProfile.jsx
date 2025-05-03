@@ -5,10 +5,6 @@ import '../UserProfile.css'
 import {UserContext} from '../UserContext'
 import {useContext, useEffect} from "react";
 
-<<<<<<< HEAD
-const UserProfile = ({ isCourier, handleBecomeCourier }) => {
-
-=======
 const UserProfile = () => {
     const {user} = useContext(UserContext);
     const navigate = useNavigate();
@@ -17,7 +13,6 @@ const UserProfile = () => {
             navigate("/login");
         }
     }, [user, navigate]);
->>>>>>> gzhao_branch
 
     return (
         <>
