@@ -266,7 +266,7 @@
     background-color: #218838;
   }
   
-  /* .close-btn {
+  .close-btn {
     background-color: #ff4d4d;
     color: white;
     float: right;
@@ -274,7 +274,7 @@
   
   .close-btn:hover {
     background-color: #a30000;
-  } */
+  }
   
   .whoosh-out {
     animation: slideOut 0.5s ease forwards;
