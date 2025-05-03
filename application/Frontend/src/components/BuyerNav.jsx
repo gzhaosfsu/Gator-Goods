@@ -10,12 +10,21 @@ import DummyDelivery from "../DummyDelivery";
 const socket = io("http://100.26.194.201:3000");
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
 
+
 const BuyerNav = ({ courierId, deliveryId }) => {
     const { user } = useContext(UserContext);
     const [courierLocation, setCourierLocation] = useState(null);
     const [status, setStatus] = useState("pending");
     const [deliveryData, setDeliveryData] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
+
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4"

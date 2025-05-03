@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import "../VendorPage.css";
@@ -8,10 +8,17 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
+import {UserContext} from "../UserContext";
 
 const VendorPage = () => {
 
     const [showForm, setShowForm] = useState(false);
+    const {user} = useContext(UserContext);
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {

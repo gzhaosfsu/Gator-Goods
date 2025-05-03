@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../UserListings.css';
 import Header from './Header';
 import Footer from './Footer';
 import CreateListingForm from './CreateListingForm'
+import {UserContext} from './UserContext';
 
 
 const UserListings = () => {
   const [showForm, setShowForm] = useState(false);
   const [listings, setListings] = useState([]);
+  const {user} = useContext(UserContext);
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
 
   useEffect(() => {
     fetch('api/listings/:id?id=1')

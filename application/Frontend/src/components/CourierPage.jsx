@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
 import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
+import {UserContext} from "../UserContext";
 
 const CourierPage = () => {
+  const {user} = useContext(UserContext);
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);

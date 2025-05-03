@@ -26,6 +26,11 @@ const CourierNav = ({ courierId, deliveryId }) => {
     const [dropoffCoords, setDropoffCoords] = useState(SFSU_COORDS);
     const [message, setMessage] = useState("");
     const [unauthorized, setUnauthorized] = useState(false);
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4"
