@@ -12,6 +12,18 @@ const CourierPage = () => {
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
 
+  const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
+  // const [deliveryRequests, setDeliveryRequests] = useState(dummyDeliveryRequests); //dummyData, comment out when using backend data
+
+  // this is the ID of the delivery request that is being removed
+  // which is used to trigger the animation when a delivery request is accepted
+  const [removingId, setRemovingId] = useState(null);
+
+  // this is the state that tracks the message bubble for each delivery request
+  // it is used to show whether the message has been sent or not
+  const [messageStates, setMessageStates] = useState({});
+
+  // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
     setSelectedDelivery(null);
@@ -48,12 +60,7 @@ const CourierPage = () => {
     } else {
       setDeliveryRequests([]);
     }
-  });
-
-
-  // this is the ID of the delivery request that is being removed
-  // which is used to trigger the animation when a delivery request is accepted
-  const [removingId, setRemovingId] = useState(null);
+  }, [onShift]);
   
   // This function is called when a delivery request is clicked
   // It fetches the combined delivery request data from the backend and sets it to the selectedDelivery state
@@ -81,8 +88,18 @@ const CourierPage = () => {
       .catch((err) => console.error("Error fetching combined info:", err));
   };
 
-  
-  const [messageStates, setMessageStates] = useState({}); // To track which requests sent a message
+
+    //DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleStartDelivery = () => {
+  //   setRemovingId(selectedDelivery.id);
+  //   setSelectedDelivery(null);
+  //   setTimeout(() => {
+  //     setDeliveryRequests(prev =>
+  //       prev.filter(req => req.id !== selectedDelivery.id)
+  //     );
+  //     setRemovingId(null);
+  //   }, 500); // 500 used to match animation duration
+  // }
 
 
   // This function is called when the "Start Delivery" button is clicked
@@ -141,39 +158,10 @@ const CourierPage = () => {
   //   alert(`Message sent to buyer for delivery #${deliveryId}`);
   // };
 
-  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
-  // THE CONST BELOW WILL MAKE IT SO THAT THE DELIVERY REQUEST GETS ACCEPTED IN THE BACKEND
-//   const handleAcceptDelivery = (deliveryId) => {
-//     fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}`, {
-//       method: "PUT", // PUT method to update the delivery request
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         id: deliveryId, 
-//         status: "accepted", // Update the status to "accepted" or whatever is appropriate
-//       }),
-//     })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error('Failed to accept delivery');
-//       }
-//       // After successful backend update, trigger your animation
-//       setRemovingId(deliveryId);
-//       setTimeout(() => {
-//         setDeliveryRequests((prevRequests) =>
-//           prevRequests.filter((delivery) => delivery.id !== deliveryId)
-//         );
-//         setRemovingId(null);
-//       }, 500);
-//     })
-//     .catch((error) => {
-//       console.error("Error accepting delivery:", error);
-//     });
-// };
-  
-
-
+  // DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleSendMessage = (id) => {
+  //   setMessageStates((prev) => ({ ...prev, [id]: true }));
+  // };
 
   return (
     <div className="courier-page">
@@ -217,11 +205,11 @@ const CourierPage = () => {
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button>
+              <button className="accept-btn" onClick={() => handleSelectDelivery(deliveryReq.id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
-                // handleSendMessage={handleSendMessage} 
-                // messageStates={messageStates}
+                handleSendMessage={handleSendMessage} 
+                messageStates={messageStates}
                 />       
             </div>
             </div>
@@ -249,7 +237,7 @@ const CourierPage = () => {
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
+              <button className="start-btn" onClick={handleAcceptDelivery(selectedDelivery.id)}>Start Delivery</button>
             </div>
           </div>
         )}
