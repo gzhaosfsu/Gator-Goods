@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba322e2d-c4ec-40be-a4df-8172b520f635" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/application/Backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,12 +19,16 @@
         <option value="package.json" />
         <option value="TypeScript JSX File" />
         <option value="JSX File" />
+        <option value="CSS File" />
         <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/application/Backend/package.json" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
@@ -41,6 +46,7 @@
     "Node.js.Register.jsx.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "gzhao__branch",
+    "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -80,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1744873489139</updated>
       <workItem from="1744873490378" duration="1448000" />
-      <workItem from="1745868751696" duration="387000" />
+      <workItem from="1745868751696" duration="33589000" />
     </task>
     <servers />
   </component>
@@ -98,7 +104,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="gzhao_branch" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>

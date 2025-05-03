@@ -1,0 +1,324 @@
+Index: application/Frontend/src/components/Header.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\nimport SearchBar from \"./SearchBar\"\nimport Categories from \"./Categories\"\nimport logo from \"./images/LogoGG.png\"\nimport {Link } from 'react-router-dom'\nimport { useState, useEffect } from \"react\"\nimport { dummyData } from \"../dummyData\";\nimport Filters from \"./Filters\"\nimport UserDash from \"./UserDash\";\nimport {UserContext} from \"../UserContext\";\nimport {useContext} from \"react\";\n\nconst Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {\n\n    const [searchResults, setSearchResults] = useState (\"\"); // holds the search bar text \n    const [selectedCategory, setSelectedCategory] = useState(\"\");// holds the selected category\n    const {user} = useContext(UserContext);\n\n\n    \n    // When user clicks on logo it resets the entire values of search bar and categories\n    const featuredItems = ()=> {\n        setSearchResults(\"\"); \n        setSelectedCategory(\"\");\n        setSelectedCategoryName(\"\");\n        setDataReturned([]); \n        setIsSearching(false);\n        setFilters({ condition: \"\", priceSort: \"\", datePosted: \"\", minDiscount: \"\", minRating: \"\" });\n    }  \n    console.log(\"\uD83D\uDD0D Filters import is:\", Filters)\n  \n    return (\n       <>\n           <div className=\"header-container\">\n               <div className=\"header\">\n                   <div className=\"inner-header\">\n                       <div className=\"logo\">\n                           <Link onClick={featuredItems} to=\"/\">\n                               <img src={logo} alt=\"Gator Goods logo\" style={{width: \"100%\", height: \"100%\"}}/>\n                           </Link>\n                       </div>\n                       <div className=\"header-box\">\n                           <div className=\"filter-container\">\n                               <Categories setSelectedCategory={setSelectedCategory}\n                                           setSelectedCategoryName={setSelectedCategoryName}/>\n                               <SearchBar setSearchResults={setSearchResults} selectedCategory={selectedCategory}\n                                          setDataReturned={setDataReturned} setIsSearching={setIsSearching}\n                                          setSelectedCategoryName={setSelectedCategoryName}/>\n                           </div>\n                    </div>\n                </div>\n            </div>\n            <div className=\"logIn-container\">\n                               {user ? (\n                                   <UserDash username={user.username}/>\n                               ) : (\n                                   <Link to=\"/login\">\n                                       <button className=\"btn-logIn\">Login</button>\n                                </Link>\n                            )}\n                        </div>\n        </div>\n           {isSearching && (\n               <div className=\"filters-row\">\n                   <Filters\n                       filters={filters}\n                       setFilters={newFilters => {\n                           setFilters(newFilters)\n                           setIsSearching(true)    // keep us in “search mode”\n                       }}\n                   />\n               </div>\n                    )}    \n       </>\n    )\n}\n\nexport default Header
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Frontend/src/components/Header.jsx b/application/Frontend/src/components/Header.jsx
+--- a/application/Frontend/src/components/Header.jsx	(revision b3f10e59a28af7c0002decf2f9a7f9e482d9c318)
++++ b/application/Frontend/src/components/Header.jsx	(date 1746048326034)
+@@ -51,14 +51,14 @@
+                 </div>
+             </div>
+             <div className="logIn-container">
+-                               {user ? (
+-                                   <UserDash username={user.username}/>
+-                               ) : (
+-                                   <Link to="/login">
+-                                       <button className="btn-logIn">Login</button>
+-                                </Link>
+-                            )}
+-                        </div>
++                {user ? (
++                    <UserDash username={user.username}/>
++                ) : (
++                    <Link to="/login">
++                        <button className="btn-logIn">Login</button>
++                    </Link>
++                )}
++            </div>
+         </div>
+            {isSearching && (
+                <div className="filters-row">
+Index: application/Backend/package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"gator-goods-backend\",\n  \"description\": \"Backend for React app using Express and MySQL\",\n  \"main\": \"server.js\",\n  \"dependencies\": {\n    \"bcryptjs\": \"^2.4.3\",\n    \"cors\": \"^2.8.5\",\n    \"dotenv\": \"^16.4.7\",\n    \"express\": \"^4.21.2\",\n    \"mysql2\": \"^3.12.0\"\n  },\n  \"scripts\": {\n    \"start\": \"node server.js\",\n    \"dev\": \"nodemon server.js\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.1.0\"\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Backend/package.json b/application/Backend/package.json
+--- a/application/Backend/package.json	(revision b3f10e59a28af7c0002decf2f9a7f9e482d9c318)
++++ b/application/Backend/package.json	(date 1746055882602)
+@@ -3,7 +3,7 @@
+   "description": "Backend for React app using Express and MySQL",
+   "main": "server.js",
+   "dependencies": {
+-    "bcryptjs": "^2.4.3",
++    "bcrypt": "^5.1.1",
+     "cors": "^2.8.5",
+     "dotenv": "^16.4.7",
+     "express": "^4.21.2",
+Index: application/Backend/routes/title_search.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>const express = require('express');\nconst router = express.Router();\nconst db = require('../DB');\n\n\n\n\n// Search Listings by Title\nrouter.get('/', (req, res) => {\n    const searchTerm = req.query.q; // will come after /api/title?q=...\n    if (!searchTerm) {\n        return res.status(400).json({ error: \"Missing search term\" });\n    }\n\n    const query = \"SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'\"\n    const searchValue = `%${searchTerm}%`;\n\n    db.query(query, [searchValue], (err, results) => { \n        if (err) {\n            console.error(\"Database query failed:\", err);\n            return res.status(500).json({ error: \"Database query failed\" });\n        }\n\n        const listingsWithImages = results.map(row => {\n            const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;\n\n            return {\n                listing_id: row.listing_id,\n                price: row.price,\n                discount: row.discount,\n                listing_date: row.listing_date,\n                title: row.title,\n                description: row.description,\n                product_id: row.product_id,\n                category: row.category,\n                // image: row.image,\n                vendor_id: row.vendor_id,\n                thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null\n            };\n        });\n        res.json(listingsWithImages);\n    });\n});\n\nmodule.exports = router;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Backend/routes/title_search.js b/application/Backend/routes/title_search.js
+--- a/application/Backend/routes/title_search.js	(revision b3f10e59a28af7c0002decf2f9a7f9e482d9c318)
++++ b/application/Backend/routes/title_search.js	(date 1746050061659)
+@@ -6,20 +6,17 @@
+ 
+ 
+ // Search Listings by Title
+-router.get('/', (req, res) => {
+-    const searchTerm = req.query.q; // will come after /api/title?q=...
++router.get('/', async (req, res) => {
++    const searchTerm = req.query.title; // will come after /api/title?q=...
+     if (!searchTerm) {
+         return res.status(400).json({ error: "Missing search term" });
+     }
+ 
+-    const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'"
+-    const searchValue = `%${searchTerm}%`;
+-
+-    db.query(query, [searchValue], (err, results) => { 
+-        if (err) {
+-            console.error("Database query failed:", err);
+-            return res.status(500).json({ error: "Database query failed" });
+-        }
++    try {
++
++        const query = "SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE product.title LIKE ? AND listing.listing_status = 'Active'"
++        const searchValue = `%${searchTerm}%`;
++        const [results] = await db.query(query, searchValue);
+ 
+         const listingsWithImages = results.map(row => {
+             const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
+@@ -39,7 +36,11 @@
+             };
+         });
+         res.json(listingsWithImages);
+-    });
++    }
++    catch (err) {
++        console.error("Database query failed:", err);
++        res.status(500).json({ error: "Database query failed" });
++    }
+ });
+ 
+ module.exports = router;
+\ No newline at end of file
+Index: .idea/dbnavigator.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"DBNavigator.Project.DDLFileAttachmentManager\">\n    <mappings />\n    <preferences />\n  </component>\n  <component name=\"DBNavigator.Project.DatabaseAssistantManager\">\n    <assistants />\n  </component>\n  <component name=\"DBNavigator.Project.DatabaseBrowserManager\">\n    <autoscroll-to-editor value=\"false\" />\n    <autoscroll-from-editor value=\"true\" />\n    <show-object-properties value=\"true\" />\n    <loaded-nodes />\n  </component>\n  <component name=\"DBNavigator.Project.DatabaseFileManager\">\n    <open-files />\n  </component>\n  <component name=\"DBNavigator.Project.Settings\">\n    <connections />\n    <browser-settings>\n      <general>\n        <display-mode value=\"TABBED\" />\n        <navigation-history-size value=\"100\" />\n        <show-object-details value=\"false\" />\n        <enable-sticky-paths value=\"true\" />\n      </general>\n      <filters>\n        <object-type-filter>\n          <object-type name=\"SCHEMA\" enabled=\"true\" />\n          <object-type name=\"USER\" enabled=\"true\" />\n          <object-type name=\"ROLE\" enabled=\"true\" />\n          <object-type name=\"PRIVILEGE\" enabled=\"true\" />\n          <object-type name=\"CHARSET\" enabled=\"true\" />\n          <object-type name=\"TABLE\" enabled=\"true\" />\n          <object-type name=\"VIEW\" enabled=\"true\" />\n          <object-type name=\"MATERIALIZED_VIEW\" enabled=\"true\" />\n          <object-type name=\"NESTED_TABLE\" enabled=\"true\" />\n          <object-type name=\"COLUMN\" enabled=\"true\" />\n          <object-type name=\"INDEX\" enabled=\"true\" />\n          <object-type name=\"CONSTRAINT\" enabled=\"true\" />\n          <object-type name=\"DATASET_TRIGGER\" enabled=\"true\" />\n          <object-type name=\"DATABASE_TRIGGER\" enabled=\"true\" />\n          <object-type name=\"SYNONYM\" enabled=\"true\" />\n          <object-type name=\"SEQUENCE\" enabled=\"true\" />\n          <object-type name=\"PROCEDURE\" enabled=\"true\" />\n          <object-type name=\"FUNCTION\" enabled=\"true\" />\n          <object-type name=\"PACKAGE\" enabled=\"true\" />\n          <object-type name=\"TYPE\" enabled=\"true\" />\n          <object-type name=\"TYPE_ATTRIBUTE\" enabled=\"true\" />\n          <object-type name=\"ARGUMENT\" enabled=\"true\" />\n          <object-type name=\"JAVA_CLASS\" enabled=\"true\" />\n          <object-type name=\"JAVA_INNER_CLASS\" enabled=\"true\" />\n          <object-type name=\"JAVA_FIELD\" enabled=\"true\" />\n          <object-type name=\"JAVA_METHOD\" enabled=\"true\" />\n          <object-type name=\"DIMENSION\" enabled=\"true\" />\n          <object-type name=\"CLUSTER\" enabled=\"true\" />\n          <object-type name=\"DBLINK\" enabled=\"true\" />\n          <object-type name=\"CREDENTIAL\" enabled=\"true\" />\n          <object-type name=\"AI_PROFILE\" enabled=\"true\" />\n        </object-type-filter>\n      </filters>\n      <sorting>\n        <object-type name=\"COLUMN\" sorting-type=\"NAME\" />\n        <object-type name=\"FUNCTION\" sorting-type=\"NAME\" />\n        <object-type name=\"PROCEDURE\" sorting-type=\"NAME\" />\n        <object-type name=\"ARGUMENT\" sorting-type=\"POSITION\" />\n        <object-type name=\"TYPE ATTRIBUTE\" sorting-type=\"POSITION\" />\n      </sorting>\n      <default-editors>\n        <object-type name=\"VIEW\" editor-type=\"SELECTION\" />\n        <object-type name=\"PACKAGE\" editor-type=\"SELECTION\" />\n        <object-type name=\"TYPE\" editor-type=\"SELECTION\" />\n      </default-editors>\n    </browser-settings>\n    <navigation-settings>\n      <lookup-filters>\n        <lookup-objects>\n          <object-type name=\"SCHEMA\" enabled=\"true\" />\n          <object-type name=\"USER\" enabled=\"false\" />\n          <object-type name=\"ROLE\" enabled=\"false\" />\n          <object-type name=\"PRIVILEGE\" enabled=\"false\" />\n          <object-type name=\"CHARSET\" enabled=\"false\" />\n          <object-type name=\"TABLE\" enabled=\"true\" />\n          <object-type name=\"VIEW\" enabled=\"true\" />\n          <object-type name=\"MATERIALIZED VIEW\" enabled=\"true\" />\n          <object-type name=\"INDEX\" enabled=\"true\" />\n          <object-type name=\"CONSTRAINT\" enabled=\"true\" />\n          <object-type name=\"DATASET TRIGGER\" enabled=\"true\" />\n          <object-type name=\"DATABASE TRIGGER\" enabled=\"true\" />\n          <object-type name=\"SYNONYM\" enabled=\"false\" />\n          <object-type name=\"SEQUENCE\" enabled=\"true\" />\n          <object-type name=\"PROCEDURE\" enabled=\"true\" />\n          <object-type name=\"FUNCTION\" enabled=\"true\" />\n          <object-type name=\"PACKAGE\" enabled=\"true\" />\n          <object-type name=\"TYPE\" enabled=\"true\" />\n          <object-type name=\"JAVA CLASS\" enabled=\"true\" />\n          <object-type name=\"INNER CLASS\" enabled=\"true\" />\n          <object-type name=\"JAVA FIELD\" enabled=\"true\" />\n          <object-type name=\"JAVA METHOD\" enabled=\"true\" />\n          <object-type name=\"JAVA PARAMETER\" enabled=\"true\" />\n          <object-type name=\"DIMENSION\" enabled=\"false\" />\n          <object-type name=\"CLUSTER\" enabled=\"false\" />\n          <object-type name=\"DBLINK\" enabled=\"true\" />\n          <object-type name=\"CREDENTIAL\" enabled=\"false\" />\n        </lookup-objects>\n        <force-database-load value=\"false\" />\n        <prompt-connection-selection value=\"true\" />\n        <prompt-schema-selection value=\"true\" />\n      </lookup-filters>\n    </navigation-settings>\n    <dataset-grid-settings>\n      <general>\n        <enable-zooming value=\"true\" />\n        <enable-column-tooltip value=\"true\" />\n      </general>\n      <sorting>\n        <nulls-first value=\"true\" />\n        <max-sorting-columns value=\"4\" />\n      </sorting>\n      <audit-columns>\n        <column-names value=\"\" />\n        <visible value=\"true\" />\n        <editable value=\"false\" />\n      </audit-columns>\n    </dataset-grid-settings>\n    <dataset-editor-settings>\n      <text-editor-popup>\n        <active value=\"false\" />\n        <active-if-empty value=\"false\" />\n        <data-length-threshold value=\"100\" />\n        <popup-delay value=\"1000\" />\n      </text-editor-popup>\n      <values-actions-popup>\n        <show-popup-button value=\"true\" />\n        <element-count-threshold value=\"1000\" />\n        <data-length-threshold value=\"250\" />\n      </values-actions-popup>\n      <general>\n        <fetch-block-size value=\"100\" />\n        <fetch-timeout value=\"30\" />\n        <trim-whitespaces value=\"true\" />\n        <convert-empty-strings-to-null value=\"true\" />\n        <select-content-on-cell-edit value=\"true\" />\n        <large-value-preview-active value=\"true\" />\n      </general>\n      <filters>\n        <prompt-filter-dialog value=\"true\" />\n        <default-filter-type value=\"BASIC\" />\n      </filters>\n      <qualified-text-editor text-length-threshold=\"300\">\n        <content-types>\n          <content-type name=\"Text\" enabled=\"true\" />\n          <content-type name=\"XML\" enabled=\"true\" />\n          <content-type name=\"DTD\" enabled=\"true\" />\n          <content-type name=\"HTML\" enabled=\"true\" />\n          <content-type name=\"XHTML\" enabled=\"true\" />\n          <content-type name=\"CSS\" enabled=\"true\" />\n          <content-type name=\"SQL\" enabled=\"true\" />\n          <content-type name=\"PL/SQL\" enabled=\"true\" />\n          <content-type name=\"JavaScript\" enabled=\"true\" />\n          <content-type name=\"JSON\" enabled=\"true\" />\n          <content-type name=\"JSON5\" enabled=\"true\" />\n          <content-type name=\"YAML\" enabled=\"true\" />\n        </content-types>\n      </qualified-text-editor>\n      <record-navigation>\n        <navigation-target value=\"VIEWER\" />\n      </record-navigation>\n    </dataset-editor-settings>\n    <code-editor-settings>\n      <general>\n        <show-object-navigation-gutter value=\"false\" />\n        <show-spec-declaration-navigation-gutter value=\"true\" />\n        <enable-spellchecking value=\"true\" />\n        <enable-reference-spellchecking value=\"false\" />\n      </general>\n      <confirmations>\n        <save-changes value=\"false\" />\n        <revert-changes value=\"true\" />\n        <exit-on-changes value=\"ASK\" />\n      </confirmations>\n    </code-editor-settings>\n    <code-completion-settings>\n      <filters>\n        <basic-filter>\n          <filter-element type=\"RESERVED_WORD\" id=\"keyword\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"function\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"parameter\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"datatype\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"exception\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"schema\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"role\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"user\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"privilege\" selected=\"true\" />\n          <user-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"true\" />\n          </user-schema>\n          <public-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"false\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"false\" />\n          </public-schema>\n          <any-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"true\" />\n          </any-schema>\n        </basic-filter>\n        <extended-filter>\n          <filter-element type=\"RESERVED_WORD\" id=\"keyword\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"function\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"parameter\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"datatype\" selected=\"true\" />\n          <filter-element type=\"RESERVED_WORD\" id=\"exception\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"schema\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"user\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"role\" selected=\"true\" />\n          <filter-element type=\"OBJECT\" id=\"privilege\" selected=\"true\" />\n          <user-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"true\" />\n          </user-schema>\n          <public-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"true\" />\n          </public-schema>\n          <any-schema>\n            <filter-element type=\"OBJECT\" id=\"table\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"materialized view\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"index\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"constraint\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"trigger\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"synonym\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"sequence\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"procedure\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"function\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"package\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"type\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dimension\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"cluster\" selected=\"true\" />\n            <filter-element type=\"OBJECT\" id=\"dblink\" selected=\"true\" />\n          </any-schema>\n        </extended-filter>\n      </filters>\n      <sorting enabled=\"true\">\n        <sorting-element type=\"RESERVED_WORD\" id=\"keyword\" />\n        <sorting-element type=\"RESERVED_WORD\" id=\"datatype\" />\n        <sorting-element type=\"OBJECT\" id=\"column\" />\n        <sorting-element type=\"OBJECT\" id=\"table\" />\n        <sorting-element type=\"OBJECT\" id=\"view\" />\n        <sorting-element type=\"OBJECT\" id=\"materialized view\" />\n        <sorting-element type=\"OBJECT\" id=\"index\" />\n        <sorting-element type=\"OBJECT\" id=\"constraint\" />\n        <sorting-element type=\"OBJECT\" id=\"trigger\" />\n        <sorting-element type=\"OBJECT\" id=\"synonym\" />\n        <sorting-element type=\"OBJECT\" id=\"sequence\" />\n        <sorting-element type=\"OBJECT\" id=\"procedure\" />\n        <sorting-element type=\"OBJECT\" id=\"function\" />\n        <sorting-element type=\"OBJECT\" id=\"package\" />\n        <sorting-element type=\"OBJECT\" id=\"type\" />\n        <sorting-element type=\"OBJECT\" id=\"dimension\" />\n        <sorting-element type=\"OBJECT\" id=\"cluster\" />\n        <sorting-element type=\"OBJECT\" id=\"dblink\" />\n        <sorting-element type=\"OBJECT\" id=\"schema\" />\n        <sorting-element type=\"OBJECT\" id=\"role\" />\n        <sorting-element type=\"OBJECT\" id=\"user\" />\n        <sorting-element type=\"RESERVED_WORD\" id=\"function\" />\n        <sorting-element type=\"RESERVED_WORD\" id=\"parameter\" />\n      </sorting>\n      <format>\n        <enforce-code-style-case value=\"true\" />\n      </format>\n    </code-completion-settings>\n    <execution-engine-settings>\n      <statement-execution>\n        <fetch-block-size value=\"100\" />\n        <execution-timeout value=\"20\" />\n        <debug-execution-timeout value=\"600\" />\n        <focus-result value=\"false\" />\n        <prompt-execution value=\"false\" />\n      </statement-execution>\n      <script-execution>\n        <command-line-interfaces />\n        <execution-timeout value=\"300\" />\n      </script-execution>\n      <method-execution>\n        <execution-timeout value=\"30\" />\n        <debug-execution-timeout value=\"600\" />\n        <parameter-history-size value=\"10\" />\n      </method-execution>\n    </execution-engine-settings>\n    <operation-settings>\n      <transactions>\n        <uncommitted-changes>\n          <on-project-close value=\"ASK\" />\n          <on-disconnect value=\"ASK\" />\n          <on-autocommit-toggle value=\"ASK\" />\n        </uncommitted-changes>\n        <multiple-uncommitted-changes>\n          <on-commit value=\"ASK\" />\n          <on-rollback value=\"ASK\" />\n        </multiple-uncommitted-changes>\n      </transactions>\n      <session-browser>\n        <disconnect-session value=\"ASK\" />\n        <kill-session value=\"ASK\" />\n        <reload-on-filter-change value=\"false\" />\n      </session-browser>\n      <compiler>\n        <compile-type value=\"KEEP\" />\n        <compile-dependencies value=\"ASK\" />\n        <always-show-controls value=\"false\" />\n      </compiler>\n    </operation-settings>\n    <ddl-file-settings>\n      <extensions>\n        <mapping file-type-id=\"VIEW\" extensions=\"vw\" />\n        <mapping file-type-id=\"TRIGGER\" extensions=\"trg\" />\n        <mapping file-type-id=\"PROCEDURE\" extensions=\"prc\" />\n        <mapping file-type-id=\"FUNCTION\" extensions=\"fnc\" />\n        <mapping file-type-id=\"PACKAGE\" extensions=\"pkg\" />\n        <mapping file-type-id=\"PACKAGE_SPEC\" extensions=\"pks\" />\n        <mapping file-type-id=\"PACKAGE_BODY\" extensions=\"pkb\" />\n        <mapping file-type-id=\"TYPE\" extensions=\"tpe\" />\n        <mapping file-type-id=\"TYPE_SPEC\" extensions=\"tps\" />\n        <mapping file-type-id=\"TYPE_BODY\" extensions=\"tpb\" />\n        <mapping file-type-id=\"JAVA_SOURCE\" extensions=\"sql\" />\n      </extensions>\n      <general>\n        <lookup-ddl-files value=\"true\" />\n        <create-ddl-files value=\"false\" />\n        <synchronize-ddl-files value=\"true\" />\n        <use-qualified-names value=\"false\" />\n        <make-scripts-rerunnable value=\"true\" />\n      </general>\n    </ddl-file-settings>\n    <assistant-settings>\n      <credential-settings>\n        <credentials />\n      </credential-settings>\n    </assistant-settings>\n    <general-settings>\n      <regional-settings>\n        <date-format value=\"MEDIUM\" />\n        <number-format value=\"UNGROUPED\" />\n        <locale value=\"SYSTEM_DEFAULT\" />\n        <use-custom-formats value=\"false\" />\n      </regional-settings>\n      <environment>\n        <environment-types>\n          <environment-type id=\"development\" name=\"Development\" description=\"Development environment\" color=\"-2430209/-12296320\" readonly-code=\"false\" readonly-data=\"false\" />\n          <environment-type id=\"integration\" name=\"Integration\" description=\"Integration environment\" color=\"-2621494/-12163514\" readonly-code=\"true\" readonly-data=\"false\" />\n          <environment-type id=\"production\" name=\"Production\" description=\"Productive environment\" color=\"-11574/-10271420\" readonly-code=\"true\" readonly-data=\"true\" />\n          <environment-type id=\"other\" name=\"Other\" description=\"\" color=\"-1576/-10724543\" readonly-code=\"false\" readonly-data=\"false\" />\n        </environment-types>\n        <visibility-settings>\n          <connection-tabs value=\"true\" />\n          <dialog-headers value=\"true\" />\n          <object-editor-tabs value=\"true\" />\n          <script-editor-tabs value=\"false\" />\n          <execution-result-tabs value=\"true\" />\n        </visibility-settings>\n      </environment>\n    </general-settings>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dbnavigator.xml b/.idea/dbnavigator.xml
+--- a/.idea/dbnavigator.xml	(revision 5fae46ad6ca5ab81dce88a0734242705c0c52ba7)
++++ b/.idea/dbnavigator.xml	(date 1746056441088)
+@@ -4,6 +4,11 @@
+     <mappings />
+     <preferences />
+   </component>
++  <component name="DBNavigator.Project.DataEditorManager">
++    <record-view-column-sorting-type value="BY_INDEX" />
++    <value-preview-text-wrapping value="false" />
++    <value-preview-pinned value="false" />
++  </component>
+   <component name="DBNavigator.Project.DatabaseAssistantManager">
+     <assistants />
+   </component>
+@@ -13,6 +18,9 @@
+     <show-object-properties value="true" />
+     <loaded-nodes />
+   </component>
++  <component name="DBNavigator.Project.DatabaseEditorStateManager">
++    <last-used-providers />
++  </component>
+   <component name="DBNavigator.Project.DatabaseFileManager">
+     <open-files />
+   </component>
+@@ -429,4 +437,8 @@
+       </environment>
+     </general-settings>
+   </component>
++  <component name="DBNavigator.Project.StatementExecutionManager">
++    <execution-variables />
++    <execution-variable-types />
++  </component>
+ </project>
+\ No newline at end of file
+Index: application/Frontend/src/App.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap'); */\n@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');\n\n\nbody {\n  margin: 0;\n  padding: 0; \n}\n.App {\n  min-height: 100vh;\n  display: flex;\n  flex-direction: column;\n}\n.body-container{\n  height: 65vh;\n  margin-left: auto;\n  margin-right: auto;\n  width: 95vw;\n}\n.header-container{\n  width: 100%;\n  display: flex;\n  background-color: #231161;\n}\n.header{\n  height: 110px;\n  padding: 7px 14px;\n   margin-left: auto;\n  margin-right: auto;\n\n\n}\n.inner-header{\n  display: flex;\n  flex-direction: row;\n  margin: 0;\n  width: 100%;\n  box-sizing: border-box;\n  overflow: hidden;\n}\n.header-box {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  width: 100%;\n  padding: 0 14px;\n\n}\n\n\n.search{\n  /* margin-top: 10px; */\n  display: flex;\n  width: max-content;\n  align-items: center;\n  /* padding: 5px; */\n  background: white;\n  border-radius: 24px;\n  height: 48px;\n  margin-right: 18px;\n  \n}\n\n.search input{\n\n  padding: 9px 19px;\n  font-size: 16px;\n  outline: none;\n  border: none;\n  background: transparent;\n  width: 650px;\n  height: 26px;\n}\n\n.searchIcon{\n\n  /* padding: 9px 19px; */\n  padding-right: 19px;\n  /* padding-left: 5px; */\n  display: flex;\n  align-items: center;\n}\n\n.logIn-container{\n  display: flex;\n  justify-content: flex-end;\n\n}\n\n.btn-logIn{\n  background: none;\n  font-size: 20px;\n  color: white; \n  border: none;\n  cursor: pointer;\n}\n\n.logo{\n\n  width: 120px;\n  flex-shrink: 0;\n}\n\n.nav-container{\n  background: #D9D9D9;\n}\n.nav-style{\n  display: flex;\n  justify-content: space-evenly;\n  list-style: none;\n}\n\n.nav-style a{\n  color: #231161;\n  font-weight: bold;\n  text-decoration: none;\n}\n\n.homepage-img{\n  width: 100vw; \n  display: block;\n  padding: 0; \n  margin: 0; \n}\n\n.team-heading{\n  font-family: \"Inter\", serif;\n  font-size: 36px;\n  font-weight: bold;\n  color: #231161; \n}\n\n.team-heading-container{\n  padding-left: 50px;\n  padding-top: 25px;\n}\n\n.highlight{\n  height: 10px;\n  width: 105px;\n  background-color: #FFDC70;\n}\n\n.highlight-2{\n  height: 10px;\n  width: 160px;\n  background-color: #FFDC70;\n}\n\n.about-card-container{\n  padding-left: 50px;\n  padding-top: 50px\n}\n\n.about-card{\n padding-bottom: 25px;\n}\n\n.about-text{\n  padding-left: 20px;\n  color: black;\n  font-weight: bold;\n  text-decoration: none;\n\n  height: 50px;\n  width: 280px;\n  background-color: #FFDC70;\n  border-radius: 5px;\n  cursor: pointer;\n\n  display: flex; \n  justify-content: flex-start;\n  align-items: center;\n\n}\n\n.about-text:hover{\n  background-color: #e7e3e3;\n  color: black;\n  box-shadow: rgba(60, 64, 67, 0.3) 1px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;\n\n}\n\n\n\n.about-container{\n  padding-top: 100px;\n  display: flex;\n  flex-direction: row;\n  margin-left: auto;\n  margin-right: auto;\n  width: 95vw;\n  height: 70vh;\n}\n\n.about-info{\n  width: 50vw;\n}\n\n.about-description{\n  /* padding-left: 50px;\n  padding-top: 25px;\n  padding-right: 50px; */\n  padding: 20px 100px 50px 50px;\n  line-height: 1.5;\n}\n\n.social-media{\n  padding-left: 50px;\n}\n\n.social-media a{\n  padding-right: 25px;\n}\n\n.about-img{\n  width: 50vw;\n  padding: 50px;\n  overflow: hidden;\n}\n\n.about-img img{\n  height: auto;\n  width: 80%;\n  object-fit: cover;\n}\n\n\n.social-media img:hover{\n  transform: scale(1.2)\n}\n\n\n\n\n/* CSS for Categories */\n.categories-container {\n  padding: 5px;\n  border-radius: 2px;\n  /* background-color: #f9f9f9; */\n  text-align: center;\n  max-width: 100px;\n  margin: 0 auto;\n  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */\n}\n\n.categories-title {\n  font-size: 12px;\n  color: #ffffff;\n  margin-bottom: 10px;\n}\n\n.categories-label {\n  font-size: 12px;\n  font-weight: bold;\n  display: block;\n  margin-bottom: 1px;\n}\n\n.categories-dropdown {\n  width: 100%;\n  padding: 8px;\n  border-radius: 5px;\n  border: 1px solid #ccc;\n  font-size: 10px;\n  margin-bottom: 5px;\n}\n\n/* .categories-button {\n  background-color: #8000ff;\n  color: #fff;\n  padding: 5px 10px;\n  border: none;\n  border-radius: 5px;\n  font-size: 10px;\n  cursor: pointer;\n} */\n\n.products-list {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n}\n\n.product-card {\n  border: 1px solid #ccc;\n  border-radius: 6px;\n  padding: 1rem;\n  width: 200px;\n  text-align: center;\n}\n\n.product-image {\n  width: 100%;\n  height: auto;\n}\n\n.no-image {\n  width: 100%;\n  height: 150px;\n  background-color: #eee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #555;\n}\n\n.product-card:hover {\n  transform: scale(1.03);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);\n}\n\n\n\n\n\n\n/* CSS for Filters */\n.filter-container {\n  display: flex;\n  flex-wrap: wrap;       \n  gap: 1rem;          \n  margin-top: 0.75rem;   \n  justify-content: center; \n}\n\n\n.filters-container select {\n  margin :0 0.5rem;\n  flex: 1 1 auto;\n  height: 2.5rem;\n  line-height: 2.5rem;\n  padding: 0 1.25rem;\n  background-color: #FFD447;\n  border: none;\n  border-radius: 1.25rem;\n  font-size: 0.95rem;\n  font-weight: 500;\n  color: #231161;\n  cursor: pointer;\n  appearance: none;\n  background-image: url(\"data:image/svg+xml,…\"); \n  background-repeat: no-repeat;\n  background-position: right 0.75rem center;\n  background-size: 0.6rem;\n  padding-right: 2rem;\n  min-width: 140px;\n  transition: background-color 0.2s, transform 0.1s;\n}\n.filters-container select:hover {\n  background-color: #FFDC70;\n  transform: translateY(-1px);\n}\n\n\n.filter-container select:focus {\n  outline: none;\n  box-shadow: 0 0 0 2px rgba(255, 212, 71, 0.6);\n}\n.filters-row {\n  display: flex;\n  justify-content: center;   \n  width: 100%; \n  padding: 0 2rem;             \n  margin-top: 1rem;       \n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Frontend/src/App.css b/application/Frontend/src/App.css
+--- a/application/Frontend/src/App.css	(revision b3f10e59a28af7c0002decf2f9a7f9e482d9c318)
++++ b/application/Frontend/src/App.css	(date 1746048326034)
+@@ -84,6 +84,8 @@
+ .logIn-container{
+   display: flex;
+   justify-content: flex-end;
++  padding-right: 40px;
++  align-items: center;
+ 
+ }
+ 
+Index: application/Frontend/src/UserDash.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Frontend/src/UserDash.css b/application/Frontend/src/UserDash.css
+new file mode 100644
+--- /dev/null	(date 1746048326034)
++++ b/application/Frontend/src/UserDash.css	(date 1746048326034)
+@@ -0,0 +1,35 @@
++.user-dropdown-container {
++
++    /* background-color: lightblue; */
++    display: flex;
++    flex-direction: column;
++    color: white;
++
++}
++
++.dropdown-menu {
++    background-color: white; 
++    display: flex;
++    flex-direction: column;
++    position: absolute;
++    z-index: 100;
++    top: 85px;
++    right: 40px;
++    padding: 10px 20px 10px 20px;
++    border-radius: 5px;
++}
++
++.dropdown-menu a{
++    text-decoration: none;
++    cursor: pointer;
++    padding-bottom: 10px;
++}
++
++.dropdown-menu button{
++    border: none;
++    background-color: #ffffff;
++    font-size: 14px;
++    cursor: pointer;
++    text-align: left;
++    padding: 0px;
++}
+\ No newline at end of file
+Index: application/Backend/routes/combined_search.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>const express = require('express');\nconst router = express.Router();\nconst db = require('../DB');\n\n// Search Listings by Category AND Title\nrouter.get('/', async (req, res) => {\n\n    const category = req.query.category; // will come after /api/combined_search?category=...\n    const title = req.query.title; // ... then will come after &title=...\n    if (!title && !category) {\n        return res.status(400).json({ error: \"Missing search terms\" });\n    }\n\n    try {\n\n    const query = \"SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?\";\n    const searchValues = [`%${category}%`, `%${title}%`];\n    const [results] = await db.query(query, searchValues);\n    \n    \n\n    // db.query(query, searchValues, (err, results) => {\n    //     if (err) {\n    //         console.error(\"Database query failed:\", err);\n    //         return res.status(500).json({ error: \"Database query failed\" });\n    //     }\n        \n\n        const listingsWithImages = results.map(row => {\n            const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;\n\n            return {\n                listing_id: row.listing_id,\n                price: row.price,\n                discount: row.discount,\n                listing_date: row.listing_date,\n                title: row.title,\n                description: row.description,\n                product_id: row.product_id,\n                category: row.category,\n                conditions: row.conditions,\n                // image: row.image,\n                vendor_id: row.vendor_id,\n                rating: row.rating,\n                thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null\n            };\n        });\n\n        res.json(listingsWithImages);\n    // });\n}\n    catch (err){\n        console.error(\"Database query failed:\", err);\n        res.status(500).json({ error: \"Database query failed\" });\n    }\n});\n\nmodule.exports = router;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application/Backend/routes/combined_search.js b/application/Backend/routes/combined_search.js
+--- a/application/Backend/routes/combined_search.js	(revision b3f10e59a28af7c0002decf2f9a7f9e482d9c318)
++++ b/application/Backend/routes/combined_search.js	(date 1746050061678)
+@@ -13,19 +13,10 @@
+ 
+     try {
+ 
+-    const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
+-    const searchValues = [`%${category}%`, `%${title}%`];
+-    const [results] = await db.query(query, searchValues);
+-    
+-    
++        const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
++        const searchValues = [`%${category}%`, `%${title}%`];
++        const [results] = await db.query(query, searchValues);
+ 
+-    // db.query(query, searchValues, (err, results) => {
+-    //     if (err) {
+-    //         console.error("Database query failed:", err);
+-    //         return res.status(500).json({ error: "Database query failed" });
+-    //     }
+-        
+-
+         const listingsWithImages = results.map(row => {
+             const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
+ 
+@@ -47,8 +38,7 @@
+         });
+ 
+         res.json(listingsWithImages);
+-    // });
+-}
++    }
+     catch (err){
+         console.error("Database query failed:", err);
+         res.status(500).json({ error: "Database query failed" });
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"ba322e2d-c4ec-40be-a4df-8172b520f635\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/application/Backend/package.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/application/Backend/package.json\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"package.json\" />\n        <option value=\"TypeScript JSX File\" />\n        <option value=\"JSX File\" />\n        <option value=\"JavaScript File\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"ProblemsViewState\">\n    <option name=\"selectedTabId\" value=\"QODANA_PROBLEMS_VIEW_TAB\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 4\n}</component>\n  <component name=\"ProjectId\" id=\"2vqXGz2vd0WTzjAFu0jZITDi1o9\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"Node.js.Register.jsx.executor\": \"Run\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"git-widget-placeholder\": \"gzhao__branch\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"ts.external.directory.path\": \"/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/application/Backend\" />\n    </key>\n  </component>\n  <component name=\"RunManager\">\n    <configuration name=\"Register.jsx\" type=\"NodeJSConfigurationType\" temporary=\"true\" nameIsGenerated=\"true\" path-to-js-file=\"$PROJECT_DIR$/application/Frontend/src/components/Register.jsx\" working-dir=\"$PROJECT_DIR$/application/Frontend/src/components\">\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Node.js.Register.jsx\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"ba322e2d-c4ec-40be-a4df-8172b520f635\" name=\"Changes\" comment=\"\" />\n      <created>1744873489139</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1744873489139</updated>\n      <workItem from=\"1744873490378\" duration=\"1448000\" />\n      <workItem from=\"1745868751696\" duration=\"387000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State>\n              <option name=\"FILTERS\">\n                <map>\n                  <entry key=\"branch\">\n                    <value>\n                      <list>\n                        <option value=\"gzhao_branch\" />\n                      </list>\n                    </value>\n                  </entry>\n                </map>\n              </option>\n            </State>\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5fae46ad6ca5ab81dce88a0734242705c0c52ba7)
++++ b/.idea/workspace.xml	(date 1746056441087)
+@@ -25,6 +25,9 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="PackageJsonUpdateNotifier">
++    <dismissed value="$PROJECT_DIR$/application/Backend/package.json" />
++  </component>
+   <component name="ProblemsViewState">
+     <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+   </component>
+@@ -36,19 +39,19 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Node.js.Register.jsx.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "gzhao__branch",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Node.js.Register.jsx.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;Rebasing gzhao__branch&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="$PROJECT_DIR$/application/Backend" />
+@@ -80,7 +83,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1744873489139</updated>
+       <workItem from="1744873490378" duration="1448000" />
+-      <workItem from="1745868751696" duration="387000" />
++      <workItem from="1745868751696" duration="11146000" />
+     </task>
+     <servers />
+   </component>
+@@ -98,7 +101,7 @@
+                   <entry key="branch">
+                     <value>
+                       <list>
+-                        <option value="gzhao_branch" />
++                        <option value="main" />
+                       </list>
+                     </value>
+                   </entry>
