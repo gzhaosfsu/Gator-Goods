@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./DB');
+const http = require('http');
+const {Server} = require('socket.io');
+
 
 const buyerRoutes = require('./routes/buyer');
 const courierRoutes = require('./routes/courier');
@@ -20,6 +23,17 @@ const login = require('./routes/login');
 const register = require('./routes/register');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    /*
+    //for production
+    origin: ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"],
+    methods: ["GET", "POST"]
+    */
+    cors: { origin: "*" }
+  }
+});
 app.use(cors());
 app.use(express.json());
 
@@ -40,7 +54,7 @@ app.use('/api/all', allSearch);
 app.use('/api/combined', combinedSearch);
 app.use('/api/login', login);
 app.use('/api/register', register);
-
+require('./socket')(io);
 
 app.listen(3001, () => console.log('API running on port 3001'));
 
