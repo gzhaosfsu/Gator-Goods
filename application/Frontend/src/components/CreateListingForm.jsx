@@ -1,10 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import '../CreateListingForm.css';
 import {UserContext} from "../UserContext";
+import {useNavigate} from "react-router-dom";
 
 
 const CreateListingForm = ({ onClose }) => {
   const {user} = useContext(UserContext);
+  const navigate = useNavigate();
   useEffect(() => {
     if (!user) {
       navigate("/login");

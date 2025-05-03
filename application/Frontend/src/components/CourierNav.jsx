@@ -5,6 +5,7 @@ import { UserContext } from "../UserContext";
 import mascot from "./images/LogoGG.png";
 import "../DeliveryLayout.css";
 import ReturnHome from "./ReturnHome";
+import { useNavigate } from "react-router-dom";
 
 const socket = io("http://100.26.194.201:3000");
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
@@ -26,6 +27,7 @@ const CourierNav = ({ courierId, deliveryId }) => {
     const [dropoffCoords, setDropoffCoords] = useState(SFSU_COORDS);
     const [message, setMessage] = useState("");
     const [unauthorized, setUnauthorized] = useState(false);
+    const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
             navigate("/login");

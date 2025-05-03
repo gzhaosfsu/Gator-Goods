@@ -1,12 +1,13 @@
 import Header from './Header';
 import image from "./images/imageNA.png"
-import {Link } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import '../UserProfile.css'
 import {UserContext} from '../UserContext'
 import {useContext, useEffect} from "react";
 
 const UserProfile = () => {
     const {user} = useContext(UserContext);
+    const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
             navigate("/login");

@@ -1,12 +1,14 @@
-import React, {useContext} from 'react';
-import { useState, useEffect } from "react";
+import {React, useContext, useEffect, useState } from "react";
 import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
 import {UserContext} from "../UserContext";
+import { useNavigate } from "react-router-dom";
+
 
 const CourierPage = () => {
   const {user} = useContext(UserContext);
+  const navigate = useNavigate();
   useEffect(() => {
     if (!user) {
       navigate("/login");

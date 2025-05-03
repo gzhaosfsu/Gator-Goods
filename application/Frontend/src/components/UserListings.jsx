@@ -3,13 +3,15 @@ import '../UserListings.css';
 import Header from './Header';
 import Footer from './Footer';
 import CreateListingForm from './CreateListingForm'
-import {UserContext} from './UserContext';
+import {UserContext} from '../UserContext';
+import {useNavigate} from "react-router-dom";
 
 
 const UserListings = () => {
   const [showForm, setShowForm] = useState(false);
   const [listings, setListings] = useState([]);
-  const {user} = useContext(UserContext);
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
             navigate("/login");

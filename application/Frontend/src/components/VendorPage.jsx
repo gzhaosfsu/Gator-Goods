@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "../VendorPage.css";
 import Header from './Header';
 import Footer from './Footer';
@@ -14,6 +14,7 @@ const VendorPage = () => {
 
     const [showForm, setShowForm] = useState(false);
     const {user} = useContext(UserContext);
+    const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
             navigate("/login");
