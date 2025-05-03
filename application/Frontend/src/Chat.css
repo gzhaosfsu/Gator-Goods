@@ -11,6 +11,7 @@
     border-right: 2px solid rgb(199, 199, 199);;
     display: flex;
     flex-direction: column;
+    height: 90vh;
 }
 
 .Sender-title {
@@ -26,7 +27,9 @@
 }
 
 .sender-listings{
-  padding: 25px 10px 25px 10px;
+  padding: 25px 0px 25px 0px;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 
@@ -58,7 +61,12 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-bottom: 50px;
+    /* padding: 20px; */
+    padding: 20px 0px 20px 25px;
+    margin-bottom: 20px;
+}
+.individual-chat.selected{
+  background-color: rgb(238, 238, 238);
 }
 
 .individual-chat img{
@@ -106,8 +114,8 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: 66vh; 
-    overflow-y: auto;
+    height: 62%; 
+    overflow-y: scroll;
     /* border: 1px solid #ccc;  */
 
   }
@@ -127,6 +135,9 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
     margin-bottom: 25px;
   }
+.message-box.typing{
+  border: black 1px solid;
+}
 
   .message-box input{
     padding: 9px 19px;

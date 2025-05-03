@@ -7,43 +7,88 @@ import React, { useState, useEffect } from "react"
 
 const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
     const [conversation, setConversation] = useState([]);
-    const [messageText, setMessageText] = useState('');
+    const [istyping, setIsTyping] = useState(false); 
+    const [drafts, setDrafts] = useState({});
 
        
 
 useEffect(() => {
-
-    fetch(`/api/direct_message`)
-      .then((res) => res.json())
-      .then((data) => {
-        const filtered = data.filter(msg => {
-          const isBetweenUsers = 
-            (msg.sender_id === senderID && msg.receiver_id === receiverID) ||
-            (msg.sender_id === receiverID && msg.receiver_id === senderID);
-          
-          const isSameListing = msg.listing_id === listingID;
-          
-          return isBetweenUsers && isSameListing;
+    if(senderID && senderID && listingID) {
+        fetch(`/api/direct_message`)
+        .then((res) => res.json())
+        .then((data) => {
+          const filtered = data.filter(msg => {
+            const isBetweenUsers = 
+              (msg.sender_id === senderID && msg.receiver_id === receiverID) ||
+              (msg.sender_id === receiverID && msg.receiver_id === senderID);
+            
+            const isSameListing = msg.listing_id === listingID;
+            
+            return isBetweenUsers && isSameListing;
+          });
+  
+          console.log("Here", filtered); 
+          setConversation(filtered);
+        })
+        .catch(err => {
+          console.error("Error fetching messages:", err);
         });
+    }
 
-        console.log("Here", filtered); 
-        setConversation(filtered);
-      })
-      .catch(err => {
-        console.error("Error fetching messages:", err);
-      });
+    
 
 }, [senderID, receiverID, listingID]);
 
 const handleInputChange = (e) => {
-    setMessageText(e.target.value);
+    const newMessage = e.target.value;
+
+    setDrafts((prevDrafts) => ({
+        ...prevDrafts,
+        [receiverID]: newMessage
+    }));
+
+    if((e.target.value).length !== 0 ) {
+        setIsTyping(true); 
+    } else {
+        setIsTyping(false); 
+    }
 };
 
 const handleMessage = () => {
-    if (messageText.trim()) {
-        
-        setMessageText(''); // clear input
-        console.log("sent")
+    const currentMessage = drafts[receiverID] || '';
+
+    if (currentMessage.trim()) {
+        // Send message logic here...
+
+        fetch("api/direct_message", {
+            mode: "cors",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              sender_id: senderID,  // Corrected to pass the variable properly
+              receiver_id: receiverID,
+              listing_id: listingID,
+              content: currentMessage,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data, "data");
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+            });
+
+
+
+        setDrafts((prevDrafts) => ({
+            ...prevDrafts,
+            [receiverID]: ''
+        }));
+
+        setIsTyping(false);
     }
 };
 
@@ -66,12 +111,12 @@ return (
             ))}
         </div>
 
-        <div className="message-box">
+        <div className={`message-box ${istyping ? 'typing' : ''}`}>
             <input
                 className="message-text"
                 placeholder="Message..."
                 type="text"
-                value={messageText}
+                value={drafts[receiverID] || ''}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === 'Enter' && handleMessage()}
             />
