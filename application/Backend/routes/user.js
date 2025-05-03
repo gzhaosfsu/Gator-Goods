@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.query.id]);
+        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.params.id]);
         
         res.json(results);
     }

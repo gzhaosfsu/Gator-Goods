@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT direct_message.* FROM direct_message WHERE direct_message.sender_id = ?', [req.query.id]);
+        const [results] = await db.query('SELECT direct_message.* FROM direct_message WHERE direct_message.sender_id = ?', [req.params.id]);
         
         res.json(results);
     }

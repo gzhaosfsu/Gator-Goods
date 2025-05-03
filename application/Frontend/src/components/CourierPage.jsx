@@ -3,184 +3,195 @@ import { useState, useEffect } from "react";
 import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
+import MessageBubble from './MessageBubble';
+import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData to .js
 
 const CourierPage = () => {
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
 
+  const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
+  // const [deliveryRequests, setDeliveryRequests] = useState(dummyDeliveryRequests); //dummyData, comment out when using backend data
+
+  // this is the ID of the delivery request that is being removed
+  // which is used to trigger the animation when a delivery request is accepted
+  const [removingId, setRemovingId] = useState(null);
+
+  // this is the state that tracks the message bubble for each delivery request
+  // it is used to show whether the message has been sent or not
+  const [messageStates, setMessageStates] = useState({});
+
+  // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
     setSelectedDelivery(null);
   };
 
-  const [dummyDeliveryRequests, setDummyRequests] = useState ([
-
-    {
-      id: 1,
-      title: "Delivery Request 1",
-      pickupAddress: "VENDOR #1'S ADDRESS",
-      dropoffAddress: "BUYER #1'S ADDRESS",
-      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
-      sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
-      buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
-    },
-    {
-      id: 2,
-      title: "Delivery Request 2",
-      pickupAddress: "VENDOR #2'S ADDRESS",
-      dropoffAddress: "BUYER #2'S ADDRESS",
-      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
-      sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
-      buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
-    },
-    {
-      id: 3,
-      title: "Delivery Request 3",
-      pickupAddress: "VENDOR #3'S ADDRESS",
-      dropoffAddress: "BUYER #3'S ADDRESS",
-      imageUrl: "https://file.garden/Zn8NIHsVuBTAwgXF/GRAYSQUARE",
-      sellerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas. Pellentesque erat ante, accumsan et efficitur at, gravida vitae ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus scelerisque rutrum massa, non pulvinar orci molestie et. Quisque risus orci, placerat quis eros quis, sagittis tincidunt ante. Nam porta imperdiet massa in fringilla. Aenean pretium enim vitae porta rhoncus. Curabitur faucibus at nulla consectetur ornare. Pellentesque congue eros sit amet accumsan venenatis. Proin eget vulputate nulla, sed iaculis diam. Pellentesque ut ex rhoncus, facilisis arcu ac, convallis quam.",
-      buyerNote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac pulvinar lacus. Donec et augue placerat, sodales urna at, fermentum lectus. Vestibulum venenatis diam nec ex sollicitudin, et venenatis ipsum congue. Mauris imperdiet nisl ac tortor dictum, ac aliquet arcu mollis. Curabitur vehicula sed sem nec facilisis. Suspendisse vitae dolor non risus luctus egestas.",
+  //UNCOMMENT TO USE BACKEND DATA
+  // This useEffect fetches the delivery requests from the backend when the component mounts and when the onShift state changes
+  // It sets the delivery requests in the state and handles the case when onShift is false by clearing the requests
+  useEffect(() => {
+    if (onShift) {
+      fetch("http://localhost:3001/api/delivery_requests")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch delivery requests");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Fetched delivery requests:", data); // Debugging line
+          setDeliveryRequests(data);
+        })
+        .catch((error) => console.error("Error fetching deliveries:", error));
+    } else {
+      setDeliveryRequests([]);
     }
-  ]);
-
-
-  // this is the ID of the delivery request that is being removed
-  // which is used to trigger the animation when a delivery request is accepted
-  const [removingId, setRemovingId] = useState(null);
-  
-  // function is called when the "Start Delivery" button is clicked
-  // it sets the removingId to the ID of the selected delivery request
-  // and then sets the selectedDelivery to null to close the popup
-  const handleStartDelivery = () => {
-    setRemovingId(selectedDelivery.id);
-    setSelectedDelivery(null);
-    setTimeout(() => {
-      setDummyRequests(prev =>
-        prev.filter(req => req.id !== selectedDelivery.id)
-      );
-      setRemovingId(null);
-    }, 500); // 500 used to match animation duration
-  }
+  }, [onShift]);
+ 
 
   
-  const [messageStates, setMessageStates] = useState({}); // To track which requests sent a message
 
-  // for backend implementation, comment out the lines below
-  // lines 71 to 74, which are the dummy data for the delivery requests
-  const handleSendMessage = (id) => {
-    setMessageStates((prev) => ({ ...prev, [id]: true }));
-  };
-
-
-// MessageBubble component is used to send a message to the buyer
-const MessageBubble = ({ id, 
-  // handleSendMessage, // for backend implementation, uncomment the line
-  // messageStates // for backend implementation, uncomment the line
-}) => {
-    const [messageText, setMessageText] = useState('');
-  
-    const handleSendClick = () => {
-      if (messageText.trim() !== '') {
-        handleSendMessage(id);
-        // for backend implementation, uncomment the lines below
-        // handleSendMessage(id, messageText); // pass the actual text to the function
-        // setMessageText(''); // Optionally clear the input after sending
-      }
-    };
-
-    return (
-      <div className="message-section">
-        <div className="message-bubble">
-          <p className="message-label">Send buyer a message</p>
-          {!messageStates[id] ? (
-            <div className="message-input-row">
-              <input
-                type="text"
-                className="message-input"
-                value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
-                placeholder="I will deliver the item and need payment"
-              />
-              <button className="send-btn" onClick={handleSendClick}>SEND</button>
-            </div>
-          ) : (
-            <button className="see-convo-btn">See Conversation</button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-
-  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
-  // THE CONST BELOW WILL REPLACE THE DUMMY DATA ABOVE ONCE THE BACKEND IS READY
-  // const [deliveryRequests, setDeliveryRequests] = useState([]);
-
+  // IGNORE THIS COMMENTED OUT CODE THIS WAS A TEST RUN ATTEMPT TO FETCH DATA FROM BACKEND
   // useEffect(() => {
   //   if (onShift) {
-  //     fetch("http://localhost:3001/api/delivery_requests") //THIS IS A TEMP URL, CHANGE LATER
+  //     fetch("http://localhost:3001/api/delivery_requests")
   //       .then((response) => response.json())
-  //       .then((data) => setDeliveryRequests(data))
+  //       .then((data) => {
+  //         const formattedData = data.map((item) => ({
+  //           id: item.delivery_request_id,
+  //           title: `Delivery Request #${item.delivery_request_id}`, // fake title for now
+  //           pickupAddress: "Pickup Address Placeholder", // placeholder
+  //           dropoffAddress: item.dropoff, 
+  //           imageUrl: "https://via.placeholder.com/150", // placeholder image
+  //           sellerNote: "Seller Note Placeholder", // you can fetch this later properly
+  //           buyerNote: "Buyer Note Placeholder",
+  //           status: item.status
+  //         }));
+  //         setDeliveryRequests(formattedData);
+  //       })
   //       .catch((error) => console.error("Error fetching deliveries:", error));
   //   } else {
-  //     setDeliveryRequests([]); // Clear requests when off shift
+  //     setDeliveryRequests([]);
   //   }
   // }, [onShift]);
-
-  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
-  // THE CONST BELOW WILL MAKE IT SO THAT THE MESSAGE IN THE MESSAGE BOX SENDS TO THE BACKEND
-  // const handleSendMessage = (id, messageText) => {
-  //   fetch(`http://localhost:3001/api/deliveries/${id}/message`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ message: messageText }), // send the actual text
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setMessageStates((prev) => ({ ...prev, [id]: true }));
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error sending message:", error);
-  //     });
-  // };
-
-
-  // COMMENTED-OUT FETCH REQUEST FOR LATER IMPLEMENTATION OF BACKEND
-  // THE CONST BELOW WILL MAKE IT SO THAT THE DELIVERY REQUEST GETS ACCEPTED IN THE BACKEND
-//   const handleAcceptDelivery = (deliveryId) => {
-//     fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}`, {
-//       method: "PUT", // PUT method to update the delivery request
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         id: deliveryId, 
-//         status: "accepted", // Update the status to "accepted" or whatever is appropriate
-//       }),
-//     })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error('Failed to accept delivery');
-//       }
-//       // After successful backend update, trigger your animation
-//       setRemovingId(deliveryId);
-//       setTimeout(() => {
-//         setDeliveryRequests((prevRequests) =>
-//           prevRequests.filter((delivery) => delivery.id !== deliveryId)
-//         );
-//         setRemovingId(null);
-//       }, 500);
-//     })
-//     .catch((error) => {
-//       console.error("Error accepting delivery:", error);
-//     });
-// };
   
+  
+ 
+  
+  // This function is called when the "Start Delivery" button is clicked
+  // It updates the delivery request status in the backend, closes the popup,
+  // removes the delivery request from the list,
+  // and triggers the animation for the delivery request being accepted
+  const handleStartDelivery = () => {
+    if (!selectedDelivery) return; // Safety check
+  
+    fetch(`http://localhost:3001/api/delivery_requests/${selectedDelivery.id}`, {
+      //PUT request to update the delivery request
+      method: "PUT",
+      headers: { // headers used to specify the content type of the request
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: "accepted" }), // Mark as accepted
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to accept delivery");
+        }
+        setRemovingId(selectedDelivery.id); // Trigger the "whoosh-out" animation
+        setSelectedDelivery(null); // Close popup
+        setTimeout(() => {
+          setDeliveryRequests((prevRequests) => // Remove the accepted delivery request from the list
+            prevRequests.filter((delivery) => delivery.id !== selectedDelivery.id) // filter out the accepted delivery request
+          );
+          setRemovingId(null); // Reset removingId after the animation
+        }, 500); // Wait for animation
+      })
+      .catch((error) => {
+        console.error("Error starting delivery:", error);
+      });
+  };
 
+  
+  //DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleStartDelivery = () => {
+  //   setRemovingId(selectedDelivery.id);
+  //   setSelectedDelivery(null);
+  //   setTimeout(() => {
+  //     setDeliveryRequests(prev =>
+  //       prev.filter(req => req.id !== selectedDelivery.id)
+  //     );
+  //     setRemovingId(null);
+  //   }, 500); // 500 used to match animation duration
+  // }
+
+
+  // COMMENT OUT THIS FUNCTION WHEN TESTING WITH BACKEND DATA
+  // This function is called when the "Accept" button is clicked on a delivery request
+  // It updates the delivery request status in the backend and triggers the animation for the delivery request being accepted
+  // It also sets the selected delivery request to show the popup with details
+  const handleAcceptDelivery = (deliveryId) => {
+    // Find the selected delivery in the current state to update it
+    const selectedDelivery = deliveryRequests.find((delivery) => delivery.id === deliveryId);
+    if (!selectedDelivery) return; // Safety check
+
+    // Send the full data for update
+    fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        buyer_id: selectedDelivery.buyer_id, // Make sure the full data is included
+        vendor_id: selectedDelivery.vendor_id, // Make sure the full data is included
+        status: "accepted", // Update the status to "accepted"
+        dropoff: selectedDelivery.dropoffAddress, // Use the dropoff address from UI
+        listing_id: selectedDelivery.listing_id // CHECK-IN: If needed
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to accept delivery');
+        }
+        setRemovingId(deliveryId); // Trigger the "whoosh-out" animation
+        setTimeout(() => {
+          setDeliveryRequests((prevRequests) =>
+            prevRequests.filter((delivery) => delivery.id !== deliveryId)
+          );
+          setRemovingId(null); // Reset removingId after the animation
+        }, 500);
+      })
+      .catch((error) => {
+        console.error("Error accepting delivery:", error);
+      });
+  };
+
+  // This function is called when the "Send" button is clicked in the message bubble
+  // It sends the message to the backend and updates the message state to show that it has been sent
+  // It also clears the message input field after sending the message
+  const handleSendMessage = (deliveryId, messageText) => {
+    fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}/message`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: messageText }), // Send message content
+    })
+      .then((response) => response.json())
+      .then((data) => { //NOTE (delete later): YOU ARE THE REASON. YOU AR ETHE CAUSE OF MY PAIN WITH THE SEE CONVERSATION BUTTON.
+        setMessageStates((prev) => ({ ...prev, [deliveryId]: true })); // Mark as sent
+      })
+      .catch((error) => {
+        console.error("Error sending message:", error);
+      });
+  };
+
+
+  // DUMMY DATA VERSION OF ABOVE FUNCTION
+  // const handleSendMessage = (id) => {
+  //   setMessageStates((prev) => ({ ...prev, [id]: true }));
+  // };
 
 
   return (
@@ -198,9 +209,8 @@ const MessageBubble = ({ id,
           </button>
       </div>
         <div className="yellow-divider"></div>
-        {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
         {!onShift && <p>Click button to start shift.</p>}
-        {onShift && (dummyDeliveryRequests.length > 0 ? (dummyDeliveryRequests.map((deliveryReq) => (
+        {onShift && (deliveryRequests.length > 0 ? (deliveryRequests.map((deliveryReq) => (
 
           // This is how the delivery requests get "whooshed out" when accepted
         <div
@@ -225,11 +235,12 @@ const MessageBubble = ({ id,
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button>
+              {/* <button className="accept-btn" onClick={() => setSelectedDelivery(deliveryReq)}>ACCEPT</button> */}
+              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
-                // handleSendMessage={handleSendMessage} 
-                // messageStates={messageStates}
+                handleSendMessage={handleSendMessage} 
+                messageStates={messageStates}
                 />       
             </div>
             </div>

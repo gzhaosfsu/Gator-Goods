@@ -4,10 +4,16 @@ const db = require('../DB');
 
 // GET all listings
 router.get('/', async (req, res) => {
-    db.query('SELECT * FROM listing', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+    try {
+
+        const [results] = await db.query('SELECT * FROM listing');
+        
         res.json(results);
-    });
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // GET listing by ID
@@ -15,7 +21,7 @@ router.get('/:id', async (req, res) => {
 
     try {
 
-    const [results] = await db.query('SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.vendor_id = ?', [req.query.id]);
+    const [results] = await db.query('SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.listing_id = ?', [req.params.id]);
 
     const listingsWithImages = results.map(row => {
         const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
@@ -29,6 +35,8 @@ router.get('/:id', async (req, res) => {
             description: row.description,
             product_id: row.product_id,
             category: row.category,
+            rating: row.rating,
+            conditions: row.conditions,
             // image: row.image,
             vendor_id: row.vendor_id,
             thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
