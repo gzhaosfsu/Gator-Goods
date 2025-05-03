@@ -1,12 +1,24 @@
-import React from 'react';
-import { useState, useEffect } from "react";
+import {React, useContext, useEffect, useState } from "react";
 import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
+<<<<<<< HEAD
 import MessageBubble from './MessageBubble';
 import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData to .js
+=======
+import {UserContext} from "../UserContext";
+import { useNavigate } from "react-router-dom";
+
+>>>>>>> gzhao_branch
 
 const CourierPage = () => {
+  const {user} = useContext(UserContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);

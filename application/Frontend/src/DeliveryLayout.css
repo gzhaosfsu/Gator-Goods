@@ -1,0 +1,125 @@
+.delivery-layout {
+    display: flex;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+/* Left side map panel */
+.map-panel {
+    flex: 2;
+    background-color: #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Placeholder fallback */
+.map-placeholder {
+    font-weight: bold;
+}
+
+/* Right side info panel */
+.info-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 0;
+    justify-content: space-between;
+}
+
+/* Dark header with logo */
+.logo-header {
+    background-color: #2a176f;
+    padding: 1rem;
+    text-align: center;
+}
+
+.logo-header img {
+    max-height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Info body section */
+.delivery-details {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Product summary row */
+.product-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 8px;
+}
+
+.product-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* ETA display */
+.eta {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Chat section */
+.chat-box label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.chat-row {
+    display: flex;
+    background: #f0f0f0;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.chat-row input {
+    flex: 1;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.chat-row button {
+    margin-left: 0.5rem;
+    background-color: #2a176f;
+    color: white;
+    border: none;
+    padding: 0 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Bottom return button */
+.return-button {
+    background-color: #2a176f;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 0;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
