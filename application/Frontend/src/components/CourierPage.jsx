@@ -73,7 +73,7 @@ const CourierPage = () => {
       const res = await fetch(`http://localhost:3001/api/delivery_request/${deliveryId}/`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courier_id: courier_id })
+        body: JSON.stringify({ courier_id: courierId })
       });
   
       if (!res.ok) throw new Error("Failed to accept delivery");
