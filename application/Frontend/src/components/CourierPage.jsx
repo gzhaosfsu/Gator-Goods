@@ -1,4 +1,4 @@
-import {React, useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState } from "react";
 import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
@@ -23,10 +23,11 @@ const CourierPage = () => {
   // it is used to show whether the message has been sent or not
   const [messageStates, setMessageStates] = useState({});
 
+  const [courierId, setCourierId] = useState(123);
+
   // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
-    setSelectedDelivery(null);
   };
 
   //UNCOMMENT TO USE BACKEND DATA
@@ -35,133 +36,97 @@ const CourierPage = () => {
   // It also handles the case when the onShift state is false, in which case it clears the delivery requests
   useEffect(() => {
     if (onShift) {
-      fetch("http://localhost:3001/api/delivery_request")
-        .then((response) => {
-          if (!response.ok) throw new Error("Failed to fetch delivery requests");
-          return response.json();
+      fetch("http://localhost:3001/api/delivery_instruction")
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to fetch delivery instructions");
+          return res.json();
         })
-        .then((data) => {
-          const formattedData = data.map((item) => ({
-            id: item.delivery_request_id,
-            title: `Delivery Request #${item.delivery_request_id}`,
-            dropoffAddress: item.dropoff,
+        .then(data => {
+          const formatted = data.map(item => ({
+            title: `Delivery Request #${item.delivery_id}`,
             pickupAddress: item.pickup,
-            imageUrl: "https://via.placeholder.com/150",
-            sellerNote: item.vendor_special_request,
-            buyerNote: item.buyer_special_request,
-            vendor_id: item.vendor_id,
+            dropoffAddress: item.dropoff,
+            imageUrl: item.image_url || "https://via.placeholder.com/150",
+            sellerNote: item.seller_special_request || "N/A",
+            buyerNote: item.buyer_special_request || "N/A",
+            delivery_id: item.delivery_id,
             buyer_id: item.buyer_id,
-            listing_id: item.listing_id,
-            status: item.status,
+            vendor_id: item.vendor_id,
+            courier_id: item.courier_id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            status: item.delivery_status,
+            timestamp: item.timestamp,
           }));
-          setDeliveryRequests(formattedData);
+          setDeliveryRequests(formatted);
         })
-        .catch((err) => console.error("Fetch error:", err));
+        .catch(err => console.error("Error fetching delivery instructions:", err));
     } else {
       setDeliveryRequests([]);
     }
   }, [onShift]);
   
-  // This function is called when a delivery request is clicked
-  // It fetches the combined delivery request data from the backend and sets it to the selectedDelivery state
-  // It also fetches the pickup address details and adds them to the selected delivery data
-  const handleSelectDelivery = (deliveryId) => {
-    fetch(`http://localhost:3001/api/delivery_request/combined/${deliveryId}?delivery_request_id=${deliveryId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Combined data:", data);
-        fetch(`http://localhost:3001/api/delivery_instruction/address/pickup?pickup=${data.pickup}`)
-          .then((pickupRes) => pickupRes.json())
-          .then((pickupData) => {
-            setSelectedDelivery({
-              id: deliveryId,
-              title: `Delivery Request #${deliveryId}`,
-              // imageUrl: "https://via.placeholder.com/150",
-              pickupAddress: pickupData.address || data.pickup, // Fallback if address is missing
-              dropoffAddress: data.dropoff,
-              sellerNote: data.vendor_special_request,
-              buyerNote: data.buyer_special_request,
-            });
-          })
-          .catch((err) => console.error("Error fetching pickup address:", err));
-      })
-      .catch((err) => console.error("Error fetching combined info:", err));
+
+  //THIS NEEDS TO BE TROUBLESHOOTED
+  const handleAcceptDelivery = async (deliveryId) => {
+    try {
+      const res = await fetch(`http://localhost:3001/api/delivery_request/${deliveryId}/`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courier_id: courier_id })
+      });
+  
+      if (!res.ok) throw new Error("Failed to accept delivery");
+  
+      const updated = await res.json();
+      console.log("Accepted delivery:", updated);
+  
+      // Optional: update local state (e.g., mark accepted or remove it)
+      setDeliveryRequests(prev => prev.filter(d => d.id !== deliveryId));
+    } catch (err) {
+      console.error("Error accepting delivery:", err);
+    }
   };
+  
 
+  const handleStartDelivery = () => {
+    if (!selectedDelivery) return;
 
-    //DUMMY DATA VERSION OF ABOVE FUNCTION
-  // const handleStartDelivery = () => {
-  //   setRemovingId(selectedDelivery.id);
-  //   setSelectedDelivery(null);
-  //   setTimeout(() => {
-  //     setDeliveryRequests(prev =>
-  //       prev.filter(req => req.id !== selectedDelivery.id)
-  //     );
-  //     setRemovingId(null);
-  //   }, 500); // 500 used to match animation duration
-  // }
-
-
-  // This function is called when the "Start Delivery" button is clicked
-  // It sends a PUT request to the backend to update the delivery request status to "accepted"
-  // It also sets the removingId state to trigger the animation and removes the delivery request from the list after a delay
-  const handleAcceptDelivery = (deliveryId) => {
-    const selected = deliveryRequests.find((d) => d.id === deliveryId);
-    if (!selected) return;
-
-    fetch(`http://localhost:3001/api/delivery_request/${deliveryId}`, {
+    fetch(`http://localhost:3001/api/delivery_requests/${selectedDelivery.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: "Approved",
-        buyer_id: selected.buyer_id,
-        vendor_id: selected.vendor_id,
-        listing_id: selected.listing_id,
-        dropoff: selected.dropoffAddress,
-      }),
+      body: JSON.stringify({ status: "in_transit" }),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to update delivery request");
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to start delivery");
         setRemovingId(selectedDelivery.id);
         setSelectedDelivery(null);
         setTimeout(() => {
-          setDeliveryRequests((prev) => prev.filter((d) => d.id !== deliveryId));
+          setDeliveryRequests(prev => prev.filter(d => d.id !== selectedDelivery.id));
           setRemovingId(null);
         }, 500);
       })
-      .catch((err) => console.error("Accept error:", err));
+      .catch(err => console.error("Error starting delivery:", err));
   };
 
-  // This function is called when the "Send" button is clicked in the message bubble
-  // It sends the message to the backend and updates the message state to show that it has been sent
-  // It also clears the message input field after sending the message
-  const handleSendMessage = (deliveryId, messageText) => {
-    fetch(`http://localhost:3001/api/delivery_requests/${deliveryId}/message`, {
+
+  //THIS NEEDS TROUBLESHOOTING
+  const handleSendMessage = (id, messageText) => {
+    fetch(`http://localhost:3001/api/delivery_requests/${id}/message`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: messageText }), // Send message content
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: messageText }),
     })
-      .then((response) => response.json())
-      .then((data) => { //NOTE (delete later): YOU ARE THE REASON. YOU AR ETHE CAUSE OF MY PAIN WITH THE SEE CONVERSATION BUTTON.
-        setMessageStates((prev) => ({ ...prev, [deliveryId]: true })); // Mark as sent
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to send message");
+        return res.json();
       })
-      .catch((error) => {
-        console.error("Error sending message:", error);
-      });
+      .then(() => {
+        setMessageStates(prev => ({ ...prev, [id]: true }));
+      })
+      .catch(err => console.error("Error sending message:", err));
+      console.log(`Message sent to ${id}: ${messageText}`);
   };
-
-  // This function is a placeholder for the backend implementation of sending a message
-  // It currently just shows an alert with the delivery ID
-  // const handleSendMessage = (deliveryId) => {
-  //   alert(`Message sent to buyer for delivery #${deliveryId}`);
-  // };
-
-  // DUMMY DATA VERSION OF ABOVE FUNCTION
-  // const handleSendMessage = (id) => {
-  //   setMessageStates((prev) => ({ ...prev, [id]: true }));
-  // };
 
   return (
     <div className="courier-page">
@@ -180,7 +145,8 @@ const CourierPage = () => {
         <div className="yellow-divider"></div>
         {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
         {!onShift && <p>Click button to start shift.</p>}
-        {onShift && (dummyDeliveryRequests.length > 0 ? (dummyDeliveryRequests.map((deliveryReq) => (
+        {onShift && (deliveryRequests.length > 0 ? (deliveryRequests.map((deliveryReq) => (
+
 
           // This is how the delivery requests get "whooshed out" when accepted
         <div
@@ -199,13 +165,17 @@ const CourierPage = () => {
           />
 
           <div className="delivery-details">
-            <p>Pickup at: {deliveryReq.pickupAddress}</p>
-            <p>Dropoff at: {deliveryReq.dropoffAddress}</p>
+            <p><strong>Pickup at: </strong>{deliveryReq.pickupAddress}</p>
+            <p><strong>Dropoff at: </strong>{deliveryReq.dropoffAddress}</p>
+
+            {/* Used to debug Notes and backend info-- as of rn? WORKS */}
+            {/* <p><strong>Note from Seller: </strong> {deliveryReq.sellerNote}</p>
+            <p><strong>Note from Buyer: </strong> {deliveryReq.buyerNote}</p> */}
 
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => handleSelectDelivery(deliveryReq.id)}>ACCEPT</button>
+              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
                 handleSendMessage={handleSendMessage} 
@@ -224,7 +194,7 @@ const CourierPage = () => {
           <div className="delivery-popup">
             <div className="popup-content">
             <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
-              <h3>{selectedDelivery.title || `Delivery Request #${selectedDelivery.id}`}</h3>
+              <h3>{selectedDelivery.title}</h3>
                 <img 
                 src={selectedDelivery.imageUrl}
                 alt="Delivery" 
@@ -237,7 +207,7 @@ const CourierPage = () => {
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={handleAcceptDelivery(selectedDelivery.id)}>Start Delivery</button>
+              <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
             </div>
           </div>
         )}
