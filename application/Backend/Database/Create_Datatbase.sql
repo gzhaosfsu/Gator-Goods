@@ -13,33 +13,8 @@ CREATE TABLE user (
     sfsu_email VARCHAR(100) UNIQUE,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
-	image BLOB
-);
-
--- 2. Vendor Table
-DROP TABLE IF EXISTS vendor;
-CREATE TABLE vendor (
-    vendor_id INT AUTO_INCREMENT PRIMARY KEY,
-    rating DECIMAL(2,1),
-    user_id INT UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
-);
-
--- 3. Buyer Table
-DROP TABLE IF EXISTS buyer;
-CREATE TABLE buyer (
-    buyer_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
-);
-
--- 4. Courier Table
-DROP TABLE IF EXISTS courier;
-CREATE TABLE courier (
-    courier_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE,
-    availability_status ENUM('Available', 'Unavailable'),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+	image BLOB,
+    isCourier BOOL
 );
 
 -- 5. Product Table
@@ -51,8 +26,9 @@ CREATE TABLE product (
     title VARCHAR(100),
     image BLOB,
     thumbnail BLOB,
+    mimetype VARCHAR(50),
     vendor_id INT,
-    FOREIGN KEY (vendor_id) REFERENCES vendor(vendor_id)
+    FOREIGN KEY (vendor_id) REFERENCES user(user_id)
 );
 
 -- 6. Listing Table
@@ -69,7 +45,7 @@ CREATE TABLE listing (
     listing_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     conditions ENUM('New', 'Used - Like New', 'Used - Good', 'Used - Fair'),
     FOREIGN KEY (product_id) REFERENCES product(product_id),
-    FOREIGN KEY (vendor_id) REFERENCES vendor(vendor_id)
+    FOREIGN KEY (vendor_id) REFERENCES user(user_id)
 );
 
 -- 7. Review Table
@@ -108,8 +84,8 @@ CREATE TABLE delivery_request (
     status ENUM('Pending', 'Approved', 'Denied'),
     dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
     listing_id INT,
-    FOREIGN KEY (buyer_id) REFERENCES buyer(buyer_id),
-    FOREIGN KEY (vendor_id) REFERENCES vendor(vendor_id),
+    FOREIGN KEY (buyer_id) REFERENCES user(user_id),
+    FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (listing_id) REFERENCES listing(listing_id)
 );
 
@@ -128,8 +104,8 @@ CREATE TABLE delivery_instruction (
     vendor_special_request TEXT,
     delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered'),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (vendor_id) REFERENCES vendor(vendor_id),
-    FOREIGN KEY (courier_id) REFERENCES courier(courier_id),
-    FOREIGN KEY (buyer_id) REFERENCES buyer(buyer_id),
+    FOREIGN KEY (vendor_id) REFERENCES user(user_id),
+    FOREIGN KEY (courier_id) REFERENCES user(user_id),
+    FOREIGN KEY (buyer_id) REFERENCES user(user_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
