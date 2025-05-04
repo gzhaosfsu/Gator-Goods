@@ -20,38 +20,34 @@ import CourierNav from "./components/CourierNav";
 import BuyerNav from "./components/BuyerNav";
 import OrderStatus from "./components/OrderStatus";
 
-import {UserProvider} from "./UserContext";
-
 function App() {
   const [count, setCount] = useState(0)
   const [user, setUser] = useState(null)
 
   return (
-    <UserProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Homepage/>}/>
-          <Route path="/aboutMartha" element={<AboutMartha/>}/>
-          <Route path="/aboutAnthony" element={<AboutAnthony/>}/>
-          <Route path="/aboutGarvin" element={<AboutGarvin/>}/>
-          <Route path="/aboutJace" element={<AboutJace/>}/>
-          <Route path="/aboutVansh" element={<AboutVansh/>}/>
-          <Route path='/aboutTeam' element={<AboutTeam/>}/>
-          <Route path='/chats' element={<Chats/>} />
-          <Route path='/login' element={<Login setUser={setUser}/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/courierPage' element={<CourierPage/>} />
-          <Route path="/vendorPage" element={<VendorPage/>} />
-          <Route path="/userListings" element={<UserListings/>} />
-          <Route path="/realUserProfile" element={<RealUserProfile/>} />
-          <Route path="/userProfile" element={<UserProfile/>} />
-          <Route path="/CourierNav" element={<CourierNav/>} />
-          <Route path="/BuyerNav" element={<BuyerNav/>} />
-          <Route path="/OrderStatus" element={<OrderStatus/>} />
-        </Routes>
-      </BrowserRouter>
-    </UserProvider>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage/>}/>
+        <Route path="/aboutMartha" element={<AboutMartha/>}/>
+        <Route path="/aboutAnthony" element={<AboutAnthony/>}/>
+        <Route path="/aboutGarvin" element={<AboutGarvin/>}/>
+        <Route path="/aboutJace" element={<AboutJace/>}/>
+        <Route path="/aboutVansh" element={<AboutVansh/>}/>
+        <Route path='/aboutTeam' element={<AboutTeam/>}/>
+        <Route path='/chats' element={<Chats/>} />
+        <Route path='/login' element={<Login setUser={setUser}/>}/>
+        <Route path='/register' element={<Register/>}/>
+        <Route path='/courierPage' element={<CourierPage/>} />
+        <Route path="/vendorPage" element={<VendorPage/>} />
+        <Route path="/userListings" element={<UserListings/>} />
+        <Route path="/realUserProfile" element={<RealUserProfile/>} />
+        <Route path="/userProfile" element={<UserProfile/>} />
+        <Route path="/CourierNav" element={<CourierNav/>} />
+        <Route path="/BuyerNav" element={<BuyerNav/>} />
+        <Route path="/OrderStatus" element={<OrderStatus/>} />
+      </Routes>
+    </BrowserRouter>
+)
 }
 
 export default App
