@@ -68,24 +68,32 @@ const CourierPage = () => {
   
 
   //THIS NEEDS TO BE TROUBLESHOOTED
-  const handleAcceptDelivery = async (deliveryId) => {
-    try {
-      const res = await fetch(`http://localhost:3001/api/delivery_request/${deliveryId}/`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courier_id: courier_id })
-      });
+  const handleAcceptDelivery = (delivery) => {
+    fetch(`http://localhost:3001/api/delivery_request/${delivery.delivery_request_id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        buyer_id: delivery.buyer_id,
+        vendor_id: delivery.vendor_id,
+        status: 'Approved',
+        dropoff: delivery.dropoffAddress,
+        listing_id: delivery.listing_id,
+      }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to accept delivery');
+        return res.json(); // assuming your backend sends back the updated row
+      })
+      .then(data => {
+        console.log("Accepted delivery:", data);
   
-      if (!res.ok) throw new Error("Failed to accept delivery");
+        // Remove it from the UI list
+        setDeliveryRequests(prev => prev.filter(d => d.delivery_request_id !== delivery.delivery_request_id));
   
-      const updated = await res.json();
-      console.log("Accepted delivery:", updated);
-  
-      // Optional: update local state (e.g., mark accepted or remove it)
-      setDeliveryRequests(prev => prev.filter(d => d.id !== deliveryId));
-    } catch (err) {
-      console.error("Error accepting delivery:", err);
-    }
+        // Open the popup
+        setSelectedDelivery(data);  // assuming `data` is a single delivery object
+      })
+      .catch(err => console.error("Error accepting delivery:", err));
   };
   
 
@@ -175,7 +183,7 @@ const CourierPage = () => {
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.id)}>ACCEPT</button>
+              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
                 handleSendMessage={handleSendMessage} 
