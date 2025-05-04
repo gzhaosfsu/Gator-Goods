@@ -6,20 +6,27 @@ import CreateListingForm from './CreateListingForm'
 import {UserContext} from '../UserContext';
 import {useNavigate} from "react-router-dom";
 
+import ReturnProfile from "./ReturnProfile";
+
 
 const UserListings = () => {
   const [showForm, setShowForm] = useState(false);
   const [listings, setListings] = useState([]);
-    const {user} = useContext(UserContext);
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (!user) {
-            navigate("/login");
-        }
-    }, [user, navigate]);
+  const {user} = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('api/listings/:id?id=1')
+    if (user === null) return; // Wait for user to load
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+
+    if (!user) return;
+
+    fetch(`/api/listing/vendor/${user.id}`)
       .then(res => res.json())
       .then(data => {
         const cleanedData = data.map(item => ({
@@ -28,14 +35,21 @@ const UserListings = () => {
           listing_date: new Date(item.listing_date),
           thumbnail: item.thumbnail
         }));
+        console.log('Heres the user id: ', user.id);
         setListings(cleanedData);
     })
       .catch(err => console.error('Failed to load listings:', err));
-  }, []);
+  }, [user]);
+  
+  if (!user) {
+    return <div>Loading user...</div>;
+  }
 
   return (
+    
     <div className="listings-page">
       <Header />
+      <ReturnProfile />
       <div className="listing-formatting">
         <h1 className="title">Active Listings</h1>
         {/* <div className="button-wrapper"> */}
