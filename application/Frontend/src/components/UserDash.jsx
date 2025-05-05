@@ -71,8 +71,8 @@ const UserDash = ({ username }) => {
               <div className="dropdown-menu">
                 <Link to="/realUserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/chats" onClick={() => setOpen(false)}>Message</Link>
-                <Link to="/vendorPage" onClick={() => setOpen(false)}>Vendor</Link>
-                <Link to="/courierPage" onClick={() => setOpen(false)}>Courier</Link>
+                {/* GARVIN: I need you to do some login here on log in if user is not courier then they should not show up as an option */}
+                {/* <Link to="/courierPage" onClick={() => setOpen(false)}>Courier</Link> */}
                 <button onClick={handleSignOut}>Sign Out</button>
               </div>
             )}

@@ -1,0 +1,40 @@
+.os-content {
+    padding: 2rem;
+  }
+  
+  .os-heading {
+    border-bottom: 4px solid #f5d066;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+  
+  .os-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .os-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .os-thumb {
+    width: 100px;
+    height: 100px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-right: 1.5rem;
+  }
+  
+  .os-info .os-title {
+    margin: 0 0 0.5rem;
+  }
+  
+  .os-eta {
+    color: #666;
+  }
+  
