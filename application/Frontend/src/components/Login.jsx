@@ -30,7 +30,7 @@ const Login = () => {
 
             alert('Logged in!');
             login(data.user);
-            navigate('/UserProfile');
+            navigate('/realUserProfile');
         } catch (error) {
             console.error('Login error:', error);
             alert('Something went wrong. Please try again.');
