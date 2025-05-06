@@ -366,3 +366,30 @@ body {
   padding: 0 2rem;             
   margin-top: 1rem;       
 }
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 0 0.5rem;      
+}
+
+
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding-right: 2rem;   
+}
+
+
+.select-wrapper .select-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  pointer-events: none;  
+  color: #333;          
+  font-size: 1rem;       
+}
+
