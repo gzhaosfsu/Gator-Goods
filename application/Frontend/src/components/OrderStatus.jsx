@@ -1,9 +1,10 @@
 import React from 'react';
 import Header from './Header';
-import ReturnHome from './ReturnHome';
+import { useNavigate } from 'react-router-dom';
 import '../OrderStatus.css';
 
 const OrderStatusPage = () => {
+    const navigate = useNavigate();
   // hard-coded for now, later swap out with real data
   const dummy = [
     { title: 'Order Title', eta: '[ time stamp ]' },
@@ -25,7 +26,12 @@ const OrderStatusPage = () => {
     <div className="os-page">
       <Header />
       <div className="os-content">
-        <ReturnHome />
+        <button
+          className="os-back-btn"
+          onClick={() => navigate('/UserProfile')}
+        >
+          ← Back to Profile
+        </button>
         <h1 className="os-heading">Orders Status</h1>
         <div className="os-list">
           {dummy.map((o, i) => (
