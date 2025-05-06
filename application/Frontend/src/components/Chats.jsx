@@ -8,53 +8,42 @@ import {UserContext} from "../UserContext"
 import {useContext} from "react"
 
 const Chats = () => {
-
+    // This is how we access current user
     const {user} = useContext(UserContext);
 
-    console.log("HERE" , user); 
-    
-    // console.log(user.id + " user Id "); 
-    // Object.entries(user).forEach(([key, value]) => {
-    //     console.log(`Key: ${key}, Value: ${value}`);
-    //   });
 
-      
-    // console.log(Object.entries(user).length + " number of entries");
+    const [ischatting, setIsChatting] = useState(false); // will display the user conversation with selected person
+    const [receiverID, setReceiverID] = useState(0); // hold the value of receiver ID aka person user is chatting with
+    const [listingID, setListingID] = useState(0); // each chat is connected with listing 
+    const [senderID, setSenderID] = useState(0); // we need to also track the user 
+    const [usernameReceiver, setUsernameReceiver] = useState("");  // this hold the username of the person chatting with 
+    const [userMessages, setUserMessages] = useState(true); // toggles between if the user has ever chatted with anyone 
+    const [uniqueChats, setUniqueChats] = useState([]); // this holds all the unque chats the user has talked to
+    const [loading, setLoading] = useState(true); // We have to make sure we are able to fetch all requiremts before it renders the page 
+    const [isSelected, setIsSelected] = useState(null); // handles css highlight 
 
-
-
-    const [ischatting, setIsChatting] = useState(false);
-    const [receiverID, setReceiverID] = useState(0);
-    const [listingID, setListingID] = useState(0);
-    const [senderID, setSenderID] = useState(0);
-    const [usernameReceiver, setUsernameReceiver] = useState(""); 
-    const [userMessages, setUserMessages] = useState(true); 
-    const [uniqueChats, setUniqueChats] = useState([]); 
-    const [loading, setLoading] = useState(true);
-    const [isSelected, setIsSelected] = useState(null); 
-    const [drafts, setDrafts] = useState({});
   
 
   // const currentUserID = user.user_id; 
-  const currentUserID = 3; 
+  const currentUserID = 3; // this is the current user signed in Id 
 
 
 useEffect(() => {
+  // this will fetch all messages from the current user 
     fetch(`/api/direct_message/${currentUserID}`)
       .then((res) => res.json())
       .then(async (data) => {
 
-       console.log("DATA Length: ", data.length); 
-        if(data.length < 1 ) {
-          console.log("no messages"); 
-          setUserMessages(false); 
+        if(data.length < 1 ) { // if user does not have chat history 
+          setUserMessages(false);  // diplay different message
           setLoading(false);
         } else {
+          // else we get all messages my unique listings 
           const uniqueMessage = data.filter((msg, index, self) => {
             return index === self.findIndex((m) => m.listing_id === msg.listing_id);
           });
 
-
+          // this will gather all information from those unique chats based on the listings
           const chatdisplay = await Promise.all(
             uniqueMessage.map(async (msg) => {
               try {
@@ -87,8 +76,7 @@ useEffect(() => {
             })
           );
     
-          // Remove any failed fetch results (null)
-          console.log("here chats.jsx", chatdisplay); 
+          
           setUniqueChats(chatdisplay.filter((chat) => chat !== null));
           setLoading(false);
         }
@@ -100,25 +88,24 @@ useEffect(() => {
         setLoading(false);
       });
 
-      // console.log("Here" , uniqueChats); 
   }, []);
 
   
 
     const handleClick = (receiverId, listingId, receiverUsername, userId) => {
-      setIsSelected(receiverId); 
+      // This will handle the selected person the user wants to conitnue chatting with and display 
+      // their conversation log
 
-        setListingID(listingId);
-        setReceiverID(receiverId); 
-        setUsernameReceiver(receiverUsername); 
-        setSenderID(userId); 
-        setIsChatting(true); 
+      setIsSelected(receiverId); 
+      setListingID(listingId);
+      setReceiverID(receiverId); 
+      setUsernameReceiver(receiverUsername); 
+      setSenderID(userId); 
+      setIsChatting(true); 
        
         
 
-    }
-
-    // I need the receiver username and the product name from listing 
+    } 
 
     return(
         <>

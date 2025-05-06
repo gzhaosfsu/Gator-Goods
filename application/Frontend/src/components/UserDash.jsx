@@ -5,7 +5,8 @@ import { UserContext } from '../UserContext';
 const UserDash = ({ username }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-    const { logout } = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
+    const courier = useContext(UserContext);
 
     const handleSignOut = () => {
         logout();
@@ -69,10 +70,12 @@ const UserDash = ({ username }) => {
             </div>
             {open && (
               <div className="dropdown-menu">
-                <Link to="/realUserProfile" onClick={() => setOpen(false)}>Profile</Link>
-                <Link to="/chats" onClick={() => setOpen(false)}>Message</Link>
-                {/* GARVIN: I need you to do some login here on log in if user is not courier then they should not show up as an option */}
-                {/* <Link to="/courierPage" onClick={() => setOpen(false)}>Courier</Link> */}
+                <Link to="/RealUserProfile" onClick={() => setOpen(false)}>Profile</Link>
+                <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
+                <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
+                  {user?.isCourier && (
+                      <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
+                  )}
                 <button onClick={handleSignOut}>Sign Out</button>
               </div>
             )}

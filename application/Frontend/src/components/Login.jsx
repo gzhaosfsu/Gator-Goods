@@ -27,10 +27,19 @@ const Login = () => {
                 alert(data.message || 'Login failed');
                 return;
             }
-
             alert('Logged in!');
             login(data.user);
             navigate('/realUserProfile');
+
+            fetch(`/api/courier/${data.user.user_id}`)
+                .then(res => res.json())
+                .then(courierData => {
+                    if (courierData.exists) {
+                        // Update user context if courier
+                        login({ ...data.user, isCourier: true });
+                    }
+                })
+                .catch(err => console.warn('Courier status fetch failed:', err));
         } catch (error) {
             console.error('Login error:', error);
             alert('Something went wrong. Please try again.');

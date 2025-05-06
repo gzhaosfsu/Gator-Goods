@@ -22,7 +22,7 @@ const Filters = ({
   return (
     <div className="filters-container">
       <select value={filters.condition} onChange={handleCondition}>
-        <option value="">All Conditions</option>
+        <option value="">Condition</option>
         <option value='New'>New</option>
         <option value="Used - Like New">Used - Like New</option>
         <option value="Used - Good">Used - Good</option>
@@ -36,21 +36,21 @@ const Filters = ({
       </select>
 
       <select value={filters.datePosted} onChange={handleDatePosted}>
-        <option value="">Any time</option>
+        <option value="">Sort by Time</option>
         <option value="24h">Past 24 hours</option>
         <option value="7d">Past 7 days</option>
         <option value="30d">Past 30 days</option>
       </select>
 
       <select value={filters.minDiscount} onChange={handleDiscount}>
-        <option value="">Any discount</option>
+        <option value="">Discounts</option>
         <option value="10">10% or more</option>
         <option value="25">25% or more</option>
         <option value="50">50% or more</option>
       </select>
  
       <select value={filters.minRating} onChange={handleMinRating}>
-        <option value="">Any rating</option>
+        <option value="">Vendor Rating</option>
         <option value="4">4 ★ & up</option>
         <option value="3">3 ★ & up</option>
         <option value="2">2 ★ & up</option>

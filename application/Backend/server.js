@@ -26,12 +26,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    /*
     //for production
-    origin: ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"],
+    //origin: ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"],
+    origin: "*",
     methods: ["GET", "POST"]
-    */
-    cors: { origin: "*" }
   }
 });
 app.use(cors());
@@ -56,7 +54,7 @@ app.use('/api/login', login);
 app.use('/api/register', register);
 require('./socket')(io);app.use(express.static('public'));
 
-app.listen(3001, () => console.log('API running on port 3001'));
+server.listen(3001, () => console.log('API running on port 3001'));
 
 // MySQL Database Connection
 
