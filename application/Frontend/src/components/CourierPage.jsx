@@ -68,15 +68,6 @@ const CourierPage = () => {
   
 
   //THIS NEEDS TO BE TROUBLESHOOTED
-<<<<<<< HEAD
-  const handleAcceptDelivery = async (deliveryId) => {
-    try {
-      const res = await fetch(`http://localhost:3001/api/delivery_request/${deliveryId}/`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courier_id: courierId })
-      });
-=======
   const handleAcceptDelivery = (delivery) => {
     fetch(`http://localhost:3001/api/delivery_request/${delivery.delivery_request_id}`, {
       method: 'PUT',
@@ -95,7 +86,6 @@ const CourierPage = () => {
       })
       .then(data => {
         console.log("Accepted delivery:", data);
->>>>>>> c86078ed791e66d636a1699d033094c1dbe3cd74
   
         // Remove it from the UI list
         setDeliveryRequests(prev => prev.filter(d => d.delivery_request_id !== delivery.delivery_request_id));
