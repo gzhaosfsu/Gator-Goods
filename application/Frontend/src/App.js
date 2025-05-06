@@ -14,8 +14,11 @@ import Register from './components/Register'
 import CourierPage from './components/CourierPage'
 import VendorPage from './components/VendorPage'
 import UserListings from './components/UserListings'
-import UserProfile from './components/UserProfile'
 import RealUserProfile from './components/RealUserProfile'
+import UserProfile from './components/UserProfile'
+import CourierNav from "./components/CourierNav";
+import BuyerNav from "./components/BuyerNav";
+import OrderStatus from "./components/OrderStatus";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,11 +40,14 @@ function App() {
         <Route path='/courierPage' element={<CourierPage/>} />
         <Route path="/vendorPage" element={<VendorPage/>} />
         <Route path="/userListings" element={<UserListings/>} />
-        <Route path="/userProfile" element={<UserProfile/>} />
         <Route path="/realUserProfile" element={<RealUserProfile/>} />
+        <Route path="/userProfile" element={<UserProfile/>} />
+        <Route path="/CourierNav" element={<CourierNav/>} />
+        <Route path="/BuyerNav" element={<BuyerNav/>} />
+        <Route path="/OrderStatus" element={<OrderStatus/>} />
       </Routes>
     </BrowserRouter>
-  )
+)
 }
 
 export default App

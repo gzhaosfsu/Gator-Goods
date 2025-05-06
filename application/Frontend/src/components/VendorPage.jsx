@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "../VendorPage.css";
 import Header from './Header';
 import Footer from './Footer';
@@ -8,15 +8,25 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
+import {UserContext} from "../UserContext";
 
 const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {
     //     setOnShift(prev => !prev);
     //   };
+
+    console.log("are they a courier: ", isCourier);
 
     return (
         <div className="vendorPage">
@@ -37,7 +47,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
-                        {isCourier && (
+                        {isCourier === true && (
                             <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
                         )}
                     </div>

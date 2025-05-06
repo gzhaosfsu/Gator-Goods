@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mascot from './images/LogoGG.png';
 import { UserContext } from "../UserContext";
+import ReturnHome from "./ReturnHome";
 
 const Login = () => {
     const [form, setForm] = useState({ email: '', password: '' });
@@ -29,7 +30,7 @@ const Login = () => {
 
             alert('Logged in!');
             login(data.user);
-            navigate('/UserProfile');
+            navigate('/realUserProfile');
         } catch (error) {
             console.error('Login error:', error);
             alert('Something went wrong. Please try again.');
@@ -153,6 +154,7 @@ const Login = () => {
                 <div className="auth-form-section">
                     <h2>Login</h2>
                     <div className="underline"></div>
+                    <ReturnHome/>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="email">
                             SF State Email <span className="required-asterisk">*</span>

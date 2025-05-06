@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.query.id]);
+        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.params.id]);
         
         res.json(results);
     }
@@ -44,16 +44,50 @@ router.post('/', async (req, res) => {
 
 // UPDATE a user by ID
 router.put('/:id', async (req, res) => {
-    const { first_name, last_name, username, password, sfsu_email, is_verified } = req.body;
-    db.query(
-        'UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, sfsu_email = ?, is_verified = ? WHERE user_id = ?',
-        [first_name, last_name, username, password, sfsu_email, is_verified, req.params.id],
-        (err) => {
-            if (err) return res.status(500).json({ error: err });
-            res.sendStatus(204);
+    try {
+        const fields = [
+            'first_name',
+            'last_name',
+            'username',
+            'password' ,
+            'sfsu_email' ,
+            'registration_date' ,
+            'is_verified' ,
+            'image',
+            'is_courier'
+        ];
+    
+        const updates = [];
+        const values = [];
+    
+        // Building the SET
+        fields.forEach(field => {
+          if (req.body[field] !== undefined) {
+            updates.push(`${field} = ?`);
+            values.push(req.body[field]);
+          }
+        });
+    
+        if (updates.length === 0) {
+          return res.status(400).json({ error: 'No fields provided for update' });
         }
-    );
-});
+    
+        values.push(req.params.id); // Add the ID for the WHERE
+    
+        const sql = `UPDATE user SET ${updates.join(', ')} WHERE user_id = ?`;
+        const [result] = await db.query(sql, values);
+    
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'User not found or no changes made' });
+        }
+    
+        res.status(200).json({ message: 'User updated successfully' });
+    
+      } catch (err) {
+        console.error('Error during DB update:', err);
+        res.status(500).json({ error: 'Database update failed'});
+      }
+    });
 
 // DELETE a user by ID
 router.delete('/:id', async (req, res) => {

@@ -1,46 +1,56 @@
 import Header from './Header';
-import image from "./images/imageNA.png"
-import {Link } from 'react-router-dom'
-import '../UserProfile.css'
+import image from "./images/imageNA.png";
+import { Link, useNavigate } from 'react-router-dom';
+import '../UserProfile.css';
+import { UserContext } from '../UserContext';
+import { useContext, useEffect } from "react";
 
 const UserProfile = ({ isCourier, handleBecomeCourier }) => {
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
+
+    console.log("are they a courier in userprofile: ", isCourier);
 
     return (
         <>
-            {/* <Header /> */}
-            <div className='user-profile-container'> 
-    <div className='left-section'>
-        <div className='profile-title'>
-            <img src={image} width={80} height={80}/>
-            <h2>Username</h2>
-        </div>
-        <div className='user-info-container'>
-            <h2>About</h2>
-            <div className='info-name-update'>
-                <input type="text" value="First Name"/>
-                <input type="text" value="Last Name" />
-            </div>
-            <div className='user-email-update'>
-                <input type="text" value="username12@sfsu.edu"/>
-            </div>
-        </div>
-    </div>
+            <div className='user-profile-container'>
+                <div className='left-section'>
+                    <div className='profile-title'>
+                        <img src={image} width={80} height={80} />
+                        <h2>{user?.username || "Username"}</h2>
+                    </div>
 
-    <div className='button-container'>
-        <button className='order-status-btn'>Order Status</button>
-        {!isCourier && (
-            <button className="become-courier-btn" onClick={handleBecomeCourier}>
-                Become a Courier
-            </button>
-                )}
-        {/* <button className='courier-btn'>Become a Courier</button> */}
-    </div>
-</div>
-            
+                    <div className='user-info-container'>
+                        <h2>About</h2>
+                        <div className='info-name-update'>
+                            <input type="text" value="First Name" readOnly />
+                            <input type="text" value="Last Name" readOnly />
+                        </div>
+                        <div className='user-email-update'>
+                            <input type="text" value={user?.email || "username12@sfsu.edu"} readOnly />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='right-section'>
+                    <div className='button-container'>
+                        <button className='order-status-btn'>Order Status</button>
+                        {isCourier ===false  && (
+                            <button className="become-courier-btn" onClick={handleBecomeCourier}>
+                                Become a Courier
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </div>
         </>
-    )
-}
+    );
+};
 
-
-export default UserProfile
+export default UserProfile;

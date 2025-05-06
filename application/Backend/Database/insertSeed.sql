@@ -5,19 +5,6 @@ INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_veri
 ('Jane', 'Smith', 'janesmith', 'securepass', 'janesmith@mail.sfsu.edu', TRUE),
 ('Alice', 'Johnson', 'alicej', 'mypassword', 'alicej@mail.sfsu.edu', FALSE);
 
--- Insert Vendors
-INSERT INTO vendor (rating, user_id) VALUES
-(1, 1),
-(2, 2);
-
--- Insert Buyers
-INSERT INTO buyer (user_id) VALUES
-(3);
-
--- Insert Couriers
-INSERT INTO courier (user_id, availability_status) VALUES
-(3, 'Available');
-
 -- Insert Products
 INSERT INTO product (description, category, title, image, thumbnail, vendor_id) VALUES
 ('Comfortable cotton t-shirt', 'clothing', 'SF State T-Shirt', 	
@@ -74,29 +61,6 @@ INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_veri
 ('Eve', 'Polastri', 'evep', 'spyhunter', 'evep@mail.sfsu.edu', TRUE),
 ('Frank', 'Ocean', 'focean', 'blonded', 'focean@mail.sfsu.edu', TRUE),
 ('Grace', 'Hopper', 'ghopper', 'debug123', 'ghopper@mail.sfsu.edu', TRUE);
-
--- Insert Vendors (IDs 3, 4, 5, 6)
-INSERT INTO vendor (rating, user_id) VALUES
-(5, 4),
-(4, 5),
-(2, 7),
-(3, 6);
-
--- Insert Buyers (IDs 2, 4, 5, 6)
-INSERT INTO buyer (user_id) VALUES
-(1),
-(2),
-(4),
-(5),
-(6);
-
--- Insert Couriers (IDs 2, 4, 5, 6)
-INSERT INTO courier (user_id, availability_status) VALUES
-(1, 'Unavailable'),
-(4, 'Available'),
-(5, 'Available'),
-(6, 'Unavailable'),
-(7, 'Unavailable');
 
 -- Insert Products (IDs 5 to 10)
 INSERT INTO product (description, category, title, image, thumbnail, vendor_id) VALUES

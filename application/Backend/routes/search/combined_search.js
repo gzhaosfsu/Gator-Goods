@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
     try {
 
-        const query = "SELECT listing.*, product.*, vendor.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN vendor ON listing.vendor_id = vendor.vendor_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
+        const query = "SELECT listing.*, product.*, user.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN user ON listing.vendor_id = user.user_id WHERE product.category LIKE ? AND listing.listing_status = 'Active' AND product.title LIKE ?";
         const searchValues = [`%${category}%`, `%${title}%`];
         const [results] = await db.query(query, searchValues);
 
