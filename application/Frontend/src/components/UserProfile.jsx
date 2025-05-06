@@ -15,6 +15,8 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
         }
     }, [user, navigate]);
 
+    console.log("are they a courier in userprofile: ", isCourier);
+
     return (
         <>
             <div className='user-profile-container'>
@@ -39,7 +41,7 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
                 <div className='right-section'>
                     <div className='button-container'>
                         <button className='order-status-btn'>Order Status</button>
-                        {!isCourier && (
+                        {isCourier ===false  && (
                             <button className="become-courier-btn" onClick={handleBecomeCourier}>
                                 Become a Courier
                             </button>

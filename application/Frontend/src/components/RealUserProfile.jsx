@@ -1,18 +1,69 @@
-import React, { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import UserProfile from "./UserProfile.jsx";
 import VendorPage from "./VendorPage.jsx";
 import "../RealUserProfile.css";
 import Header from './Header';
 import Footer from './Footer';
+import {UserContext} from '../UserContext';
+import {useNavigate} from "react-router-dom";
 
 const RealUserProfile = () => {
-    const [showForm, setShowForm] = useState(false);
-    const [isCourier, setIsCourier] = useState(false);
 
-    const handleBecomeCourier = () => {
-        // later you can call API to update backend too
-        setIsCourier(true);
+    const {user} = useContext(UserContext);
+    const [showForm, setShowForm] = useState(false);
+    const [isCourier, setIsCourier] = useState(user?.is_courier ?? false);
+    
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user && typeof user.is_courier !== 'undefined') {
+          setIsCourier(user.is_courier);
+        }
+      }, [user]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+          if (!user?.user_id) return;
+    
+          try {
+            const response = await fetch(`/api/user/${user.user_id}`);
+            const data = await response.json();
+            setIsCourier(data.is_courier);
+          } catch (err) {
+            console.error("Failed to fetch user courier status:", err);
+          }
+        };
+
+        fetchUser();
+    }, [user?.user_id]);
+
+    const handleBecomeCourier = async () => {
+        try {
+          const response = await fetch(`/api/user/${user.user_id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                is_courier: true
+            })
+          });
+
+          console.log('Heres the user id: ', user.user_id);
+      
+          if (response.ok) {
+            setIsCourier(true); // Update frontend state
+          } else {
+            const text = await response.text();
+            console.error('Failed to update user. Response:', text);
+          }
+        } catch (error) {
+          console.error('Error in PUT request:', error);
+        }
       };
+
+      console.log('User:', user);
+      console.log('isCourier:', isCourier);
 
     return (
         <div className="user-dash">

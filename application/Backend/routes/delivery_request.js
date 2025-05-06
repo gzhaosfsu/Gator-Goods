@@ -63,19 +63,19 @@ router.get('/combined/:delivery_request_id', async (req, res) => {
 });
 
 // GET Delivery Requests by Title, no Title in delivery Requests tho??
-// router.get('/by-title', async (req, res) => {
-//     try {
+router.get('/by-title', async (req, res) => {
+    try {
 
-//         const [results] = await db.query(
-//             'SELECT * FROM delivery_request WHERE title = ?',
-//             [req.query.title]);
-//         res.json(results);
+        const [results] = await db.query(
+            'SELECT * FROM delivery_request JOIN listing on delivery_request.listing_id = listing.listing_id JOIN product on listing.product_id = product.product_id WHERE product.title = ?',
+            [req.query.title]);
+        res.json(results);
 
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: 'Server error' });
-//     }
-// });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 
 

@@ -26,6 +26,8 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     //     setOnShift(prev => !prev);
     //   };
 
+    console.log("are they a courier: ", isCourier);
+
     return (
         <div className="vendorPage">
           {/* <Header /> */}
@@ -45,7 +47,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
-                        {isCourier && (
+                        {isCourier === true && (
                             <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
                         )}
                     </div>

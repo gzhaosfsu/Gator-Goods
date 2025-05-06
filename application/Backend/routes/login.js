@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
                 username: user.username,
                 sfsu_email: user.sfsu_email,
                 first_name: user.first_name,
-                last_name: user.last_name }
+                last_name: user.last_name,
+                is_courier: user.is_courier }
         });
 
     } catch (err) {
