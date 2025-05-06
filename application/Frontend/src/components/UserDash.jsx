@@ -5,7 +5,8 @@ import { UserContext } from '../UserContext';
 const UserDash = ({ username }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-    const { logout } = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
+    const courier = useContext(UserContext);
 
     const handleSignOut = () => {
         logout();
@@ -72,7 +73,9 @@ const UserDash = ({ username }) => {
                 <Link to="/RealUserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
                 <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
-                <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
+                  {user?.isCourier && (
+                      <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
+                  )}
                 <button onClick={handleSignOut}>Sign Out</button>
               </div>
             )}

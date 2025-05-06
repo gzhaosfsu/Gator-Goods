@@ -5,7 +5,6 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
-    // Load user + validate session on app start
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         const expiry = localStorage.getItem('sessionExpiry');
@@ -15,24 +14,21 @@ export const UserProvider = ({ children }) => {
             if (now < parseInt(expiry, 10)) {
                 setUser(JSON.parse(storedUser));
             } else {
-                localStorage.clear(); // expired
+                localStorage.clear();
                 setUser(null);
             }
         }
     }, []);
 
-    // Log user in
     const login = (userData) => {
         const sessionStart = Date.now();
-        const sessionDuration = 30 * 60 * 1000; // 30 minutes
-        localStorage.setItem('user', JSON.stringify(userData)); // Store the full object
+        const sessionDuration = 30 * 60 * 1000; // 30 mins
+        const fullUser = { ...userData }; // Add flags like isCourier here if needed
+        localStorage.setItem('user', JSON.stringify(fullUser));
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
-
-
-        setUser(userData);
+        setUser(fullUser);
     };
 
-    // Log user out
     const logout = () => {
         localStorage.clear();
         setUser(null);
