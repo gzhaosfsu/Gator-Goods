@@ -20,8 +20,9 @@ const DROP_OFF_COORDS = {
     "Annex 1": { lat: 37.7208, lng: -122.4770 }
 };
 
-const CourierNav = ({ courierId, deliveryId }) => {
+const CourierNav = ({ deliveryId }) => {
     const { user } = useContext(UserContext);
+    const courierId = user?.user_id;
     const [currentLocation, setCurrentLocation] = useState(null);
     const [deliveryData, setDeliveryData] = useState(null);
     const [dropoffCoords, setDropoffCoords] = useState(SFSU_COORDS);
