@@ -6,18 +6,19 @@ import React, { useState, useEffect } from "react"
 
 
 const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
-    const [conversation, setConversation] = useState([]);
-    const [istyping, setIsTyping] = useState(false); 
-    const [drafts, setDrafts] = useState({});
+    const [conversation, setConversation] = useState([]); // holds the conversation between users 
+    const [istyping, setIsTyping] = useState(false); // handles css when user is typing 
+    const [drafts, setDrafts] = useState({}); // we want to temporarly store the user conversation when on chat feature only 
 
-       
+    
+const getConversation = () => {
 
-useEffect(() => {
-    if(senderID && senderID && listingID) {
-        fetch(`/api/direct_message`)
+    // get request for messages 
+    fetch(`/api/direct_message`)
         .then((res) => res.json())
         .then((data) => {
-          const filtered = data.filter(msg => {
+            // This make sure we get all conversation between the users
+            const filtered = data.filter(msg => {
             const isBetweenUsers = 
               (msg.sender_id === senderID && msg.receiver_id === receiverID) ||
               (msg.sender_id === receiverID && msg.receiver_id === senderID);
@@ -27,12 +28,18 @@ useEffect(() => {
             return isBetweenUsers && isSameListing;
           });
   
-          console.log("Here", filtered); 
+
           setConversation(filtered);
         })
         .catch(err => {
           console.error("Error fetching messages:", err);
         });
+}    
+
+useEffect(() => {
+    // this will render when a new chat is selected
+    if(senderID && senderID && listingID) {
+        getConversation(); 
     }
 
     
@@ -42,6 +49,7 @@ useEffect(() => {
 const handleInputChange = (e) => {
     const newMessage = e.target.value;
 
+    // this deals with the holding draft message has typed but not sent 
     setDrafts((prevDrafts) => ({
         ...prevDrafts,
         [receiverID]: newMessage
@@ -54,7 +62,8 @@ const handleInputChange = (e) => {
     }
 };
 
-const handleMessage = () => {
+ const handleMessage = () => { // method deals with post request of the user conversation and when they have sent message it renders the sent message
+    
     const currentMessage = drafts[receiverID] || '';
 
     if (currentMessage.trim()) {
@@ -75,13 +84,14 @@ const handleMessage = () => {
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log(data, "data");
+
+
             })
             .catch((err) => {
               console.error("Error:", err);
             });
 
-
+            setTimeout(getConversation, 100); 
 
         setDrafts((prevDrafts) => ({
             ...prevDrafts,
@@ -110,20 +120,22 @@ return (
                 </div>
             ))}
         </div>
-
-        <div className={`message-box ${istyping ? 'typing' : ''}`}>
-            <input
-                className="message-text"
-                placeholder="Message..."
-                type="text"
-                value={drafts[receiverID] || ''}
-                onChange={handleInputChange}
-                onKeyDown={(e) => e.key === 'Enter' && handleMessage()}
-            />
-            <span className="sendIcon" onClick={handleMessage}>
-                <SendIcon />
-            </span>
+        <div>
+            <div className={`message-box ${istyping ? 'typing' : ''}`}>
+                <input
+                    className="message-text"
+                    placeholder="Message..."
+                    type="text"
+                    value={drafts[receiverID] || ''}
+                    onChange={handleInputChange}
+                    onKeyDown={(e) => e.key === 'Enter' && handleMessage()}
+                />
+                <span className="sendIcon" onClick={handleMessage}>
+                    <SendIcon />
+                </span>
+            </div>
         </div>
+
     </>
 )
 }

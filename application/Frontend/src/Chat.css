@@ -64,6 +64,7 @@
     /* padding: 20px; */
     padding: 20px 0px 20px 25px;
     margin-bottom: 20px;
+    cursor: pointer; 
 }
 .individual-chat.selected{
   background-color: rgb(238, 238, 238);
@@ -114,7 +115,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: 62%; 
+    max-height: 500px; 
     overflow-y: scroll;
     /* border: 1px solid #ccc;  */
 
@@ -130,7 +131,7 @@
     background: white;
     border-radius: 24px;
     height: 48px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 0 18px; 
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
     margin-bottom: 25px;
