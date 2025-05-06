@@ -19,7 +19,7 @@ import UserProfile from './components/UserProfile'
 import CourierNav from "./components/CourierNav";
 import BuyerNav from "./components/BuyerNav";
 import OrderStatus from "./components/OrderStatus";
-import vendorDeliveryRequest from "./components/VendorDeliveryRequest"
+import VendorDeliveryRequest from "./components/VendorDeliveryRequest"
 
 function App() {
   const [count, setCount] = useState(0)
@@ -46,7 +46,7 @@ function App() {
         <Route path="/CourierNav" element={<CourierNav/>} />
         <Route path="/BuyerNav" element={<BuyerNav/>} />
         <Route path="/OrderStatus" element={<OrderStatus/>} />
-        <Route path="/vendorDeliveryRequest" element={<OrderStatus/>} />
+        <Route path="/vendorDeliveryRequest" element={<VendorDeliveryRequest/>} />
       </Routes>
     </BrowserRouter>
   )
