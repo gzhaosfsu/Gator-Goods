@@ -30,6 +30,16 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// GET all delivery instructions that dont have couriers
+router.get('/courier/unassigned', async (req, res) => { 
+    try {
+        const [results] = await db.query('SELECT * FROM delivery_instruction WHERE delivery_instruction.delivery_status = "Unassigned"');
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // POST a new Delivery Instruction
 router.post('/', async (req, res) => {
     const {
