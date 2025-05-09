@@ -1,5 +1,6 @@
 // FeaturedProducts.jsx
 import React, { useState, useEffect } from "react";
+import {Link } from 'react-router-dom'
 import { dummyData } from "../dummyData";
 import "../FeaturedProducts.css";
 
@@ -41,6 +42,7 @@ export const FeaturedProducts = () => {
       <h2>Shop Our Most Popular Products</h2>
       <div className="featured-products-list">
         {featuredItems.map((item) => (
+        <Link to={`/productListing/${item.listing_id}`} >
           <div key={item.listing_id} className="featured-product-card">
             {item.thumbnail ? (
               <img 
@@ -63,6 +65,7 @@ export const FeaturedProducts = () => {
             )}
             <p>{item.description}</p>
           </div>
+          </Link>
         ))}
       </div>
     </div>
