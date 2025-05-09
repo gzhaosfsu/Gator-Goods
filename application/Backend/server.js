@@ -5,8 +5,6 @@ const http = require('http');
 const {Server} = require('socket.io');
 
 
-const buyerRoutes = require('./routes/buyer');
-const courierRoutes = require('./routes/courier');
 const deliveryInstructionsRoutes = require('./routes/delivery_instruction');
 const deliveryRequestRoutes = require('./routes/delivery_request');
 const messageRoutes = require('./routes/direct_message');
@@ -14,7 +12,6 @@ const listingRoutes = require('./routes/listing');
 const productRoutes = require('./routes/product');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user');
-const vendorRoutes = require('./routes/vendor');
 const titleSearch = require('./routes/search/title_search');
 const categorySearch = require('./routes/search/category_search');
 const allSearch = require('./routes/search/all_search');
@@ -36,8 +33,6 @@ app.use(cors());
 app.use(express.json());
 
 // Register routes
-app.use('/api/buyer', buyerRoutes);
-app.use('/api/courier', courierRoutes);
 app.use('/api/delivery_instruction', deliveryInstructionsRoutes);
 app.use('/api/delivery_request', deliveryRequestRoutes);
 app.use('/api/listing', listingRoutes);
@@ -45,7 +40,6 @@ app.use('/api/direct_message', messageRoutes)
 app.use('/api/product', productRoutes);
 app.use('/api/review', reviewRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/vendor', vendorRoutes);
 app.use('/api/title', titleSearch);
 app.use('/api/category', categorySearch);
 app.use('/api/all', allSearch);

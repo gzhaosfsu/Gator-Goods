@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const [rows] = await db.query(
-            `SELECT di.*, p.name AS product_name, p.condition, p.image_url
+        const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
+            `SELECT di.*, p.title AS product_name, p.image
             FROM delivery_instruction di
             JOIN product p ON di.product_id = p.product_id
             WHERE di.delivery_id = ?`,
@@ -84,7 +84,7 @@ router.put('/:id', async (req, res) => {
     
         values.push(req.params.id); // Add the ID for the WHERE
     
-        const sql = `UPDATE delivery_instruction SET ${updates.join(', ')} WHERE delivery_instruction_id = ?`;
+        const sql = `UPDATE delivery_instruction SET ${updates.join(', ')} WHERE delivery_id = ?`;
         const [result] = await db.query(sql, values);
     
         if (result.affectedRows === 0) {
