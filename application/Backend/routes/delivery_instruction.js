@@ -53,24 +53,50 @@ router.post('/', async (req, res) => {
 
 // UPDATE a Delivery Instruction by ID
 router.put('/:id', async (req, res) => {
-    const {
-        vendor_id, courier_id, buyer_id, product_id,
-        pickup, dropoff, quantity, buyer_special_request,
-        vendor_special_request, delivery_status
-    } = req.body;
     try {
-    await db.query(
-        `UPDATE delivery_instruction SET vendor_id = ?, courier_id = ?, buyer_id = ?, product_id = ?, pickup = ?, dropoff = ?,
-         quantity = ?, buyer_special_request = ?, vendor_special_request = ?, delivery_status = ?
-         WHERE delivery_id = ?`,
-        [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity,
-            buyer_special_request, vendor_special_request, delivery_status, req.params.id]
-        );
-        res.sendStatus(204);
-    } catch (err) {
-            res.status(500).json({ error: err });
- 
+        const fields = [
+            'vendor_id',
+            'courier_id',
+            'buyer_id',
+            'product_id',
+            'pickup',
+            'dropoff',
+            'quantity',
+            'buyer_special_request',
+            'vendor_special_request',
+            'delivery_status'
+        ];
+    
+        const updates = [];
+        const values = [];
+    
+        // Building the SET
+        fields.forEach(field => {
+          if (req.body[field] !== undefined) {
+            updates.push(`${field} = ?`);
+            values.push(req.body[field]);
+          }
+        });
+    
+        if (updates.length === 0) {
+          return res.status(400).json({ error: 'No fields provided for update' });
         }
+    
+        values.push(req.params.id); // Add the ID for the WHERE
+    
+        const sql = `UPDATE delivery_instruction SET ${updates.join(', ')} WHERE delivery_instruction_id = ?`;
+        const [result] = await db.query(sql, values);
+    
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Delivery Instruction not found or no changes made' });
+        }
+    
+        res.status(200).json({ message: 'Delivery Instruction updated successfully' });
+    
+      } catch (err) {
+        console.error('Error during DB update:', err);
+        res.status(500).json({ error: 'Database update failed'});
+      }
     });
 
 

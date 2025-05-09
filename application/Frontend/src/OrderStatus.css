@@ -1,12 +1,22 @@
 .os-content {
     padding: 2rem;
   }
+
+  .os-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;             
+    margin-bottom: 1.5rem; 
+  }
   
   .os-heading {
     border-bottom: 4px solid #f5d066;
-    display: inline-block;
-    margin-bottom: 1.5rem;
+    display: inline-block;  
+    padding-bottom: 0.25rem; 
+    margin: 0;  
   }
+
+  
   
   .os-list {
     display: flex;
@@ -37,4 +47,24 @@
   .os-eta {
     color: #666;
   }
-  
+
+  .os-loading,
+  .os-error,
+  .os-empty {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+.os-back-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.os-back-btn:hover {
+  background-color: #e0e0e0;
+}
