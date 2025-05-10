@@ -33,16 +33,20 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a new review
-router.post('/', (req, res) => {
+router.post('/', async(req, res) => {
     const { author_id, vendor_id, rating, comment } = req.body;
-    db.query(
-        'INSERT INTO review (author_id, vendor_id, rating, comment) VALUES (?, ?, ?, ?)',
-        [author_id, vendor_id, rating, comment],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: err });
-            res.status(201).json({ review_id: result.insertId });
-        }
-    );
+    try {
+        const [result] = await db.query(
+            'INSERT INTO review (author_id, vendor_id, rating, comment) VALUES (?, ?, ?, ?)',
+            [author_id, vendor_id, rating, comment],
+        )
+        res.status(201).json({ review_id: result.insertId });
+
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+        
+    }
+   
 });
 
 // UPDATE a review by ID
