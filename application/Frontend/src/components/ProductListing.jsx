@@ -10,7 +10,6 @@ import CreateReviewForm from "./CreateReviewForm";
 const ProductListing =  () => {
 
     const { id } = useParams();
-    // console.log("Listing ID: ", id); 
     const [product, setProduct] = useState([]); 
     const [reviews, setReviews] = useState([]); 
     const [loading, setLoading] = useState(true);
@@ -23,8 +22,6 @@ const ProductListing =  () => {
                 return res.json();
             })
             .then((data) => {
-                // console.log("listing Info: ", data);
-                // console.log("vendor id: " + data[0].vendor_id); 
                 setProduct(data); 
                 setLoading(false); 
             })
@@ -42,7 +39,6 @@ const ProductListing =  () => {
               return res.json();
             })
             .then((data) => {
-            //   console.log("reviews HERE: ", data); 
                 setReviews(data); 
               
             })
