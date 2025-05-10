@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react"
+
 import { useParams } from "react-router-dom";
 import '../ProductListing.css'
 import Header from "./Header"
 import image from "./images/imageNA.png"
 import StarIcon from '@mui/icons-material/Star';
+import CreateReviewForm from "./CreateReviewForm";
 
 const ProductListing =  () => {
 
     const { id } = useParams();
-    console.log("Listing ID: ", id); 
+    // console.log("Listing ID: ", id); 
     const [product, setProduct] = useState([]); 
     const [reviews, setReviews] = useState([]); 
     const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         fetch(`/api/listing/${id}`)
@@ -20,13 +23,13 @@ const ProductListing =  () => {
                 return res.json();
             })
             .then((data) => {
-                console.log("listing Info: ", data);
-                console.log("vendor id: " + data[0].vendor_id); 
+                // console.log("listing Info: ", data);
+                // console.log("vendor id: " + data[0].vendor_id); 
                 setProduct(data); 
                 setLoading(false); 
             })
             .catch((err) => console.error("Error fetching products:", err));
-      }, []);
+      }, [id , showForm]);
 
       useEffect(() => {
 
@@ -39,7 +42,7 @@ const ProductListing =  () => {
               return res.json();
             })
             .then((data) => {
-              console.log("reviews HERE: ", data); 
+            //   console.log("reviews HERE: ", data); 
                 setReviews(data); 
               
             })
@@ -71,11 +74,14 @@ const formatDate = (date) => {
                         <div className="vendor-username" >Seller: Name here</div>
                         <div className="total-stars" > stars</div>
                         <div className="submit-review" >
-                            <button> Write a review</button>
+                            <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
+                            {
+                                showForm && (<CreateReviewForm onClose={() => setShowForm(false)} vendorId={product[0].vendor_id}/>)
+                            }
                         </div>
                     </div>
                 
-                    { reviews.map((review) => (
+                    { [...reviews].reverse().map((review) => (
                         <div className="customer-review-container" key={review.review_id}> 
                             <div className="customer-stars" >
                             {[...Array(review.rating)].map((_, i) => (
