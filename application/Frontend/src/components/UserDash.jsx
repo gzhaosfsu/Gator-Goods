@@ -72,7 +72,6 @@ const UserDash = ({ username }) => {
               <div className="dropdown-menu">
                 <Link to="/RealUserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
-                <Link to="/VendorPage" onClick={() => setOpen(false)}>Vendor</Link>
                   {user?.isCourier && (
                       <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
                   )}
