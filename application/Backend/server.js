@@ -1,54 +1,53 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./DB');
 const http = require('http');
 const {Server} = require('socket.io');
 
-
-const deliveryInstructionsRoutes = require('./routes/delivery_instruction');
-const deliveryRequestRoutes = require('./routes/delivery_request');
-const messageRoutes = require('./routes/direct_message');
-const listingRoutes = require('./routes/listing');
-const productRoutes = require('./routes/product');
-const reviewRoutes = require('./routes/review');
-const userRoutes = require('./routes/user');
-const titleSearch = require('./routes/search/title_search');
-const categorySearch = require('./routes/search/category_search');
-const allSearch = require('./routes/search/all_search');
-const combinedSearch = require('./routes/search/combined_search');
-const login = require('./routes/login');
-const register = require('./routes/register');
-
 const app = express();
 const server = http.createServer(app);
+// Setup CORS based on environment
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"]
+    : ["http://localhost:3000"];
 const io = new Server(server, {
   cors: {
-    //for production
-    //origin: ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"],
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
-app.use(cors());
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
+app.use(express.static('public'));
 
-// Register routes
-app.use('/api/delivery_instruction', deliveryInstructionsRoutes);
-app.use('/api/delivery_request', deliveryRequestRoutes);
-app.use('/api/listing', listingRoutes);
-app.use('/api/direct_message', messageRoutes)
-app.use('/api/product', productRoutes);
-app.use('/api/review', reviewRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/title', titleSearch);
-app.use('/api/category', categorySearch);
-app.use('/api/all', allSearch);
-app.use('/api/combined', combinedSearch);
-app.use('/api/login', login);
-app.use('/api/register', register);
-require('./socket')(io);app.use(express.static('public'));
+// Routes
+app.use('/api/buyer', require('./routes/buyer'));
+app.use('/api/courier', require('./routes/courier'));
+app.use('/api/delivery_instruction', require('./routes/delivery_instruction'));
+app.use('/api/delivery_request', require('./routes/delivery_request'));
+app.use('/api/listing', require('./routes/listing'));
+app.use('/api/direct_message', require('./routes/direct_message'));
+app.use('/api/product', require('./routes/product'));
+app.use('/api/review', require('./routes/review'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/vendor', require('./routes/vendor'));
+app.use('/api/title', require('./routes/search/title_search'));
+app.use('/api/category', require('./routes/search/category_search'));
+app.use('/api/all', require('./routes/search/all_search'));
+app.use('/api/combined', require('./routes/search/combined_search'));
+app.use('/api/login', require('./routes/login'));
+app.use('/api/register', require('./routes/register'));
 
-server.listen(3001, () => console.log('API running on port 3001'));
+// Initialize Socket.IO handlers
+require('./socket')(io);
+
+// Server listening
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+});
 
 // MySQL Database Connection
 
@@ -77,14 +76,13 @@ server.listen(3001, () => console.log('API running on port 3001'));
 //       console.log('DB connection validated with test query!');
 //     }
 //   });
-
-  (async () => {
-    try {
-      console.log('Trying to connect to DB...');
-      const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', ['gzhao@sfsu.edu']);
-      console.log(rows);
-      console.log('DB connection validated with test query!');
-    } catch (err) {
-      console.error('Error connecting to database:', err);
-    }
-  })();
+(async () => {
+  try {
+    console.log('Trying to connect to DB...');
+    const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', ['gzhao@sfsu.edu']);
+    console.log(rows);
+    console.log('DB connection validated with test query!');
+  } catch (err) {
+    console.error('Error connecting to database:', err);
+  }
+})();

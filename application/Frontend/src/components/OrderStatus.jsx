@@ -1,28 +1,40 @@
 // src/components/OrderStatus.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 import '../OrderStatus.css';
 
 const OrderStatusPage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [orders, setOrders]     = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
 
-  // useEffect(() => {
-  //   fetch('http://localhost:3001/api/orders/status', { credentials: 'include' })
-  //     .then(res => {
-  //       if (!res.ok) throw new Error(`Status ${res.status}`);
-  //       return res.json();
-  //     })
-  //     .then(data => setOrders(data))
-  //     .catch(err => setError(err.message))
-  //     .finally(() => setLoading(false));
-  // }, []);
+  useEffect(() => {
+    if (!user) { 
+      setLoading(false);
+      return;
+    }
+    fetch('/api/orders', { credentials: 'include' })
+      .then(res => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      })
+      .then(data => {
+        const me = data.filter(instr =>
+          instr.buyer_id === user.user_id &&
+          ['Assigned','Picked Up'].includes(instr.delivery_status)
+        );
+        setOrders(me);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  // if (loading) return <p className="os-loading">Loading…</p>;
-  // if (error)   return <p className="os-error">Error: {error}</p>;
+  if (loading) return <p className="os-loading">Loading…</p>;
+  if (error)   return <p className="os-error">Error: {error}</p>;
 
   return (
     <div className="os-page">

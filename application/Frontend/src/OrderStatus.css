@@ -40,9 +40,12 @@
     margin-right: 1.5rem;
   }
   
-  .os-info .os-title {
-    margin: 0 0 0.5rem;
+  .os-info .os-detail {
+    margin: 0.25rem 0;
+    color: #555;
+    font-size: 0.95rem;
   }
+  
   
   .os-eta {
     color: #666;

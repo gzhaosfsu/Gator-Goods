@@ -36,7 +36,7 @@ const CourierPage = () => {
   // It also handles the case when the onShift state is false, in which case it clears the delivery requests
   useEffect(() => {
     if (onShift) {
-      fetch("http://localhost:3001/api/delivery_instruction")
+      fetch("/api/delivery_instruction/")
         .then(res => {
           if (!res.ok) throw new Error("Failed to fetch delivery instructions");
           return res.json();
@@ -67,50 +67,43 @@ const CourierPage = () => {
   }, [onShift]);
   
 
-  //THIS NEEDS TO BE TROUBLESHOOTED
-  const handleAcceptDelivery = (delivery) => {
-    fetch(`http://localhost:3001/api/delivery_request/${delivery.delivery_request_id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        buyer_id: delivery.buyer_id,
-        vendor_id: delivery.vendor_id,
-        status: 'Approved',
-        dropoff: delivery.dropoffAddress,
-        listing_id: delivery.listing_id,
-      }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to accept delivery');
-        return res.json(); // assuming your backend sends back the updated row
-      })
-      .then(data => {
-        console.log("Accepted delivery:", data);
-  
-        // Remove it from the UI list
-        setDeliveryRequests(prev => prev.filter(d => d.delivery_request_id !== delivery.delivery_request_id));
-  
-        // Open the popup
-        setSelectedDelivery(data);  // assuming `data` is a single delivery object
-      })
-      .catch(err => console.error("Error accepting delivery:", err));
-  };
-  
+  const handleAcceptDelivery = async (deliveryReq) => {
+    console.log("Delivery accepted:", deliveryReq);
+    try {
+      // Update backend to mark as assigned
+      const res = await fetch(`/api/delivery_instruction/${deliveryReq.delivery_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courier_id: courierId, // TODO: Replace with real logged-in courier ID
+          delivery_status: "Assigned"
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to assign delivery");
+      setSelectedDelivery(deliveryReq);
+    } catch (err) {
+    console.error("Error accepting delivery:", err);
+  }
+};
 
-  const handleStartDelivery = () => {
+
+  const handleStartDelivery = (selectedDelivery) => {
     if (!selectedDelivery) return;
 
-    fetch(`http://localhost:3001/api/delivery_requests/${selectedDelivery.id}`, {
+    console.log("Starting delivery for:", selectedDelivery);
+
+    fetch(`/api/delivery_instruction/${selectedDelivery.delivery_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "in_transit" }),
+      body: JSON.stringify({ delivery_status: "Picked Up" }),
     })
       .then(res => {
         if (!res.ok) throw new Error("Failed to start delivery");
-        setRemovingId(selectedDelivery.id);
+
+        setRemovingId(selectedDelivery.delivery_id);
         setSelectedDelivery(null);
         setTimeout(() => {
-          setDeliveryRequests(prev => prev.filter(d => d.id !== selectedDelivery.id));
+          setDeliveryRequests(prev => prev.filter(d => d.delivery_id !== selectedDelivery.delivery.id));
           setRemovingId(null);
         }, 500);
       })
@@ -120,7 +113,7 @@ const CourierPage = () => {
 
   //THIS NEEDS TROUBLESHOOTING
   const handleSendMessage = (id, messageText) => {
-    fetch(`http://localhost:3001/api/delivery_requests/${id}/message`, {
+    fetch(`/api/delivery_requests/${id}/message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: messageText }),
@@ -140,7 +133,7 @@ const CourierPage = () => {
     <div className="courier-page">
       <Header />
       <div className="courier-body">
-      <button className={"dashboard-btn"} onClick={() => navigate('/userProfile')}>BACK TO PROFILE DASHBOARD</button>
+      <button className={"dashboard-btn"} onClick={() => navigate('/realUserProfile')}>BACK TO PROFILE DASHBOARD</button>
       <div className="courier-header">
       <h2>List of Open Assignments</h2>
         <button 
@@ -158,7 +151,7 @@ const CourierPage = () => {
 
           // This is how the delivery requests get "whooshed out" when accepted
         <div
-        className={`delivery-request ${removingId === deliveryReq.id ? "whoosh-out" : ""}`}
+        className={`delivery-request ${removingId === deliveryReq.delivery_id ? "whoosh-out" : ""}`}
         key={deliveryReq.id}
         >
 
@@ -183,7 +176,7 @@ const CourierPage = () => {
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
+              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.delivery_id)}>ACCEPT</button>
               <MessageBubble id={deliveryReq.id} 
                 // for backend implementation, uncomment the line below
                 handleSendMessage={handleSendMessage} 
@@ -204,7 +197,7 @@ const CourierPage = () => {
             <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
               <h3>{selectedDelivery.title}</h3>
                 <img 
-                src={selectedDelivery.imageUrl}
+                src={selectedDelivery.image_url}
                 alt="Delivery" 
                 className="delivery-image" 
                 />
@@ -215,7 +208,7 @@ const CourierPage = () => {
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={handleStartDelivery}>Start Delivery</button>
+              <button className="start-btn" onClick={() => handleStartDelivery(selectedDelivery.delivery_id)}>Start Delivery</button>
             </div>
           </div>
         )}
