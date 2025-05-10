@@ -23,8 +23,6 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api/buyer', require('./routes/buyer'));
-app.use('/api/courier', require('./routes/courier'));
 app.use('/api/delivery_instruction', require('./routes/delivery_instruction'));
 app.use('/api/delivery_request', require('./routes/delivery_request'));
 app.use('/api/listing', require('./routes/listing'));
@@ -32,7 +30,6 @@ app.use('/api/direct_message', require('./routes/direct_message'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/review', require('./routes/review'));
 app.use('/api/user', require('./routes/user'));
-app.use('/api/vendor', require('./routes/vendor'));
 app.use('/api/title', require('./routes/search/title_search'));
 app.use('/api/category', require('./routes/search/category_search'));
 app.use('/api/all', require('./routes/search/all_search'));
