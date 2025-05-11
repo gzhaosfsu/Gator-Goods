@@ -34,37 +34,47 @@ const CourierPage = () => {
   // This useEffect fetches the delivery requests from the backend when the component mounts or when the onShift state changes
   // It formats the data to match the expected structure and sets it to the deliveryRequests state
   // It also handles the case when the onShift state is false, in which case it clears the delivery requests
-  useEffect(() => {
-    if (onShift) {
-      fetch("/api/delivery_instruction/")
-        .then(res => {
-          if (!res.ok) throw new Error("Failed to fetch delivery instructions");
-          return res.json();
-        })
-        .then(data => {
-          const formatted = data.map(item => ({
-            title: `Delivery Request #${item.delivery_id}`,
-            pickupAddress: item.pickup,
-            dropoffAddress: item.dropoff,
-            imageUrl: item.image_url || "https://via.placeholder.com/150",
-            sellerNote: item.seller_special_request || "N/A",
-            buyerNote: item.buyer_special_request || "N/A",
-            delivery_id: item.delivery_id,
-            buyer_id: item.buyer_id,
-            vendor_id: item.vendor_id,
-            courier_id: item.courier_id,
-            product_id: item.product_id,
-            quantity: item.quantity,
-            status: item.delivery_status,
-            timestamp: item.timestamp,
-          }));
-          setDeliveryRequests(formatted);
-        })
-        .catch(err => console.error("Error fetching delivery instructions:", err));
-    } else {
-      setDeliveryRequests([]);
-    }
-  }, [onShift]);
+useEffect(() => {
+  if (onShift) {
+    fetch("/api/delivery_instruction/")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch delivery instructions");
+        return res.json();
+      })
+      .then(data => setDeliveryRequests(
+        data.map(({
+          delivery_id,
+          pickup,
+          dropoff,
+          seller_special_request,
+          buyer_special_request,
+          buyer_id,
+          vendor_id,
+          courier_id,
+          product_id,
+          quantity,
+          delivery_status,
+          timestamp
+        }) => ({
+          pickupAddress: pickup,
+          dropoffAddress: dropoff,
+          sellerNote: seller_special_request || "N/A",
+          buyerNote: buyer_special_request || "N/A",
+          delivery_id,
+          buyer_id,
+          vendor_id,
+          courier_id,
+          product_id,
+          quantity,
+          status: delivery_status,
+          timestamp,
+        }))
+      ))
+      .catch(err => console.error("Error fetching delivery instructions:", err));
+  } else {
+    setDeliveryRequests([]);
+  }
+}, [onShift]);
   
 
   const handleAcceptDelivery = async (deliveryReq) => {
@@ -103,7 +113,7 @@ const CourierPage = () => {
         setRemovingId(selectedDelivery.delivery_id);
         setSelectedDelivery(null);
         setTimeout(() => {
-          setDeliveryRequests(prev => prev.filter(d => d.delivery_id !== selectedDelivery.delivery.id));
+          setDeliveryRequests(prev => prev.filter(d => d.delivery_id !== selectedDelivery.delivery_id));
           setRemovingId(null);
         }, 500);
       })
@@ -111,23 +121,30 @@ const CourierPage = () => {
   };
 
 
-  //THIS NEEDS TROUBLESHOOTING
-  const handleSendMessage = (id, messageText) => {
-    fetch(`/api/delivery_requests/${id}/message`, {
+  //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID
+  const handleSendMessage = (deliveryId, messageText, buyerId) => {
+    fetch('/api/direct_messages', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: messageText }),
+      body: JSON.stringify({
+        sender_id: courierId,      // You must have this available
+        receiver_id: buyerId,
+        listing_id: deliveryId,
+        content: messageText
+      }),
     })
       .then(res => {
         if (!res.ok) throw new Error("Failed to send message");
         return res.json();
       })
-      .then(() => {
-        setMessageStates(prev => ({ ...prev, [id]: true }));
+      .then(data => {
+        console.log("Message stored with ID:", data.message_id);
+        setMessageStates(prev => ({ ...prev, [deliveryId]: true }));
       })
       .catch(err => console.error("Error sending message:", err));
-      console.log(`Message sent to ${id}: ${messageText}`);
   };
+
+
 
   return (
     <div className="courier-page">
@@ -144,7 +161,6 @@ const CourierPage = () => {
           </button>
       </div>
         <div className="yellow-divider"></div>
-        {/* Replace dummyDeliveryRequests with deliveryRequests when ready */}
         {!onShift && <p>Click button to start shift.</p>}
         {onShift && (deliveryRequests.length > 0 ? (deliveryRequests.map((deliveryReq) => (
 
@@ -155,7 +171,7 @@ const CourierPage = () => {
         key={deliveryReq.id}
         >
 
-        <h3 className="delivery-title">{deliveryReq.title}</h3>
+        <h3 className="delivery-title">{`Delivery Request #${deliveryReq.delivery_id}`}</h3>
         <div className="delivery-content">
 
           {/* // This is the image of the delivery request */}
@@ -175,13 +191,14 @@ const CourierPage = () => {
 
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
-              {/* Replace setSelectedDelivery with with handleAcceptDelivery(deliveryReq.id) when ready */}
-              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq.delivery_id)}>ACCEPT</button>
-              <MessageBubble id={deliveryReq.id} 
-                // for backend implementation, uncomment the line below
-                handleSendMessage={handleSendMessage} 
+              <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
+              <MessageBubble
+                id={deliveryReq.delivery_id}
+                buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
+                courierId={loggedInCourierId} // TODO: you must get this from login/session state
+                handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
-                />       
+              />
             </div>
             </div>
           </div>
