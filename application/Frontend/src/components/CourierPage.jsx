@@ -42,34 +42,37 @@ useEffect(() => {
         return res.json();
       })
       .then(data => setDeliveryRequests(
-        data.map(({
-          delivery_id,
-          pickup,
-          dropoff,
-          seller_special_request,
-          buyer_special_request,
-          buyer_id,
-          vendor_id,
-          courier_id,
-          product_id,
-          quantity,
-          delivery_status,
-          timestamp
-        }) => ({
-          pickupAddress: pickup,
-          dropoffAddress: dropoff,
-          sellerNote: seller_special_request || "N/A",
-          buyerNote: buyer_special_request || "N/A",
-          delivery_id,
-          buyer_id,
-          vendor_id,
-          courier_id,
-          product_id,
-          quantity,
-          status: delivery_status,
-          timestamp,
-        }))
-      ))
+  data
+    .filter(item => item.delivery_status === "Unassigned") // only include unassigned ones
+    .map(({
+      delivery_id,
+      pickup,
+      dropoff,
+      seller_special_request,
+      buyer_special_request,
+      buyer_id,
+      vendor_id,
+      courier_id,
+      product_id,
+      quantity,
+      delivery_status,
+      timestamp
+    }) => ({
+      pickupAddress: pickup,
+      dropoffAddress: dropoff,
+      sellerNote: seller_special_request || "N/A",
+      buyerNote: buyer_special_request || "N/A",
+      delivery_id,
+      buyer_id,
+      vendor_id,
+      courier_id,
+      product_id,
+      quantity,
+      status: delivery_status,
+      timestamp,
+    }))
+))
+
       .catch(err => console.error("Error fetching delivery instructions:", err));
   } else {
     setDeliveryRequests([]);
@@ -85,7 +88,7 @@ useEffect(() => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courier_id: courierId, // TODO: Replace with real logged-in courier ID
+          courier_id: 3, // REPLACED "courierId" with "3"; seems to work, at the evry least ti fills the popup with seemingly the right information? Unsure why however
           delivery_status: "Assigned"
         }),
       });
@@ -105,7 +108,7 @@ useEffect(() => {
     fetch(`/api/delivery_instruction/${selectedDelivery.delivery_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ delivery_status: "Picked Up" }),
+      body: JSON.stringify({ delivery_status: "Assigned" }),
     })
       .then(res => {
         if (!res.ok) throw new Error("Failed to start delivery");
@@ -121,13 +124,13 @@ useEffect(() => {
   };
 
 
-  //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID
+  //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
   const handleSendMessage = (deliveryId, messageText, buyerId) => {
     fetch('/api/direct_messages', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        sender_id: courierId,      // You must have this available
+        sender_id: courierId,      // TODO: replace with logged-in courier ID
         receiver_id: buyerId,
         listing_id: deliveryId,
         content: messageText
@@ -195,7 +198,7 @@ useEffect(() => {
               <MessageBubble
                 id={deliveryReq.delivery_id}
                 buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
-                courierId={loggedInCourierId} // TODO: you must get this from login/session state
+                courierId={deliveryReq.courier_id} 
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
               />
@@ -211,7 +214,7 @@ useEffect(() => {
         {selectedDelivery && (
           <div className="delivery-popup">
             <div className="popup-content">
-            <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
+            {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
               <h3>{selectedDelivery.title}</h3>
                 <img 
                 src={selectedDelivery.image_url}
@@ -225,7 +228,7 @@ useEffect(() => {
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={() => handleStartDelivery(selectedDelivery.delivery_id)}>Start Delivery</button>
+              <button className="start-btn" onClick={() => handleStartDelivery(selectedDelivery)}>Start Delivery</button>
             </div>
           </div>
         )}
