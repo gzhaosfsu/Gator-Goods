@@ -14,7 +14,7 @@ CREATE TABLE user (
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
 	image BLOB,
-    isCourier BOOL
+    isCourier BOOL DEFAULT FALSE
 );
 
 -- 5. Product Table
