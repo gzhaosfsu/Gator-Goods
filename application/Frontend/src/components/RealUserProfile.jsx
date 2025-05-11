@@ -16,26 +16,40 @@ const RealUserProfile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user && typeof user.is_courier !== 'undefined') {
-          setIsCourier(user.is_courier);
-        }
-      }, [user]);
+      if (user && typeof user.is_courier !== 'undefined' && typeof isCourier === 'undefined') {
+        setIsCourier(user.is_courier);
+      }
+    }, [user]);
 
-    useEffect(() => {
+      useEffect(() => {
         const fetchUser = async () => {
           if (!user?.user_id) return;
-    
+      
           try {
             const response = await fetch(`/api/user/${user.user_id}`);
+            
+            if (!response.ok) {
+              console.error("Fetch failed with status:", response.status);
+              return;
+            }
+      
             const data = await response.json();
-            setIsCourier(data.is_courier);
+      
+            // Only update if the field exists
+            if (typeof data.is_courier !== 'undefined') {
+              setIsCourier(data.is_courier);
+            } else {
+              console.warn("is_courier field missing in fetched data", data);
+            }
+      
           } catch (err) {
             console.error("Failed to fetch user courier status:", err);
           }
         };
-
+      
         fetchUser();
-    }, [user?.user_id]);
+      }, [user?.user_id]);
+      
 
     const handleBecomeCourier = async () => {
         try {

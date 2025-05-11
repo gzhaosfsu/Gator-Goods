@@ -25,62 +25,94 @@ const CreateListingForm = ({ onClose }) => {
     const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value,
+      [name]: files && files.length > 0 ? files[0] : value,
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (formData.image) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log("onloadend fired");
+        console.log("reader.result:", reader.result);
+      };
+      reader.onerror = () => {
+        console.error("FileReader error");
+      };
+      reader.readAsDataURL(formData.image);
+    }
+  }, [formData.image]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting...");
+  
+    if (!formData.image) {
+      alert('Please upload an image.');
+      return;
+    }
+  
     try {
-      let base64Data = '';
-      let mimetype = '';
-      let imageName = '';
-  
-      // If a file image, convert to base 64
-      if (formData.image) {
-        const reader = new FileReader();
-  
-        reader.onloadend = async () => {
-          base64Data = reader.result.split(',')[1];
-          mimetype = formData.image.type;
-          imageName = formData.image.name;
-  
-          const payload = {
-            image: {
-              name: imageName,
-              mimetype: mimetype,
-              data: base64Data,
-            },
-            title: formData.title,
-            price: formData.price,
-            description: formData.description,
-            category: formData.category,
-            condition: formData.condition,
+      
+      const readFileAsDataURL = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+      
+          reader.onload = () => {
+            console.log("onload fired, result should be valid");
+            resolve(reader.result);
           };
+      
+          reader.onerror = (err) => {
+            console.error("FileReader error:", err);
+            reject(err);
+          };
+      
+          reader.readAsDataURL(file);
+        });
+      };
+      
+
+      
   
-          const res = await fetch('/create-listing', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
+      console.log("About to read file:", formData.image);
+      const result = await readFileAsDataURL(formData.image);
+      console.log("Base64 result length:", result.length);
+      console.log("Heres my formData: ");
+      const base64Data = result.split(',')[1];
+      const mimetype = formData.image.type;
+
+      
   
-          if (!res.ok) throw new Error('Failed to create listing');
-          const result = await res.json();
-          console.log('Listing created:', result);
+      const payload = {
+        thumbnail: base64Data,
+        mimetype: mimetype,
+        title: formData.title,
+        price: formData.price,
+        description: formData.description,
+        category: formData.category,
+        condition: formData.condition,
+      };
+
+      
   
-          onClose(); // Close modal on success
-        };
+      const res = await fetch('/api/listing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
   
-        reader.readAsDataURL(formData.image);
-      } else {
-        alert('Please upload an image.');
-      }
+      if (!res.ok) throw new Error('Failed to create listing');
+      const responseData = await res.json();
+      console.log('Listing created:', responseData);
+      onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Error creating listing. Please try again.');
     }
   };
+  
+  
 
   /*     listing_status ENUM('Active', 'Sold', 'Delisted'),
     product_id INT,
@@ -161,11 +193,12 @@ const CreateListingForm = ({ onClose }) => {
             required
           >
             <option value="">Select condition</option>
-            <option value="new">New</option>
-            <option value="used-like-new">Used - Like New</option>
-            <option value="used-good">Used - Good</option>
-            <option value="used-fair">Used - Fair</option>
+            <option value="New">New</option>
+            <option value="Used - Like New">Used - Like New</option>
+            <option value="Used - Good">Used - Good</option>
+            <option value="Used - Fair">Used - Fair</option>
           </select>
+
 
           <div className="form-buttons">
             <button type="submit">Submit</button>
