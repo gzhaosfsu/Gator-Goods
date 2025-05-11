@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import CreateListingForm from './CreateListingForm'; // your actual listing form
+import CreateListingForm from './CreateListingForm';
+import ExistingProductForm from './ExistingProductForm';
+
 
 const TwoStepListingModal = ({ onClose }) => {
   const [step, setStep] = useState(1);
 
   const handleNewProductClick = () => {
     setStep(2);
+  };
+
+  const handleExistingProductClick = () => {
+    setStep(3);
   };
 
   return (
@@ -22,9 +28,9 @@ const TwoStepListingModal = ({ onClose }) => {
                 <div className="card" onClick={handleNewProductClick}>
                     <span className="card-title">New Product</span>
                 </div>
-            <div className="card">
-                <span className="card-title">Existing Product</span>
-            </div>
+              <div className="card" onClick={handleExistingProductClick}>
+                  <span className="card-title">Existing Product</span>
+              </div>
             </div>
             </>
         )}
@@ -34,6 +40,10 @@ const TwoStepListingModal = ({ onClose }) => {
 
             {step === 2 && (
             <CreateListingForm onClose={onClose} />
+            )}
+
+            {step === 3 && (
+            <ExistingProductForm onClose={onClose} />
             )}
         </div>
     </div>

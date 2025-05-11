@@ -18,6 +18,21 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// GET product by vendor ID
+router.get('/vendor/:id', async (req, res) => {
+
+    try {
+
+        const [results] = await db.query('SELECT product.product_id, product.title FROM product WHERE product.vendor_id = ?', [req.params.id]);
+        
+        res.json(results);
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // POST a new product
 router.post('/', (req, res) => {
     const { description, category, title, image, vendor_id } = req.body;

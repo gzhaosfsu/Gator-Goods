@@ -3,80 +3,61 @@ import '../CreateListingForm.css';
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 
-const CreateListingForm = ({ onClose }) => {
+const ExistingProductForm = ({ onClose }) => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
       navigate("/login");
+      return;
     }
+  
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`/api/product/vendor/${user.user_id}`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+  
+    fetchProducts();
   }, [user, navigate]);
+  
 
   const [formData, setFormData] = useState({
-    title: '',
+    product:'',
     price: '',
-    description: '',
-    category: '',
     condition: '',
   });
 
-  const [imageFile, setImageFile] = useState(null);
+  const [products, setProducts] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === "image") {
-      setImageFile(files[0]);
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      if (!(file instanceof Blob)) {
-        reject(new Error("Provided file is not a Blob/File"));
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(reader.error);
-
-      reader.readAsDataURL(file);
-    });
+    setFormData({ ...formData, [name]: value });
+    
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting...");
 
-    if (!imageFile) {
-      alert("Please upload an image.");
-      return;
-    }
-
     try {
-      console.log("Reading file...");
-      const result = await readFileAsDataURL(imageFile);
-      const base64Data = result.split(',')[1];
-      const mimetype = imageFile.type;
 
       const payload = {
-        thumbnail: base64Data,
-        mimetype,
-        title: formData.title,
+        product_id: parseInt(formData.product),
         price: parseFloat(formData.price),
-        description: formData.description,
-        category: formData.category,
         conditions: formData.condition,  
         vendor_id: user.user_id,
       };
 
       console.log("Heres the payload: ", payload);
 
-      const res = await fetch('/api/listing', {
+      const res = await fetch('/api/listing/existing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -100,22 +81,22 @@ const CreateListingForm = ({ onClose }) => {
         </button>
         <h2>Create Listing</h2>
         <form onSubmit={handleSubmit}>
-          <label>Upload Image</label>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-          />
 
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
+        <label>Select a Product</label>
+            <select
+            name="product"
+            value={formData.product}
             onChange={handleChange}
             required
-          />
+            >
+            <option value="">Select a product</option>
+            {products.map((product) => (
+                <option key={product.product_id} value={product.product_id}>
+                {product.title}
+                </option>
+            ))}
+            </select>
+
 
           <label>Price</label>
           <input
@@ -125,32 +106,6 @@ const CreateListingForm = ({ onClose }) => {
             onChange={handleChange}
             required
           />
-
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="3"
-            required
-          />
-
-          <label>Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select a category</option>
-            <option value="food">Food</option>
-            <option value="furniture">Furniture</option>
-            <option value="clothing">Clothing</option>
-            <option value="stationary">Stationary</option>
-            <option value="books">Books</option>
-            <option value="electronics">Electronics</option>
-            <option value="other">Other</option>
-          </select>
 
           <label>Condition</label>
           <select
@@ -175,4 +130,4 @@ const CreateListingForm = ({ onClose }) => {
   );
 };
 
-export default CreateListingForm;
+export default ExistingProductForm;
