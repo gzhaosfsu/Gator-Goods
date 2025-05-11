@@ -3,32 +3,50 @@ const router = express.Router();
 const db = require('../DB');
 
 // GET all reviews
-router.get('/', (req, res) => {
-    db.query('SELECT * FROM review', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+router.get('/', async(req, res) => {
+    try {
+
+        const [results] = await db.query('SELECT * FROM review');
+        
         res.json(results);
-    });
+    }
+    catch {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // GET review by ID
-router.get('/:id', (req, res) => {
-    db.query('SELECT * FROM review WHERE review_id = ?', [req.params.id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results[0]);
-    });
+router.get('/:id', async (req, res) => {
+
+    try {
+
+        const [results] = await db.query('SELECT * FROM review WHERE vendor_id = ?', [req.params.id]);
+    
+        res.json(results);
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    
+    }
 });
 
 // POST a new review
-router.post('/', (req, res) => {
+router.post('/', async(req, res) => {
     const { author_id, vendor_id, rating, comment } = req.body;
-    db.query(
-        'INSERT INTO review (author_id, vendor_id, rating, comment) VALUES (?, ?, ?, ?)',
-        [author_id, vendor_id, rating, comment],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: err });
-            res.status(201).json({ review_id: result.insertId });
-        }
-    );
+    try {
+        const [result] = await db.query(
+            'INSERT INTO review (author_id, vendor_id, rating, comment) VALUES (?, ?, ?, ?)',
+            [author_id, vendor_id, rating, comment],
+        )
+        res.status(201).json({ review_id: result.insertId });
+
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+        
+    }
+   
 });
 
 // UPDATE a review by ID

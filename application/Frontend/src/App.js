@@ -1,6 +1,6 @@
+import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
-import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 import AboutMartha from './components/AboutMartha'
 import Homepage from "./components/Homepage"
 import AboutAnthony from './components/AboutAnthony'
@@ -20,6 +20,7 @@ import CourierNav from "./components/CourierNav";
 import BuyerNav from "./components/BuyerNav";
 import OrderStatus from "./components/OrderStatus";
 import VendorDeliveryRequest from "./components/VendorDeliveryRequest"
+import ProductListing from './components/ProductListing'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -47,6 +48,7 @@ function App() {
         <Route path="/BuyerNav" element={<BuyerNav/>} />
         <Route path="/OrderStatus" element={<OrderStatus/>} />
         <Route path="/vendorDeliveryRequest" element={<VendorDeliveryRequest/>} />
+        <Route path="/productListing/:id" element={<ProductListing/>} />
       </Routes>
     </BrowserRouter>
 )
