@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 // Setup CORS based on environment
 const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"]
+    ? ["https://server.gatorgoods.com", "http://100.26.194.201","https://sfsu.gatorgoods.com"]
     : ["http://localhost:3000"];
 const io = new Server(server, {
   cors: {

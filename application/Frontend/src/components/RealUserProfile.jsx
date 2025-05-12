@@ -59,7 +59,7 @@ const RealUserProfile = () => {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                is_courier: true
+                isCourier: true
             })
           });
 
