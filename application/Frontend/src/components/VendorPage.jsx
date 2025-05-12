@@ -9,6 +9,7 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import CreateListingForm from './CreateListingForm';
 import {UserContext} from "../UserContext";
+import TwoStepListingModal from './TwoStepListingModal';
 
 const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
@@ -36,8 +37,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
             <div className="center">
                 <button className="create-button" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></button>
 
-                {showForm && (<CreateListingForm onClose={() => setShowForm(false)} />
-                )}
+                {showForm && (<TwoStepListingModal onClose={() => setShowForm(false)} />)}
             </div>
             {/* Overview */}
             <section className="section">
@@ -47,7 +47,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
-                        {isCourier === true && (
+                        {isCourier && (
                             <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
                         )}
                     </div>

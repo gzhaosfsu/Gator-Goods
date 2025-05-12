@@ -6,7 +6,7 @@ const db = require('../DB');
 router.get('/', async(req, res) => {
     try {
 
-        const [results] = await db.query('SELECT * FROM review');
+        const [results] = await db.query('SELECT review.*, user.username FROM review JOIN user ON review.author_id = user.user_id');
         
         res.json(results);
     }

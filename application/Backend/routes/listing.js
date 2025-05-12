@@ -6,7 +6,7 @@ const db = require('../DB');
 router.get('/', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT * FROM listing');
+        const [results] = await db.query('SELECT listing.*, user.rating, user.username FROM listing JOIN user ON listing.vendor_id = user.user_id');
         
         res.json(results);
     }
@@ -136,26 +136,95 @@ router.get('/vendor/:id', async (req, res) => {
     // });
 });
 
-// POST a new listing
+// POST a new product listing
 router.post('/', async (req, res) => {
-    
-    try {
+  try {
 
-        const { listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions } = req.body;
+    const {
+      title,
+      description,
+      category,
+      thumbnail,
+      mimetype,
+      price,
+      conditions,
+      vendor_id  // now passed from the frontend
+    } = req.body;
 
-        const [result] = await db.query(
-            'INSERT INTO listing (listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [listing_status, product_id, vendor_id, availability, price, discount, approval_status, conditions]
-        );
-
-        console.log('Insert success:', result.insertId);
-        res.status(201).json({ listing_id: result.insertId });
-
-    } catch (err) {
-        console.error('Error during DB insert:', err);
-        res.status(500).json({ error: err.message });
+    if (!vendor_id) {
+      return res.status(400).json({ error: 'vendor_id is required' });
     }
+
+    if (!thumbnail || !mimetype) {
+      return res.status(400).json({ error: 'Thumbnail and mimetype are required' });
+    }
+
+    const thumbnailBuffer = Buffer.from(thumbnail, 'base64');
+
+    // 1. Insert into product
+    const [productResult] = await db.query(
+      `INSERT INTO product (title, description, category, thumbnail, mimetype, vendor_id)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [title, description, category, thumbnailBuffer, mimetype, vendor_id]
+    );
+
+    const productId = productResult.insertId;
+
+    // 2. Insert into listing
+    const [listingResult] = await db.query(
+      `INSERT INTO listing (product_id, vendor_id, availability, price, discount, conditions, listing_status, approval_status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [productId, vendor_id, 'In Stock', price, 0.00, conditions, 'Active', 'Pending']
+    );
+
+    res.status(201).json({
+      message: 'Listing created',
+      listing_id: listingResult.insertId,
+      product_id: productId
+    });
+
+  } catch (err) {
+    console.error('Error during listing creation:', err);
+    res.status(500).json({ error: 'Failed to create listing' });
+  }
 });
+
+// POST an existing product listing
+router.post('/existing', async (req, res) => {
+  try {
+
+    const {
+      product_id,
+      price,
+      conditions,
+      vendor_id  // now passed from the frontend
+    } = req.body;
+
+    if (!vendor_id) {
+      return res.status(400).json({ error: 'vendor_id is required' });
+    }
+
+    const [listingResult] = await db.query(
+      `INSERT INTO listing (product_id, vendor_id, availability, price, conditions)
+       VALUES (?, ?, ?, ?, ?)`,
+      [product_id, vendor_id, 'In Stock', price, conditions]
+    );
+
+    res.status(201).json({
+      message: 'Listing created',
+      listing_id: listingResult.insertId,
+      product_id: product_id
+    });
+
+  } catch (err) {
+    console.error('Error during listing creation:', err);
+    res.status(500).json({ error: 'Failed to create listing' });
+  }
+});
+
+  
+  
+  
 
 // UPDATE a listing by ID
 router.put('/:id', async (req, res) => {

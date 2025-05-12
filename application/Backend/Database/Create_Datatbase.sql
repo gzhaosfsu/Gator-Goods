@@ -14,7 +14,8 @@ CREATE TABLE user (
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
 	image BLOB,
-    isCourier BOOL DEFAULT FALSE
+    is_courier BOOL DEFAULT FALSE,
+    rating DECIMAL DEFAULT 5 CHECK (rating between 1 and 5) 
 );
 
 -- 5. Product Table
@@ -35,15 +36,15 @@ CREATE TABLE product (
 DROP TABLE IF EXISTS listing;
 CREATE TABLE listing (
     listing_id INT AUTO_INCREMENT PRIMARY KEY,
-    listing_status ENUM('Active', 'Sold', 'Delisted'),
-    product_id INT,
-    vendor_id INT,
-    availability ENUM('In Stock', 'Out of Stock'),
-    price DECIMAL(10,2),
-    discount DECIMAL(5,2),
-    approval_status ENUM('Pending', 'Approved', 'Denied'),
+    listing_status ENUM('Active', 'Sold', 'Delisted') DEFAULT 'Active',
+    product_id INT NOT NULL,
+    vendor_id INT NOT NULL,
+    availability ENUM('In Stock', 'Out of Stock') DEFAULT 'In Stock',
+    price DECIMAL(10,2)NOT NULL,
+    discount DECIMAL(5,2) DEFAULT 0,
+    approval_status ENUM('Pending', 'Approved', 'Denied') DEFAULT 'Pending',
     listing_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    conditions ENUM('New', 'Used - Like New', 'Used - Good', 'Used - Fair'),
+    conditions ENUM('New', 'Used - Like New', 'Used - Good', 'Used - Fair') NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product(product_id),
     FOREIGN KEY (vendor_id) REFERENCES user(user_id)
 );

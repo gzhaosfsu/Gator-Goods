@@ -41,7 +41,7 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
                 <div className='right-section'>
                     <div className='button-container'>
                         <button className='order-status-btn'>Order Status</button>
-                        {isCourier ===false  && (
+                        {!isCourier  && (
                             <button className="become-courier-btn" onClick={handleBecomeCourier}>
                                 Become a Courier
                             </button>
