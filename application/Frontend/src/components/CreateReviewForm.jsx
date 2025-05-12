@@ -50,7 +50,7 @@ const CreateReviewForm = ({ onClose, vendorId }) => {
 return(
     <>
     <div className='form-overlay'>
-        <div className='review-form-container' >
+        <div className='form-container' >
             <button className="close-button" onClick={onClose}>
                 x
             </button>

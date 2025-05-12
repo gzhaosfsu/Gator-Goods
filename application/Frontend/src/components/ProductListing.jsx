@@ -6,6 +6,7 @@ import Header from "./Header"
 import image from "./images/imageNA.png"
 import StarIcon from '@mui/icons-material/Star';
 import CreateReviewForm from "./CreateReviewForm";
+import CreateDeliveryRequest from "./CreateDeliveryRequest";
 
 const ProductListing =  () => {
 
@@ -14,6 +15,7 @@ const ProductListing =  () => {
     const [reviews, setReviews] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [showDeliRequest, setShowDeliRequest] = useState(false);
 
     useEffect(() => {
         fetch(`/api/listing/${id}`)
@@ -115,12 +117,15 @@ const formatDate = (date) => {
                     </div>
                 </div>
                 <div className="deliver-request-box" >
-                    <button>Get Item Delivered</button>
+                    <button onClick={() => setShowDeliRequest(true)}  >Get Item Delivered</button>
+                    {
+                        showDeliRequest && (<CreateDeliveryRequest onClose={() => setShowDeliRequest(false)} vendorId={product[0].vendor_id} title={product[0].title} listingID={product[0].listing_id}/>)
+                    }
                 </div>
                 <div className="description-container">
                     <h2>Description</h2>
-                    <p>Type: {product[0].category}</p>
-                    <p>Condition: {product[0].conditions}</p>
+                    <p> <strong>Type:</strong> {product[0].category}</p>
+                    <p> <strong>Condition:</strong> {product[0].conditions}</p>
                     <p>{product[0].description}</p>
                 </div>
             </div>
