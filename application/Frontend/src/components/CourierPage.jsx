@@ -9,12 +9,12 @@ import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData
 
 const CourierPage = () => {
   const navigate = useNavigate();
-  const {user} = useContext(UserContext);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
 
   const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
+  // const [deliveryRequests, setDeliveryRequests] = useState(dummyDeliveryRequests); //dummyData, comment out when using backend data
 
   // this is the ID of the delivery request that is being removed
   // which is used to trigger the animation when a delivery request is accepted
