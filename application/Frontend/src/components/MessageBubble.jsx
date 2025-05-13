@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import '../courierPage.css';
 
 
-const MessageBubble = ({ id, buyerId, courierId, handleSendMessage, messageStates
+const MessageBubble = ({ id, buyerId, handleSendMessage, messageStates
   }) => {
       const [messageText, setMessageText] = useState('');
     
       const handleSendClick = () => {
         if (messageText.trim() !== '') {
-          handleSendMessage(id, messageText, buyerId, courierId); // pass the actual text to the function
+          console.log("Sending message:", messageText);
+          handleSendMessage(buyerId, messageText, id); // pass the actual text to the function
           setMessageText(''); // Optionally clear the input after sending
+          console.log("Message sent to buyerId:", buyerId); // Make sure this is not undefined or null
+
         }
       };
   
@@ -18,7 +21,7 @@ const MessageBubble = ({ id, buyerId, courierId, handleSendMessage, messageState
         <div className="message-section">
           <div className="message-bubble">
             <p className="message-label">Send buyer a message</p>
-            {!messageStates[id] ? (
+            {!messageStates[buyerId] ? (
               <div className="message-input-row">
                 <input
                   type="text"
