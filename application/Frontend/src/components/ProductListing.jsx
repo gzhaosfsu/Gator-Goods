@@ -17,6 +17,10 @@ const ProductListing =  () => {
     const [showForm, setShowForm] = useState(false);
     const [showDeliRequest, setShowDeliRequest] = useState(false);
 
+    const getUsername = (id)=>{
+
+    }
+
     useEffect(() => {
         fetch(`/api/listing/${id}`)
             .then((res) => {
@@ -42,10 +46,16 @@ const ProductListing =  () => {
             })
             .then((data) => {
                 setReviews(data); 
+
+
+                console.log("Review product: ", data); 
               
             })
         .catch((err) => console.error("Error fetching products:", err));
         }
+
+
+
       }, [product]);
 
 const formatDate = (date) => {
@@ -65,7 +75,15 @@ const formatDate = (date) => {
         <div className="container-prodListing">
             <div className="left-container">
                 <div className="prod-img-container">
-                    <img src={image} alt="product image" />
+                    {
+                        product[0].thumbnail ? (
+                            <img src={product[0].thumbnail} alt="product image" />
+                        ) : 
+                        (
+                            <img src={image} alt="product image" />
+                        )
+                    }
+                    
                 </div>
                 <div className="vendor-reviews-container" >
                     <div className="total-review-container" >
@@ -91,7 +109,7 @@ const formatDate = (date) => {
                             </div>
                             <div className="reviewer-info">
                                 <p className="reviewer-username" >
-                                    Reviewer: Name here
+                                    Reviwer: {review.username}
                                 </p>
                                 <p className="review-date" >
                                     Date: {formatDate(review.review_date)}

@@ -21,7 +21,11 @@ router.get('/:id', async (req, res) => {
 
     try {
 
-        const [results] = await db.query('SELECT * FROM review WHERE vendor_id = ?', [req.params.id]);
+        const [results] = await db.query(`
+            SELECT review.*, user.username 
+            FROM review 
+            JOIN user ON review.author_id = user.user_id 
+            WHERE review.vendor_id = ?`, [req.params.id]);
     
         res.json(results);
         
