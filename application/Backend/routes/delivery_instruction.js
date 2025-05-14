@@ -57,6 +57,7 @@ router.post('/', async (req, res) => {
         );
             res.status(201).json({ delivery_id: results.insertId });
     } catch (err) {
+        console.error("Error inserting delivery instruction:", err);
         res.status(500).json({ error: err.message });
         }
     });

@@ -30,6 +30,24 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// GET : by listing and buyer
+router.get('/listing-sender', async (req, res) => {
+    try {
+
+        const { userId, listingId } = req.query;
+
+        const [requests] = await db.query(
+            'SELECT * FROM direct_message WHERE sender_id = ? AND listing_id = ?',
+            [userId, listingId]
+        );
+
+        res.json(requests);
+    }catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // POST a new message
 router.post('/', async (req, res) => {
     const { sender_id, receiver_id, listing_id, content } = req.body;

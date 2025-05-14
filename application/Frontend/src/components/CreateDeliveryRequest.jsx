@@ -3,10 +3,10 @@ import React, { useContext, useEffect, useState} from 'react';
 import {UserContext} from "../UserContext";
 import "../CreateReviewForm.css"
 
-const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId }) => {
+const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId, setHasRequested }) => {
 
     const {user} = useContext(UserContext);
-    const [] = useState({
+    const [formData, setFormData] = useState({
         buyer_id: 0, 
         vendor_id: 0, 
         status: "Pending",
@@ -17,6 +17,74 @@ const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId }) => {
 
 
     }); 
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        fetch("/api/delivery_request", {
+            mode: "cors",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                buyer_id: user.user_id, 
+                vendor_id: vendorId, 
+                status: "Pending",
+                dropoff: formData.dropoff, 
+                listing_id: listingId,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+                onClose(); 
+
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+            });
+
+    
+        // fetch("/api/delivery_instruction", {
+        //     mode: "cors",
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         vendor_id: vendorId,
+        //         courier_id: 0,
+        //         buyer_id: user.user_id,  
+        //         product_id: 0,
+        //         pickup: "", 
+        //         dropoff: formData.dropoff, 
+        //         quantity: 1, 
+        //         buyer_special_request: formData.buyer_special_request,
+        //         vendor_special_request: "",
+        //         delivery_status: "Unassigned",
+
+        //     }),
+        //   })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         onClose(); 
+
+        //     })
+        //     .catch((err) => {
+        //       console.error("Error:", err);
+        //     });
+        
+        setHasRequested(true); 
+    }
+
+
+    const handleChange = (e) => {
+        const { name, value, files } = e.target;
+        setFormData({
+        ...formData,
+        [name]: files ? files[0] : value,
+        });
+    };
 
     return(
         <>
@@ -30,20 +98,33 @@ const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId }) => {
                     <div className="request-form-heading">
                         <img src={image} alt="item-image" />
                         <div>
-                            <p>Item requesting to deliver: </p>
+                            <p>Item requesting to be delivered: </p>
                             <h4>{title}</h4>
                         </div>  
                     </div>
                 </div>
-                <form >
+                <form onSubmit={handleSubmit} >
                     <label>Dropoff Location</label>
-                    <select name="" id="">
-                        <option value=""></option>
+                    <select
+                    name="dropoff" 
+                    value={formData.dropoff}
+                    onChange={handleChange}
+                    required
+                     >
+                        <option value="">Select a location</option>
+                        <option value="Cesar Chavez">Cesar Chavez</option>
+                        <option value="Student Services">Student Services</option>
+                        <option value="Library">Library</option>
+                        <option value="Hensill Hall">Hensill Hall</option>
+                        <option value="The Village at Centennial Square">The Village at Centennial Square</option>
+                        <option value="Annex 1">Annex 1</option>
 
                     </select>
-                    <label>Special Request</label>
+                    <label>Special Request for Courier</label>
                     <textarea 
-                    name="" 
+                    name="buyer_special_request"
+                    onChange={handleChange}
+                    value={formData.buyer_special_request}
                     rows="7"
                     
                     />
