@@ -4,16 +4,16 @@ import Footer from './Footer';
 import '../courierPage.css';
 import MessageBubble from './MessageBubble';
 import { useNavigate } from 'react-router-dom';
-import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData to .js
+import {UserContext} from "../UserContext"
 
 const CourierPage = () => {
   const navigate = useNavigate();
+  const {user} = useContext(UserContext);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
 
   const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
-  // const [deliveryRequests, setDeliveryRequests] = useState(dummyDeliveryRequests); //dummyData, comment out when using backend data
 
   // this is the ID of the delivery request that is being removed
   // which is used to trigger the animation when a delivery request is accepted
@@ -22,8 +22,6 @@ const CourierPage = () => {
   // this is the state that tracks the message bubble for each delivery request
   // it is used to show whether the message has been sent or not
   const [messageStates, setMessageStates] = useState({});
-
-  const [courierId, setCourierId] = useState(123);
 
   // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
@@ -36,48 +34,46 @@ const CourierPage = () => {
   // It also handles the case when the onShift state is false, in which case it clears the delivery requests
 useEffect(() => {
   if (onShift) {
-    fetch("/api/delivery_instruction/")
+    fetch("/api/delivery_instruction/courier/unassigned")
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch delivery instructions");
         return res.json();
       })
       .then(data => setDeliveryRequests(
-  data
-    .filter(item => item.delivery_status === "Unassigned") // only include unassigned ones
-    .map(({
-      delivery_id,
-      pickup,
-      dropoff,
-      seller_special_request,
-      buyer_special_request,
-      buyer_id,
-      vendor_id,
-      courier_id,
-      product_id,
-      quantity,
-      delivery_status,
-      timestamp
-    }) => ({
-      pickupAddress: pickup,
-      dropoffAddress: dropoff,
-      sellerNote: seller_special_request || "N/A",
-      buyerNote: buyer_special_request || "N/A",
-      delivery_id,
-      buyer_id,
-      vendor_id,
-      courier_id,
-      product_id,
-      quantity,
-      status: delivery_status,
-      timestamp,
-    }))
-))
-
+        data.map(({
+          delivery_id,
+          pickup,
+          dropoff,
+          seller_special_request,
+          buyer_special_request,
+          buyer_id,
+          vendor_id,
+          courier_id,
+          product_id,
+          quantity,
+          delivery_status,
+          timestamp
+        }) => ({
+          pickupAddress: pickup,
+          dropoffAddress: dropoff,
+          sellerNote: seller_special_request || "N/A",
+          buyerNote: buyer_special_request || "N/A",
+          delivery_id,
+          buyer_id,
+          vendor_id,
+          courier_id,
+          product_id,
+          quantity,
+          status: delivery_status,
+          timestamp,
+        }))
+      ))
       .catch(err => console.error("Error fetching delivery instructions:", err));
   } else {
     setDeliveryRequests([]);
   }
 }, [onShift]);
+
   
 
   const handleAcceptDelivery = async (deliveryReq) => {
@@ -88,7 +84,7 @@ useEffect(() => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courier_id: 3, // REPLACED "courierId" with "3"; seems to work, at the evry least ti fills the popup with seemingly the right information? Unsure why however
+          courier_id: user.id, // REPLACED "courierId" with "3"; seems to work, at the evry least ti fills the popup with seemingly the right information? Unsure why however
           delivery_status: "Assigned"
         }),
       });
@@ -125,27 +121,47 @@ useEffect(() => {
 
 
   //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
-  const handleSendMessage = (deliveryId, messageText, buyerId) => {
-    fetch('/api/direct_messages', {
+const handleSendMessage = async (receiver_id, messageText, listing_id) => {
+  console.log("handleSendMessage called with:", { receiver_id, messageText, listing_id });
+
+  try {
+    const response = await fetch("/api/direct_message", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        sender_id: courierId,      // TODO: replace with logged-in courier ID
-        receiver_id: buyerId,
-        listing_id: deliveryId,
+        sender_id: user.id,
+        receiver_id,
+        listing_id,
         content: messageText
-      }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to send message");
-        return res.json();
       })
-      .then(data => {
-        console.log("Message stored with ID:", data.message_id);
-        setMessageStates(prev => ({ ...prev, [deliveryId]: true }));
-      })
-      .catch(err => console.error("Error sending message:", err));
-  };
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("API error:", errorText); // Show server-side error
+      throw new Error("Failed to send message");
+    }
+
+    console.log("Message sent successfully");
+
+    // Move this into a new try block
+    try {
+      setMessageStates((prev) => {
+        const updated = { ...prev, [receiver_id]: true };
+        console.log("Updated messageStates:", updated);
+        return updated;
+      });
+    } catch (stateErr) {
+      console.error("Error updating messageStates:", stateErr);
+    }
+
+  } catch (err) {
+    console.error("Error sending message:", err);
+  }
+};
+
 
 
 
@@ -198,9 +214,9 @@ useEffect(() => {
               <MessageBubble
                 id={deliveryReq.delivery_id}
                 buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
-                courierId={deliveryReq.courier_id} 
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
+                setMessageStates={setMessageStates}
               />
             </div>
             </div>

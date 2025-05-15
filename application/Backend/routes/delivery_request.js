@@ -77,7 +77,23 @@ router.get('/by-title', async (req, res) => {
     }
 });
 
+// GET : by listing and buyer
+router.get('/listing-buyer', async (req, res) => {
+    try {
 
+        const { userId, listingId } = req.query;
+
+        const [requests] = await db.query(
+            'SELECT * FROM delivery_request WHERE buyer_id = ? AND listing_id = ?',
+            [userId, listingId]
+        );
+
+        res.json(requests);
+    }catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 
 // POST a new Delivery Request

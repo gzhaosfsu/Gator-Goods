@@ -10,8 +10,29 @@
     height: 450px;
     width: 525px;
 }
-.prod-img-container {
-    /* padding-top: 50px; */
+
+.deliver-request-box button{
+    padding: 8px 16px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1E1066;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.link-btn{
+    padding: 8px 16px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1E1066;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .container-prodListing {
@@ -48,4 +69,19 @@
 }
 .customer-stars{
     padding-bottom: 10px;
+}
+
+.sendMessage-box{
+    display: flex;
+    width: 350px;
+    height: 50px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.send-message-container{
+    display: flex;
+    flex-direction: row;
 }

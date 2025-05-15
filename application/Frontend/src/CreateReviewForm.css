@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-.review-form-container{
+.form-container{
     background: white;
     position: relative;
     padding: 24px;
@@ -21,8 +21,29 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.review-form-container form{
+.form-container form{
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+
+.request-form-heading{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.request-form-heading img{
+    width: 100px;
+    height: 100px;
+    padding-right: 20px;
+}
+
+.header-color{
+    border-bottom: 4px solid #FFDC70;
+    padding-bottom: 20px;
+    /* margin-top: 50px; */
+    margin-bottom: 20px;
+
 }
