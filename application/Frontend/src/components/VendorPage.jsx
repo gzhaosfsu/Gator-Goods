@@ -12,12 +12,29 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
     const {user} = useContext(UserContext);
+    const [rating, setRating] = useState(null); // placeholder until rating is passed by context
     const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
             navigate("/login");
         }
     }, [user, navigate]);
+
+    useEffect(() => {
+        if (!user) return;
+      
+        fetch(`/api/user/${user.user_id}`)
+          .then(res => res.json())
+          .then(data => {
+            console.log("Fetched user data:", data);
+            setRating(parseFloat(data[0]?.rating) || 1);
+          })
+          .catch(err => console.error('Failed to load rating:', err));
+      }, [user]);
+
+      
+
+      
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {
@@ -56,7 +73,8 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <h2 className="section-title stats-title">Stats</h2>
                     <div className="stat-grid">
                         <StatCard label="Sold Items" value="5" />
-                        <StatCard label="Rating" value={user?.rating || "500"} />
+                        <StatCard label="Rating" value={rating !== null ? rating.toFixed(1) : "Loading..." | 500} />
+
                     </div>
                 </div>
             </section>
