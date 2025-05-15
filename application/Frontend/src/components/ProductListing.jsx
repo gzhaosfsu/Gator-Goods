@@ -151,7 +151,6 @@ const ProductListing =  () => {
     if(!user){
         return (
         <>
-        <Header></Header>
         {loading ? (
             <div>Loading...</div> // Or a spinner, skeleton, etc.
         ) : (
@@ -252,7 +251,6 @@ const ProductListing =  () => {
  
     return (
         <>
-        <Header></Header>
         {loading ? (
             <div>Loading...</div> // Or a spinner, skeleton, etc.
         ) : (
