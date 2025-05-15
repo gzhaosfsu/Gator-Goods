@@ -1,79 +1,80 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { UserContext } from "../UserContext";
 import mascot from "./images/LogoGG.png";
 import "../DeliveryLayout.css";
 import ReturnHome from "./ReturnHome";
-import DummyDelivery from "../DummyDelivery";
-import { useNavigate } from "react-router-dom";
-
 
 const socket = io("http://100.26.194.201:3000");
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
 
-
-const BuyerNav = ({ courierId, deliveryId }) => {
+export default function BuyerNav() {
+    const { deliveryId } = useParams();
+    const navigate = useNavigate();
     const { user } = useContext(UserContext);
+
+    const [deliveryData, setDeliveryData] = useState(null);
     const [courierLocation, setCourierLocation] = useState(null);
     const [status, setStatus] = useState("pending");
-    const [deliveryData, setDeliveryData] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!user) {
-            navigate("/login");
-        }
-    }, [user, navigate]);
-
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4"
+        googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4",
     });
 
-    useEffect(() => {
-        const fetchDelivery = async () => {
-            try {
-                const res = await fetch(`http://100.26.194.201:3001/api/deliveryInstructions/${deliveryId}`);
-                if (!res.ok) throw new Error("Failed to fetch delivery data");
-                const data = await res.json();
-                setDeliveryData(data);
-                setStatus(data.delivery_status || "pending");
+    // Redirect if not logged in
+    // useEffect(() => {
+    //     if (!user) navigate("/login");
+    // }, [user, navigate]);
 
-                if (user?.user_id !== data.buyer_id) {
+    // Fetch delivery details
+    useEffect(() => {
+        if (!user || !deliveryId) return;
+        (async () => {
+            try {
+                const res = await fetch(
+                    `/api/delivery_instruction/${deliveryId}`
+                );
+                if (!res.ok) throw new Error(res.statusText);
+                const data = await res.json();
+                if (data.buyer_id !== user.user_id) {
                     setUnauthorized(true);
+                } else {
+                    setDeliveryData(data);
+                    setStatus(data.delivery_status.toLowerCase());
                 }
             } catch (err) {
                 console.error(err);
             }
-        };
-
-        if (deliveryId && user) fetchDelivery();
+        })();
     }, [deliveryId, user]);
 
+    // Listen for courier updates
     useEffect(() => {
-        socket.on("courier-location-update", data => {
-            if (data.courierId === courierId) {
-                setCourierLocation({ lat: data.lat, lng: data.lng });
-                setStatus("Picked Up");
+        socket.on("courier-location", (d) => {
+            if (deliveryData && d.courierId === deliveryData.courier_id) {
+                setCourierLocation({ lat: d.lat, lng: d.lng });
+                if (status === "assigned") setStatus("picked up");
             }
         });
-
-        socket.on("delivery-status-update", data => {
-            if (data.courierId === courierId) {
-                setStatus(data.status === "delivered" ? "Delivered" : "Canceled");
+        socket.on("delivery-status", (d) => {
+            if (deliveryData && d.courierId === deliveryData.courier_id) {
+                setStatus(d.status === "delivered" ? "delivered" : "cancelled");
             }
         });
-
         return () => {
-            socket.off("courier-location-update");
-            socket.off("delivery-status-update");
+            socket.off("courier-location");
+            socket.off("delivery-status");
         };
-    }, [courierId]);
+    }, [deliveryData, status]);
 
     if (unauthorized) {
-        return <div className="delivery-layout">You are not authorized to view this delivery.</div>;
+        return <div className="delivery-layout">
+            <p>Not authorized to view this order.</p>
+            <button onClick={() => navigate("/realUserProfile")}>Back</button>
+        </div>;
     }
 
     return (
@@ -88,41 +89,30 @@ const BuyerNav = ({ courierId, deliveryId }) => {
                         {courierLocation && <Marker position={courierLocation} />}
                     </GoogleMap>
                 ) : (
-                    <div className="map-placeholder">Loading map or location unavailable...</div>
+                    <div className="map-placeholder">Loading map...</div>
                 )}
             </div>
 
             <div className="info-panel">
                 <div className="logo-header">
-                    <img src={mascot} alt="Gator Goods" />
+                    <img src={mascot} alt="Logo" />
                 </div>
-                <ReturnHome/>
+                <ReturnHome onClick={() => navigate("/realUserProfile")} />
 
                 {deliveryData && (
-                    <div className="delivery-details">
-                        <div className="product-box">
-                            <div className="product-image" style={{ backgroundColor: "#ccc", width: 80, height: 80 }}></div>
-                            <div className="product-title">{deliveryData.product_name}</div>
-                        </div>
-
-                        <div className="eta">
-                            <strong>E.T.A :</strong> [ {status} ]
-                        </div>
-
+                    <>
+                        <p><strong>Product:</strong> {deliveryData.product_name}</p>
+                        <p><strong>Status:</strong> {status.toUpperCase()}</p>
                         <div className="chat-box">
-                            <label>Message the Courier</label>
-                            <div className="chat-row" style={{ backgroundColor: "#d5d1e1", borderRadius: 8, padding: 8 }}>
-                                <input placeholder="Message..." style={{ flex: 1, padding: 6, borderRadius: 4, border: 'none' }} />
-                                <button style={{ backgroundColor: "#2a176f", color: "white", fontWeight: "bold", border: "none", padding: "0 16px", marginLeft: 8, borderRadius: 4 }}>send</button>
+                            <label>Message Courier</label>
+                            <div className="chat-row">
+                                <input placeholder="Message..." />
+                                <button>Send</button>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
-
-                <button className="return-button" style={{ backgroundColor: "#2a176f", color: "white", fontWeight: "bold", padding: 14, border: "none", borderRadius: 6, fontSize: 16 }}>Return to Orders</button>
             </div>
         </div>
     );
-};
-
-export default BuyerNav;
+}

@@ -23,10 +23,9 @@ export const UserProvider = ({ children }) => {
     const login = (userData) => {
         const sessionStart = Date.now();
         const sessionDuration = 30 * 60 * 1000; // 30 mins
-        const fullUser = { ...userData }; // Add flags like isCourier here if needed
-        localStorage.setItem('user', JSON.stringify(fullUser));
+        localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
-        setUser(fullUser);
+        setUser(userData);
     };
 
     const logout = () => {

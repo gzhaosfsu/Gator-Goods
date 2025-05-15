@@ -4,10 +4,12 @@ import Footer from './Footer';
 import '../courierPage.css';
 import MessageBubble from './MessageBubble';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData to .js
 
 const CourierPage = () => {
   const navigate = useNavigate();
+  const {user} = useContext(UserContext);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
@@ -78,7 +80,7 @@ useEffect(() => {
     setDeliveryRequests([]);
   }
 }, [onShift]);
-  
+
 
   const handleAcceptDelivery = async (deliveryReq) => {
     console.log("Delivery accepted:", deliveryReq);
@@ -88,12 +90,15 @@ useEffect(() => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courier_id: 3, // REPLACED "courierId" with "3"; seems to work, at the evry least ti fills the popup with seemingly the right information? Unsure why however
+          courier_id: user.user_id,
           delivery_status: "Assigned"
         }),
       });
       if (!res.ok) throw new Error("Failed to assign delivery");
-      setSelectedDelivery(deliveryReq);
+      navigate(
+          `/courierNav/${deliveryReq.delivery_id}`,
+          { state: { deliveryReq } }
+      );
     } catch (err) {
     console.error("Error accepting delivery:", err);
   }
@@ -156,8 +161,8 @@ useEffect(() => {
       <button className={"dashboard-btn"} onClick={() => navigate('/realUserProfile')}>BACK TO PROFILE DASHBOARD</button>
       <div className="courier-header">
       <h2>List of Open Assignments</h2>
-        <button 
-            className={onShift ? "end-shift-btn" : "available-btn"} 
+        <button
+            className={onShift ? "end-shift-btn" : "available-btn"}
             onClick={toggleOnOffShift}
           >
             {onShift ? "END SHIFT" : "Available for Work"}
@@ -178,10 +183,10 @@ useEffect(() => {
         <div className="delivery-content">
 
           {/* // This is the image of the delivery request */}
-          <img 
+          <img
             src={deliveryReq.imageUrl}
-            alt="Delivery" 
-            className="delivery-image" 
+            alt="Delivery"
+            className="delivery-image"
           />
 
           <div className="delivery-details">
@@ -198,7 +203,7 @@ useEffect(() => {
               <MessageBubble
                 id={deliveryReq.delivery_id}
                 buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
-                courierId={deliveryReq.courier_id} 
+                courierId={deliveryReq.courier_id}
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
               />
@@ -210,16 +215,16 @@ useEffect(() => {
         <p>No more delivery requests at this time. Please check again later.</p>
       )
     )}
-        
+
         {selectedDelivery && (
           <div className="delivery-popup">
             <div className="popup-content">
             {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
               <h3>{selectedDelivery.title}</h3>
-                <img 
+                <img
                 src={selectedDelivery.image_url}
-                alt="Delivery" 
-                className="delivery-image" 
+                alt="Delivery"
+                className="delivery-image"
                 />
               <p><strong>Note from Seller: </strong></p>
               <p>{selectedDelivery.sellerNote}</p>
