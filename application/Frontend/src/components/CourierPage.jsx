@@ -75,9 +75,6 @@ useEffect(() => {
   }
 }, [onShift]);
 
-
-  
-
   const handleAcceptDelivery = async (deliveryReq) => {
     console.log("Delivery accepted:", deliveryReq);
     try {
@@ -218,7 +215,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
               <MessageBubble
                 id={deliveryReq.delivery_id}
                 buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
-                courierId={deliveryReq.courier_id} 
+                courierId={deliveryReq.courier_id}
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
                 setMessageStates={setMessageStates}
