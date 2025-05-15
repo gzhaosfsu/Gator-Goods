@@ -50,7 +50,7 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) 
 (1, 1, 'Pending', 'Library', 1);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
+INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, listing_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
 (1, 1, 1, 1, 'Library', 'Student Services', 1, 'Leave at front desk.', 'Assigned');
 
 -- Insert Users (IDs 4 to 9)
@@ -120,7 +120,7 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) 
 (2, 5, 'Pending', 'Annex 1', 10);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
+INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, listing_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
 (3, 2, 4, 5, 'Dining Center', 'Cesar Chavez', 1, 'No contact delivery.', 'Picked up'),
 (3, 4, 5, 6, 'Main Library', 'Student Services', 1, '', 'Assigned'),
 (4, 5, 6, 7, 'Rec Center', 'Library', 1, 'Need it before 5pm.', 'Assigned'),
