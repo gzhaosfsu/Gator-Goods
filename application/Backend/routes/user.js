@@ -5,7 +5,7 @@ const db = require('../DB');
 router.get('/', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT * FROM user');
+        const [results] = await db.query('SELECT user_id, first_name, last_name, username, sfsu_email, registration_date, is_verified, image, is_courier, rating FROM user');
         
         res.json(results);
     }
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT user.* FROM user WHERE user.user_id = ?', [req.params.id]);
+        const [results] = await db.query('SELECT user_id, first_name, last_name, username, sfsu_email, registration_date, is_verified, image, is_courier, rating FROM user WHERE user.user_id = ?', [req.params.id]);
         
         res.json(results);
     }

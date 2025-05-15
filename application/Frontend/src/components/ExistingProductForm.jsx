@@ -66,6 +66,7 @@ const ExistingProductForm = ({ onClose }) => {
       if (!res.ok) throw new Error('Failed to create listing');
       const responseData = await res.json();
       console.log('Listing created:', responseData);
+      alert("Listing created!");
       onClose();
     } catch (error) {
       console.error("Error submitting form:", error);

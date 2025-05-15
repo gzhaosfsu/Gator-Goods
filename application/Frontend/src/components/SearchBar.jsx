@@ -2,6 +2,7 @@ import React from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
 // import { dummyData } from "../dummyData";
 
 
@@ -193,7 +194,9 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
                             <>
                               <CloseIcon onClick={clearInput} />
                               <div onClick={handleSearch} style={{ cursor: 'pointer' }}>
-                                <SearchIcon />
+                                <Link to ="/">
+                                  <SearchIcon />
+                                </Link>
                               </div>
                             </>
                         )
