@@ -10,7 +10,7 @@ import UserDash from "./UserDash";
 import {UserContext} from "../UserContext";
 import {useContext} from "react";
 
-const Header = ({ setDataReturned, setSelectedCategoryName, setIsSearching, isSearching, filters, setFilters}) => {
+const Header = ({ setSelectedCategoryName, setDataReturned, setIsSearching, isSearching, filters, setFilters}) => {
 
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
     const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category

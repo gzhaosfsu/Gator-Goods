@@ -1,6 +1,7 @@
-import {BrowserRouter, Route, Routes, Link } from 'react-router-dom'
+import {BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
+import Header from './components/Header';
 import AboutMartha from './components/AboutMartha'
 import Homepage from "./components/Homepage"
 import AboutAnthony from './components/AboutAnthony'
@@ -22,14 +23,42 @@ import OrderStatus from "./components/OrderStatus";
 import VendorDeliveryRequest from "./components/VendorDeliveryRequest"
 import ProductListing from './components/ProductListing'
 
-function App() {
+function AppContent() {
+  const location = useLocation(); 
+
+   const hideHeaderRoutes = [
+    '/login',
+    '/register',
+    '/CourierNav',
+    '/BuyerNav',
+  ];
+  const showHeader = !hideHeaderRoutes.includes(location.pathname);
+
+  const [isSearching, setIsSearching] = useState(false); // deals with toggeling the display body if we using Category or Search bar or Both or none 
+  const [dataReturned, setDataReturned] = useState([]); // This is returns an array of data from fetch request that Header.jsx deals with
+  const [selectedCategoryName, setSelectedCategoryName] = useState(""); // tells you what category was selected 
+  const [filters, setFilters] = useState({
+        condition: "",
+        priceSort: "",
+        datePosted: "",
+        minDiscount: "",
+        minRating: "",
+    })
+
+
   const [count, setCount] = useState(0)
   const [user, setUser] = useState(null)
 
   return (
-    <BrowserRouter>
+    <>
+
+      {
+        showHeader && (
+          <Header  setSelectedCategoryName={setSelectedCategoryName} setDataReturned={setDataReturned} setIsSearching={setIsSearching} isSearching={isSearching} filters={filters} setFilters={setFilters}/>
+        )}
+      
       <Routes>
-        <Route path="/" element={<Homepage/>}/>
+        <Route path="/" element={<Homepage dataReturned={dataReturned} isSearching={isSearching} selectedCategoryName={selectedCategoryName} filters={filters} />}/>
         <Route path="/aboutMartha" element={<AboutMartha/>}/>
         <Route path="/aboutAnthony" element={<AboutAnthony/>}/>
         <Route path="/aboutGarvin" element={<AboutGarvin/>}/>
@@ -50,8 +79,16 @@ function App() {
         <Route path="/vendorDeliveryRequest" element={<VendorDeliveryRequest/>} />
         <Route path="/productListing/:id" element={<ProductListing/>} />
       </Routes>
-    </BrowserRouter>
+    </>
 )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
 }
 
 export default App
