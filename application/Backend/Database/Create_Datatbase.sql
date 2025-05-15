@@ -15,7 +15,7 @@ CREATE TABLE user (
     is_verified BOOLEAN DEFAULT FALSE,
 	image BLOB,
     is_courier BOOL DEFAULT FALSE,
-    rating DECIMAL DEFAULT 5 CHECK (rating between 1 and 5) 
+    rating DECIMAL DEFAULT 5 CHECK (rating between 1 and 5)
 );
 
 -- 5. Product Table
@@ -97,7 +97,7 @@ CREATE TABLE delivery_instruction (
     vendor_id INT,
     courier_id INT,
     buyer_id INT,
-    product_id INT,
+    listing_id INT,
     pickup TEXT,
     dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
     quantity INT,
@@ -108,5 +108,5 @@ CREATE TABLE delivery_instruction (
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (courier_id) REFERENCES user(user_id),
     FOREIGN KEY (buyer_id) REFERENCES user(user_id),
-    FOREIGN KEY (product_id) REFERENCES product(product_id)
+    FOREIGN KEY (listing_id) REFERENCES listing(listing_id)
 );
