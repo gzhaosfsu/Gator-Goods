@@ -29,11 +29,11 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
                     <div className='user-info-container'>
                         <h2>About</h2>
                         <div className='info-name-update'>
-                            <input type="text" value={user.first_name} readOnly />
-                            <input type="text" value={user.last_name} readOnly />
+                            <input type="text" value={user?.first_name || "First Name"} readOnly />
+                            <input type="text" value={user?.last_name || "Last Name"} readOnly />
                         </div>
                         <div className='user-email-update'>
-                            <input type="text" value={user?.sfsu_email || "username12@sfsu.edu"} readOnly />
+                            <input type="text" value={user?.sfsu_email || "email"} readOnly />
                         </div>
                     </div>
                 </div>

@@ -2,12 +2,9 @@ import React, {useContext} from 'react';
 import { useState, useEffect } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import "../VendorPage.css";
-import Header from './Header';
-import Footer from './Footer';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
-import CreateListingForm from './CreateListingForm';
 import {UserContext} from "../UserContext";
 import TwoStepListingModal from './TwoStepListingModal';
 
@@ -44,11 +41,11 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                 <div className="section-inner">
                     <h2 className="section-title overview-title">Overview</h2>
                     <div className="card-grid">
-                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
+                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
                         {isCourier && (
-                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
+                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }} link="/courierPage"/>
                         )}
                     </div>
                 </div>
@@ -59,7 +56,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <h2 className="section-title stats-title">Stats</h2>
                     <div className="stat-grid">
                         <StatCard label="Sold Items" value="5" />
-                        <StatCard label="Rating" value="5/5" />
+                        <StatCard label="Rating" value={user?.rating || "500"} />
                     </div>
                 </div>
             </section>

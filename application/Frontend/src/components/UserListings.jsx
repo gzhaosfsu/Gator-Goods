@@ -2,7 +2,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import '../UserListings.css';
 import Header from './Header';
 import Footer from './Footer';
-import CreateListingForm from './CreateListingForm'
+// import CreateListingForm from './CreateListingForm'
+import TwoStepListingModal from './TwoStepListingModal';
 import {UserContext} from '../UserContext';
 import {useNavigate} from "react-router-dom";
 
@@ -99,7 +100,7 @@ const UserListings = () => {
         {/* <div className="button-wrapper"> */}
           <div className="create-button button-wrapper" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></div>
 
-          {showForm && (<CreateListingForm onClose={() => setShowForm(false)} />
+          {showForm && (<TwoStepListingModal onClose={() => setShowForm(false)} />
           )}
         {/* </div> */}
         <br /> <br /> <br /> <br />
