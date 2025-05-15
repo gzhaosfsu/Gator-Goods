@@ -22,7 +22,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     useEffect(() => {
         if (!user) return;
-      
+
         fetch(`/api/user/${user.user_id}`)
           .then(res => res.json())
           .then(data => {
@@ -32,9 +32,9 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
           .catch(err => console.error('Failed to load rating:', err));
       }, [user]);
 
-      
 
-      
+
+
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {
@@ -58,11 +58,11 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                 <div className="section-inner">
                     <h2 className="section-title overview-title">Overview</h2>
                     <div className="card-grid">
-                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
+                        <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} />
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
                         {isCourier && (
-                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }} link="/courierPage"/>
+                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }}/>
                         )}
                     </div>
                 </div>
@@ -74,7 +74,6 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <div className="stat-grid">
                         <StatCard label="Sold Items" value="5" />
                         <StatCard label="Rating" value={rating !== null ? rating.toFixed(1) : "Loading..." | 500} />
-
                     </div>
                 </div>
             </section>
