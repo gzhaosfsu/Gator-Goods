@@ -30,15 +30,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// GET : by listing and buyer
-router.get('/listing-sender', async (req, res) => {
+// GET : by listing and sender 
+router.get('/listing-sender/get', async (req, res) => {
     try {
 
-        const { userId, listingId } = req.query;
-
         const [requests] = await db.query(
-            'SELECT * FROM direct_message WHERE sender_id = ? AND listing_id = ?',
-            [userId, listingId]
+            'SELECT * FROM direct_message WHERE sender_id = ? AND listing_id = ?', [req.query.id, req.query.listing]
         );
 
         res.json(requests);

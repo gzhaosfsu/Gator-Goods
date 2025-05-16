@@ -25,7 +25,7 @@ const Chats = () => {
   
 
   // const currentUserID = user.user_id; 
-  const currentUserID = 3; // this is the current user signed in Id 
+  const currentUserID = user.user_id; // this is the current user signed in Id 
 
 
 useEffect(() => {
@@ -113,7 +113,6 @@ useEffect(() => {
             <div>Loading...</div> // Or a spinner, skeleton, etc.
         ) : (
            <> 
-                <Header></Header>
                 <div className="chat-body">
                   <div className="Sendor-container" >
                         <div className="Sender-title">
