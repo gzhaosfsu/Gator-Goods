@@ -76,7 +76,9 @@ const ProductListing =  () => {
                         // console.log("No request found"); 
                     }
 
-            }) 
+                }) 
+
+
             }
 
               
@@ -121,27 +123,29 @@ const ProductListing =  () => {
         e.preventDefault();
         
 
-        // fetch("/api/direct_message", {
-        //     mode: "cors",
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         sender_id: user.user_id, 
-        //         receiver_id: product[0].vendor_id, 
-        //         listing_id: id ,
-        //         content: text,
-        //     }),
-        //   })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log("direct message")
+        fetch("/api/direct_message", {
+            mode: "cors",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                sender_id: user.user_id, 
+                receiver_id: product[0].vendor_id, 
+                listing_id: id ,
+                content: text,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("direct message complete");
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+            });
 
-        //     })
-        //     .catch((err) => {
-        //       console.error("Error:", err);
-        //     });
+            setText(""); 
+            setMessageSent(true);
     }
     const handleText = (e) =>{
         setText(e.target.value)
