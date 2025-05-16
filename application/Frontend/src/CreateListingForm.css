@@ -42,6 +42,7 @@
   
   .close-button:hover {
     color: #007bff;
+    background: none;
   }
   
   .modal-form h2 {
