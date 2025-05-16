@@ -104,6 +104,13 @@
     border-radius: 6px;
     cursor: pointer;
 }
+
+.deliver-request-box .btn-delReq.active,
+.link-btn {
+    background-color: #FFDC70;
+    color: black;
+}
+
 .sendMessage-box {
     width: 100%;
     max-width: 350px;

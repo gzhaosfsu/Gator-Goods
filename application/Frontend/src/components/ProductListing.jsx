@@ -339,7 +339,7 @@ const ProductListing =  () => {
                 <div className="sendMessage-box">
                     {messageSent ? (
                         <>
-                        <div> <strong>Message Sent to Seller</strong> </div>
+                        <div  > <strong>Message Sent to Seller</strong> </div>
                         <div className="link-chats">
                             
                             <Link to="/chats">See Conversations</Link>
@@ -368,7 +368,7 @@ const ProductListing =  () => {
                     {
                         hasRequested ? (
                             <>
-                            <button className="btn-delReq" >Request Already Sent</button>
+                            <button className="btn-delReq active" >Request Already Sent</button>
                             </>
                         ):(
                         <>
