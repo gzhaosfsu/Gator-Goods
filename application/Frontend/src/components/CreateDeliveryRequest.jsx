@@ -20,6 +20,7 @@ const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId, setHasRequ
 
 
     const handleSubmit = (e) => {
+        console.log("Format: ", formData)
         e.preventDefault();
         fetch("/api/delivery_request", {
             mode: "cors",
@@ -32,6 +33,7 @@ const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId, setHasRequ
                 vendor_id: vendorId, 
                 status: "Pending",
                 dropoff: formData.dropoff, 
+                buyer_special_request: formData.buyer_special_request,
                 listing_id: listingId,
             }),
           })
@@ -43,36 +45,6 @@ const CreateDeliveryRequest = ({ onClose, vendorId, title, listingId, setHasRequ
             .catch((err) => {
               console.error("Error:", err);
             });
-
-    
-        // fetch("/api/delivery_instruction", {
-        //     mode: "cors",
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         vendor_id: vendorId,
-        //         courier_id: 0,
-        //         buyer_id: user.user_id,  
-        //         product_id: 0,
-        //         pickup: "", 
-        //         dropoff: formData.dropoff, 
-        //         quantity: 1, 
-        //         buyer_special_request: formData.buyer_special_request,
-        //         vendor_special_request: "",
-        //         delivery_status: "Unassigned",
-
-        //     }),
-        //   })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         onClose(); 
-
-        //     })
-        //     .catch((err) => {
-        //       console.error("Error:", err);
-        //     });
         
         setHasRequested(true); 
     }
