@@ -35,10 +35,12 @@
   .os-thumb {
     width: 100px;
     height: 100px;
-    background: #e0e0e0;
-    border-radius: 4px;
-    margin-right: 1.5rem;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 16px;
   }
+  
   
   .os-info .os-detail {
     margin: 0.25rem 0;
