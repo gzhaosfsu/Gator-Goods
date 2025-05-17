@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import UserProfile from "./UserProfile.jsx";
 import VendorPage from "./VendorPage.jsx";
 import "../RealUserProfile.css";
-import Header from './Header';
 import Footer from './Footer';
 import {UserContext} from '../UserContext';
 import {useNavigate} from "react-router-dom";
@@ -81,7 +80,6 @@ const RealUserProfile = () => {
 
     return (
         <div className="user-dash">
-        <Header />
 
         {/* Top Section (Profile Info) */}
         <div className="profile-section">

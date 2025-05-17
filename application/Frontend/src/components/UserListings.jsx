@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import '../UserListings.css';
-import Header from './Header';
 import Footer from './Footer';
 // import CreateListingForm from './CreateListingForm'
 import TwoStepListingModal from './TwoStepListingModal';
@@ -93,7 +92,6 @@ const UserListings = () => {
   return (
     
     <div className="listings-page">
-      <Header />
       <ReturnProfile />
       <div className="listing-formatting">
         <h1 className="title">Active Listings</h1>

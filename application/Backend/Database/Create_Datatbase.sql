@@ -85,6 +85,7 @@ CREATE TABLE delivery_request (
     status ENUM('Pending', 'Approved', 'Denied'),
     dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
     listing_id INT,
+    buyer_special_request TEXT,
     FOREIGN KEY (buyer_id) REFERENCES user(user_id),
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (listing_id) REFERENCES listing(listing_id)
