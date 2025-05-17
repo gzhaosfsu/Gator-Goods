@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba322e2d-c4ec-40be-a4df-8172b520f635" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/MessageBubble.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/MessageBubble.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +44,7 @@
   "keyToString": {
     "Node.js.Register.jsx.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Rebasing gzhao__branch",
+    "git-widget-placeholder": "gzhao__branch",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
