@@ -76,10 +76,10 @@ const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSea
         return res.json();
       })
       .then((data) => {
-        const amountToDisplay = data.length/2; 
-        const pick = (data.slice(0, amountToDisplay));
+        // const amountToDisplay = data.length/2; 
+        // const pick = (data.slice(0, amountToDisplay));
 
-        setDataReturned(pick);
+        setDataReturned(data);
 
       })
       .catch((err) => console.error("Error fetching products:", err));
