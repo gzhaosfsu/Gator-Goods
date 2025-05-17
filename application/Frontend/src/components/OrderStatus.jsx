@@ -13,11 +13,12 @@ const OrderStatusPage = () => {
   const [error, setError]       = useState(null);
 
   useEffect(() => {
-    if (!user) { 
-      setLoading(false);
-      return;
-    }
-    fetch('/api/orders', { credentials: 'include' })
+    if (!user) return;
+    setLoading(true);
+     
+      
+    
+    fetch('/api/delivery_request/buyer/${user.user_id', { credentials: 'include' })
       .then(res => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
@@ -31,7 +32,8 @@ const OrderStatusPage = () => {
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+      
+  }, [user]);
 
   if (loading) return <p className="os-loading">Loading…</p>;
   if (error)   return <p className="os-error">Error: {error}</p>;
@@ -55,17 +57,16 @@ const OrderStatusPage = () => {
         ) : (
           <div className="os-list">
             {orders.map(o => (
-              <div className="os-card" key={o.id}>
-                <div
-                  className="os-thumb"
-                  style={{
-                    backgroundImage: `url(${o.thumbnailUrl})`,
-                    backgroundSize: 'cover',
-                  }}
-                />
+              <div className="os-card" key={o.delivery_id}>
+                <div className="os-thumb" />            {/* placeholder */}
                 <div className="os-info">
-                  <h2 className="os-title">{o.title}</h2>
-                  <p className="os-eta">E.T.A. : {new Date(o.eta).toLocaleString()}</p>
+                  <h2 className="os-title">Order #{o.delivery_id}</h2>
+                  <p className="os-detail">
+                    <strong>Drop-off:</strong> {o.dropoff}
+                  </p>
+                  <p className="os-detail">
+                    <strong>Status:</strong> {o.delivery_status}
+                  </p>
                 </div>
               </div>
             ))}
