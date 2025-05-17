@@ -14,25 +14,30 @@ const OrderStatusPage = () => {
 
   useEffect(() => {
     if (!user) return;
-    setLoading(true);
-     
-      
-    
-    fetch('/api/delivery_request/buyer/${user.user_id', { credentials: 'include' })
-      .then(res => {
-        if (!res.ok) throw new Error(res.statusText);
-        return res.json();
-      })
-      .then(data => {
-        const me = data.filter(instr =>
-          instr.buyer_id === user.user_id &&
-          ['Assigned','Picked Up'].includes(instr.delivery_status)
-        );
-        setOrders(me);
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-      
+    let cancelled = false;
+
+    const load = () => {
+      setLoading(true);
+      fetch(`/api/delivery_request/buyer/${user.user_id}`, { credentials: 'include' })
+        .then(res => res.ok ? res.json() : Promise.reject(res.statusText))
+        .then(data => {
+          if (!cancelled) setOrders(data);
+        })
+        .catch(err => {
+          if (!cancelled) setError(err);
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    };
+
+    load();
+    const interval = setInterval(load, 10000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [user]);
 
   if (loading) return <p className="os-loading">Loading…</p>;
@@ -49,24 +54,23 @@ const OrderStatusPage = () => {
           >
             ← Back to Profile
           </button>
-          <h1 className="os-heading">Orders Status</h1>
+          <h1 className="os-heading">Order Status</h1>
         </div>
 
         {orders.length === 0 ? (
-          <p className="os-empty">No active orders.</p>
+          <p className="os-empty">No orders yet.</p>
         ) : (
           <div className="os-list">
             {orders.map(o => (
-              <div className="os-card" key={o.delivery_id}>
-                <div className="os-thumb" />            {/* placeholder */}
+              <div className="os-card" key={o.delivery_request_id}>
+                <div className="os-thumb" />
                 <div className="os-info">
-                  <h2 className="os-title">Order #{o.delivery_id}</h2>
-                  <p className="os-detail">
-                    <strong>Drop-off:</strong> {o.dropoff}
-                  </p>
-                  <p className="os-detail">
-                    <strong>Status:</strong> {o.delivery_status}
-                  </p>
+                  <h2 className="os-title">Order #{o.delivery_request_id}</h2>
+                  <p className="os-detail"><strong>Drop-off:</strong> {o.dropoff}</p>
+                  <p className="os-detail"><strong>Status:</strong> {o.delivery_status}</p>
+                  {o.buyer_special_request && (
+                    <p className="os-detail"><strong>Note:</strong> {o.buyer_special_request}</p>
+                  )}
                 </div>
               </div>
             ))}
