@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState } from "react";
-import Header from './Header';
 import Footer from './Footer';
 import '../courierPage.css';
 import MessageBubble from './MessageBubble';
@@ -12,26 +11,19 @@ const CourierPage = () => {
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
-
-  const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
-
-  // this is the ID of the delivery request that is being removed
-  // which is used to trigger the animation when a delivery request is accepted
+  const [deliveryRequests, setDeliveryRequests] = useState([]);
   const [removingId, setRemovingId] = useState(null);
 
-  // this is the state that tracks the message bubble for each delivery request
-  // it is used to show whether the message has been sent or not
   const [messageStates, setMessageStates] = useState({});
+  // useEffect(() => {
+  //   console.log("Current messageStates after render:", JSON.stringify(messageStates, null, 2));
+  // }, [messageStates]);
 
-  // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
   };
 
-  //UNCOMMENT TO USE BACKEND DATA
-  // This useEffect fetches the delivery requests from the backend when the component mounts or when the onShift state changes
-  // It formats the data to match the expected structure and sets it to the deliveryRequests state
-  // It also handles the case when the onShift state is false, in which case it clears the delivery requests
+
 useEffect(() => {
   if (onShift) {
     fetch("/api/delivery_instruction/courier/unassigned")
@@ -74,9 +66,36 @@ useEffect(() => {
   }
 }, [onShift]);
 
-  
+
+useEffect(() => {
+  if (user && deliveryRequests.length > 0) {
+    const fetchMessageStates = async () => {
+      const newMessageStates = {};
+
+      for (const delivery of deliveryRequests) {
+        try {
+          const res = await fetch(`/api/direct_message/listing-sender/get?id=${user.user_id}&listing=${delivery.listing_id}`);
+          const data = await res.json();
+          newMessageStates[delivery.buyer_id] = Array.isArray(data) && data.length > 0;
+        } catch (err) {
+          console.error("Error checking message state for buyer:", delivery.buyer_id, err);
+        }
+      }
+
+      setMessageStates(newMessageStates);
+    };
+
+    fetchMessageStates();
+  }
+}, [user, deliveryRequests]);
+
 
   const handleAcceptDelivery = async (deliveryReq) => {
+
+    if (!user?.id) {
+    console.error("User not logged in");
+    return;
+  }
     console.log("Delivery accepted:", deliveryReq);
     try {
       // Update backend to mark as assigned
@@ -84,7 +103,7 @@ useEffect(() => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courier_id: user.id, // REPLACED "courierId" with "3"; seems to work, at the evry least ti fills the popup with seemingly the right information? Unsure why however
+          courier_id: user.user_id, 
           delivery_status: "Assigned"
         }),
       });
@@ -97,6 +116,12 @@ useEffect(() => {
 
 
   const handleStartDelivery = (selectedDelivery) => {
+
+    if (!user?.id) {
+    console.error("User not logged in");
+    return;
+  }
+
     if (!selectedDelivery) return;
 
     console.log("Starting delivery for:", selectedDelivery);
@@ -120,9 +145,17 @@ useEffect(() => {
   };
 
 
+  console.log("Current courier user ID:", user?.id);
+
   //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
-const handleSendMessage = async (receiver_id, messageText, listing_id) => {
-  console.log("handleSendMessage called with:", { receiver_id, messageText, listing_id });
+const handleSendMessage = async (receiver_id, messageText, listing_id) => {  
+
+  console.log("Sending payload to API:", {
+  sender_id: user?.user_id,
+  receiver_id,
+  listing_id,
+  content: messageText
+});
 
   try {
     const response = await fetch("/api/direct_message", {
@@ -131,7 +164,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        sender_id: user.id,
+        sender_id: user.user_id,
         receiver_id,
         listing_id,
         content: messageText
@@ -163,11 +196,8 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
 };
 
 
-
-
   return (
     <div className="courier-page">
-      <Header />
       <div className="courier-body">
       <button className={"dashboard-btn"} onClick={() => navigate('/realUserProfile')}>BACK TO PROFILE DASHBOARD</button>
       <div className="courier-header">
@@ -204,15 +234,12 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
             <p><strong>Pickup at: </strong>{deliveryReq.pickupAddress}</p>
             <p><strong>Dropoff at: </strong>{deliveryReq.dropoffAddress}</p>
 
-            {/* Used to debug Notes and backend info-- as of rn? WORKS */}
-            {/* <p><strong>Note from Seller: </strong> {deliveryReq.sellerNote}</p>
-            <p><strong>Note from Buyer: </strong> {deliveryReq.buyerNote}</p> */}
 
             {/* This is where the delivery buttons are-- WIP for Message Buyer */}
             <div className="delivery-buttons">
               <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
               <MessageBubble
-                id={deliveryReq.delivery_id}
+                id={deliveryReq.listing_id}
                 buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
@@ -230,7 +257,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         {selectedDelivery && (
           <div className="delivery-popup">
             <div className="popup-content">
-            {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
+            <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
               <h3>{selectedDelivery.title}</h3>
                 <img 
                 src={selectedDelivery.image_url}
