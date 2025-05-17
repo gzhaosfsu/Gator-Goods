@@ -22,9 +22,10 @@
 
 .prod-img-container img {
     width: 535px; 
-    height: auto;
+    height: 500px;
     border-radius: 8px;
     display: block;
+    object-fit: contain;
 }
 
 
@@ -89,9 +90,36 @@
 }
 
 
-.deliver-request-box .btn-delReq,
-.link-btn {
+.deliver-request-box .btn-delReq {
 
+    width: 100%;
+    max-width: 369px;
+    min-height: 50px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #1E1066;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    
+}
+
+.link-btn{
+    color: white;
+    text-decoration: none;
+    font-weight: normal;
+    background: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-weight: bold;
+}
+.link-btn-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     max-width: 369px;
     min-height: 50px;
@@ -105,11 +133,11 @@
     cursor: pointer;
 }
 
-.deliver-request-box .btn-delReq.active,
+/* .deliver-request-box .btn-delReq.active,
 .link-btn {
     background-color: #FFDC70;
     color: black;
-}
+} */
 
 .sendMessage-box {
     width: 100%;

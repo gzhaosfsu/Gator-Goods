@@ -16,6 +16,8 @@ const ProductListing =  () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]); 
     const [reviews, setReviews] = useState([]); 
+    const [alreadyReviewed, setAlreadyReviewed] =useState(false); 
+    const [isSeller, setIsSeller] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [showDeliRequest, setShowDeliRequest] = useState(false);
@@ -42,8 +44,13 @@ const ProductListing =  () => {
                 setLoading(false); 
 
                 console.log("DAta : ", data); 
+                
 
                 if(user) {
+                    if(data[0].vendor_id === user.user_id) {
+                        setIsSeller(true); 
+                    }
+
                     fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
                     .then((res) => {
                         if (!res.ok) throw new Error(res.statusText);
@@ -116,6 +123,12 @@ const ProductListing =  () => {
             })
             .then((data) => {
                 setReviews(data); 
+
+                if(user) {
+                    const foundReview = data.some(review => review.author_id === user.user_id)
+                    setAlreadyReviewed(foundReview); 
+                }
+                
               
             })
         .catch((err) => console.error("Error fetching products:", err));
@@ -247,10 +260,9 @@ const ProductListing =  () => {
                         </div>         
                 </div>
                 <div className="deliver-request-box" >
-                    <button>
+                    <div className="link-btn-container" >
                         <Link className="link-btn"  to="/login"> Get Item Delivered</Link> 
-                    </button>
-                        
+                    </div>         
                 </div>
                 <div className="description-container">
                     <h2>Description</h2>
@@ -297,10 +309,15 @@ const ProductListing =  () => {
                             ))}
                         </div>
                         <div className="submit-review" >
-                            <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
-                            {
-                                showForm && (<CreateReviewForm onClose={() => setShowForm(false)} vendorId={product[0].vendor_id}/>)
-                            }
+                            { !alreadyReviewed && !isSeller  && (
+                                <>  
+                                <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
+                                {
+                                    showForm && (<CreateReviewForm onClose={() => setShowForm(false)} vendorId={product[0].vendor_id}/>)
+                                }
+                                </>
+                            )}
+                            
                         </div>
                     </div>
                 
