@@ -4,6 +4,8 @@ import '../courierPage.css';
 import MessageBubble from './MessageBubble';
 import { useNavigate } from 'react-router-dom';
 import {UserContext} from "../UserContext"
+import { Link } from 'react-router-dom';
+
 
 const CourierPage = () => {
   const navigate = useNavigate();
@@ -22,6 +24,10 @@ const CourierPage = () => {
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
   };
+
+//   useEffect(() => {
+//   console.log("User from context:", user);
+// }, [user]);
 
 
 useEffect(() => {
@@ -81,10 +87,8 @@ useEffect(() => {
           console.error("Error checking message state for buyer:", delivery.buyer_id, err);
         }
       }
-
       setMessageStates(newMessageStates);
     };
-
     fetchMessageStates();
   }
 }, [user, deliveryRequests]);
@@ -92,13 +96,8 @@ useEffect(() => {
 
   const handleAcceptDelivery = async (deliveryReq) => {
 
-    if (!user?.id) {
-    console.error("User not logged in");
-    return;
-  }
     console.log("Delivery accepted:", deliveryReq);
     try {
-      // Update backend to mark as assigned
       const res = await fetch(`/api/delivery_instruction/${deliveryReq.delivery_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -114,14 +113,7 @@ useEffect(() => {
   }
 };
 
-
   const handleStartDelivery = (selectedDelivery) => {
-
-    if (!user?.id) {
-    console.error("User not logged in");
-    return;
-  }
-
     if (!selectedDelivery) return;
 
     console.log("Starting delivery for:", selectedDelivery);
@@ -145,13 +137,12 @@ useEffect(() => {
   };
 
 
-  console.log("Current courier user ID:", user?.id);
+  console.log("Current courier user ID:", user.user_id);
 
-  //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
 const handleSendMessage = async (receiver_id, messageText, listing_id) => {  
 
   console.log("Sending payload to API:", {
-  sender_id: user?.user_id,
+  sender_id: user.user_id,
   receiver_id,
   listing_id,
   content: messageText
@@ -240,7 +231,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
               <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
               <MessageBubble
                 id={deliveryReq.listing_id}
-                buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
+                buyerId={deliveryReq.buyer_id}
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
                 setMessageStates={setMessageStates}
@@ -257,7 +248,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         {selectedDelivery && (
           <div className="delivery-popup">
             <div className="popup-content">
-            <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
+            {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
               <h3>{selectedDelivery.title}</h3>
                 <img 
                 src={selectedDelivery.image_url}
@@ -271,7 +262,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
               <div className="popup-details">
                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
               </div>
-              <button className="start-btn" onClick={() => handleStartDelivery(selectedDelivery)}>Start Delivery</button>
+              <Link to ="/CourierNav" className="start-btn" onClick={() => handleStartDelivery(selectedDelivery)}>Start Delivery</Link>
             </div>
           </div>
         )}

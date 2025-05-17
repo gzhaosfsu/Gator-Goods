@@ -7,11 +7,11 @@ import { Link } from 'react-router-dom';
 const MessageBubble = ({ id, buyerId, handleSendMessage, messageStates, setMessageStates
   }) => {
 
-    useEffect(() => {
-    console.log("MessageBubble messageStates updated:", JSON.stringify(messageStates, null, 2));
-  }, [messageStates]);
+  //   useEffect(() => {
+  //   console.log("MessageBubble messageStates updated:", JSON.stringify(messageStates, null, 2));
+  // }, [messageStates]);
 
-    console.log("buyerId inside MessageBubble:", buyerId);
+    // console.log("buyerId inside MessageBubble:", buyerId);
       const [messageText, setMessageText] = useState('');
     
       const handleSendClick = () => {
@@ -47,7 +47,7 @@ const MessageBubble = ({ id, buyerId, handleSendMessage, messageStates, setMessa
                 <button className="send-btn" onClick={handleSendClick}>SEND</button>
               </div>
             ) : (
-              <Link to= "/Chats" className="see-convo-btn">See Conversation</Link>
+              <Link to= "/chats" className="see-convo-btn">See Conversation</Link>
             )}
           </div>
         </div>
