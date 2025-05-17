@@ -98,10 +98,10 @@ router.get('/listing-buyer', async (req, res) => {
 
 // POST a new Delivery Request
 router.post('/', async (req, res) => {
-    const { buyer_id, vendor_id, status, dropoff, listing_id } = req.body;
+    const { buyer_id, vendor_id, status, dropoff, buyer_special_request, listing_id } = req.body;
     db.query(
-        'INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) VALUES (?, ?, ?, ?, ?)',
-        [buyer_id, vendor_id, status, dropoff, listing_id],
+        'INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, buyer_special_request, listing_id) VALUES (?, ?, ?, ?, ?, ?)',
+        [buyer_id, vendor_id, status, dropoff, buyer_special_request, listing_id],
         (err, result) => {
             if (err) return res.status(500).json({ error: err });
             res.status(201).json({ delivery_request_id: result.insertId });

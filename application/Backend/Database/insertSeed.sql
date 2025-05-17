@@ -111,13 +111,13 @@ INSERT INTO direct_message (sender_id, receiver_id, listing_id, content) VALUES
 (2, 5, 10, 'Any scratches on the bottle?');
 
 -- Insert Delivery Requests
-INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) VALUES -- 'Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'
-(4, 3, 'Pending', 'Cesar Chavez', 5),
-(5, 3, 'Approved', 'Library', 6),
-(6, 4, 'Approved', 'Student Services', 7),
-(1, 4, 'Approved', 'Hensill Hall', 8),
-(4, 5, 'Denied', 'The Village at Centennial Square', 9),
-(2, 5, 'Pending', 'Annex 1', 10);
+INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, buyer_special_request, listing_id) VALUES -- 'Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'
+(4, 3, 'Pending', 'Cesar Chavez',"Nothing here", 5),
+(5, 3, 'Approved', 'Library',"NOthing here", 6),
+(6, 4, 'Approved', 'Student Services',"NOthing here", 7),
+(1, 4, 'Approved', 'Hensill Hall',"NOthing here", 8),
+(4, 5, 'Denied', 'The Village at Centennial Square',"NOthing here", 9),
+(2, 5, 'Pending', 'Annex 1',"NOthing here", 10);
 
 -- Insert Delivery Instructions
 INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, listing_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES

@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// GET : by listing and buyer
+// GET : by listing and sender 
 router.get('/listing-sender/get', async (req, res) => {
     try {
 

@@ -22,6 +22,10 @@ const ProductListing =  () => {
     const [hasRequested, setHasRequested] = useState(false);
     const [messageSent, setMessageSent] = useState(false);
     const [text, setText] = useState("");
+    const [vendor, setVendor] = useState({
+        username: "", 
+        rating: 0,
+    });
 
     const getUsername = (id)=>{
 
@@ -40,28 +44,39 @@ const ProductListing =  () => {
                 console.log("DAta : ", data); 
 
                 if(user) {
-                fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
-                .then((res) => {
-                    if (!res.ok) throw new Error(res.statusText);
-                    return res.json();
-                })
-                .then((data) => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        setHasRequested(true);
-                    } else {
-                        setHasRequested(false);
-                    }
+                    fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
+                    .then((res) => {
+                        if (!res.ok) throw new Error(res.statusText);
+                        return res.json();
+                    })
+                    .then((data) => {
+                        if (Array.isArray(data) && data.length > 0) {
+                            setHasRequested(true);
+                        } else {
+                            setHasRequested(false);
+                        }   
+                    })}
                     
-                }) 
-                }
+                    fetch(`/api/user/${data[0].vendor_id}`)
+                    .then((res) => {
+                        if (!res.ok) throw new Error(res.statusText);
+                        return res.json();
+                    })
+                    .then((data) => {
+        
+                        console.log("Vendor : ", data)
+                         setVendor({
+                            username: data[0].username,
+                            rating: parseInt(data[0].rating)
+                        });
 
-                  
+                    })    
                 
             })
             .catch((err) => console.error("Error fetching products:", err));
 
             if(user) {
-                fetch(`/api/direct_message/listing-sender?userId=${user.user_id}&listingId=${id}`)
+                fetch(`/api/direct_message/listing-sender/get?id=${user.user_id}&listing=${id}`)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.statusText);
                     return res.json();
@@ -76,7 +91,10 @@ const ProductListing =  () => {
                         // console.log("No request found"); 
                     }
 
-            }) 
+                }) 
+
+                
+                
             }
 
               
@@ -121,27 +139,29 @@ const ProductListing =  () => {
         e.preventDefault();
         
 
-        // fetch("/api/direct_message", {
-        //     mode: "cors",
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         sender_id: user.user_id, 
-        //         receiver_id: product[0].vendor_id, 
-        //         listing_id: id ,
-        //         content: text,
-        //     }),
-        //   })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log("direct message")
+        fetch("/api/direct_message", {
+            mode: "cors",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                sender_id: user.user_id, 
+                receiver_id: product[0].vendor_id, 
+                listing_id: id ,
+                content: text,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("direct message complete");
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+            });
 
-        //     })
-        //     .catch((err) => {
-        //       console.error("Error:", err);
-        //     });
+            setText(""); 
+            setMessageSent(true);
     }
     const handleText = (e) =>{
         setText(e.target.value)
@@ -170,7 +190,7 @@ const ProductListing =  () => {
                 </div>
                 <div className="vendor-reviews-container" >
                     <div className="total-review-container" >
-                        <div className="vendor-username" >Seller: Name here</div>
+                        <div className="vendor-username" > <strong>Seller: {vendor.username}</strong></div>
                         <div className="total-stars" > stars</div>
                         <div className="submit-review" >
                             <button className="btn-create-review"> 
@@ -270,8 +290,12 @@ const ProductListing =  () => {
                 </div>
                 <div className="vendor-reviews-container" >
                     <div className="total-review-container" >
-                        <div className="vendor-username" >Seller: Name here</div>
-                        <div className="total-stars" > stars</div>
+                        <div className="vendor-username" ><strong>Seller: {vendor.username}</strong></div>
+                        <div className="total-stars" >
+                            {[...Array(vendor.rating)].map((_, i) => (
+                                <StarIcon key={i} style={{ color: '#000' }} />
+                            ))}
+                        </div>
                         <div className="submit-review" >
                             <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
                             {
@@ -315,9 +339,11 @@ const ProductListing =  () => {
                 <div className="sendMessage-box">
                     {messageSent ? (
                         <>
-                        <div> <strong>Message Sent to Seller</strong> </div>
-                        <div>
-                            See Conversations
+                        <div  > <strong>Message Sent to Seller</strong> </div>
+                        <div className="link-chats">
+                            
+                            <Link to="/chats">See Conversations</Link>
+                             
                         </div>
                         </>
                     ) : (
@@ -342,11 +368,11 @@ const ProductListing =  () => {
                     {
                         hasRequested ? (
                             <>
-                            <button>Request Already Sent</button>
+                            <button className="btn-delReq active" >Request Already Sent</button>
                             </>
                         ):(
                         <>
-                        <button onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
+                        <button className="btn-delReq" onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
                         {
                             showDeliRequest && (<CreateDeliveryRequest onClose={() => setShowDeliRequest(false)} vendorId={product[0].vendor_id} title={product[0].title} listingId={product[0].listing_id} setHasRequested={setHasRequested}/>)
                         }
