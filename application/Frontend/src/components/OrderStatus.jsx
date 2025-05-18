@@ -17,7 +17,7 @@ const OrderStatusPage = () => {
       setLoading(false);
       return;
     }
-    fetch('/api/orders', { credentials: 'include' })
+    fetch('/api/delivery_instruction', { credentials: 'include' })
       .then(res => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();

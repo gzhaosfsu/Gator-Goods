@@ -1,4 +1,3 @@
-import Header from './Header';
 import image from "./images/imageNA.png";
 import { Link, useNavigate } from 'react-router-dom';
 import '../UserProfile.css';
@@ -40,7 +39,11 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
 
                 <div className='right-section'>
                     <div className='button-container'>
-                        <button className='order-status-btn'>Order Status</button>
+                        <button
+                            className="order-status-btn"
+                            onClick={() => navigate('/OrderStatus')}>
+                            Order Status
+                        </button>
                         {!isCourier  && (
                             <button className="become-courier-btn" onClick={handleBecomeCourier}>
                                 Become a Courier

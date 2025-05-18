@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import Header from "./Header"
 
 const VendorDeliveryRequest = () => {
 
@@ -8,7 +7,6 @@ const VendorDeliveryRequest = () => {
     return (
 
         <>
-        <Header></Header>
         <div>Vendor pages
             <div >Back to dashbaord</div>
             <div className="deli-request-container">

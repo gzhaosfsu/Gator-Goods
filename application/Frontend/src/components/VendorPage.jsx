@@ -60,8 +60,8 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <div className="card-grid">
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
-                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
-                        {isCourier && (
+                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
+                        {isCourier === true && (
                             <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }} link="/courierPage"/>
                         )}
                     </div>

@@ -86,7 +86,6 @@ CREATE TABLE delivery_request (
     dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
     buyer_special_request TEXT,
     listing_id INT,
-    buyer_special_request TEXT,
     FOREIGN KEY (buyer_id) REFERENCES user(user_id),
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (listing_id) REFERENCES listing(listing_id)
