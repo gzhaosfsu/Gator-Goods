@@ -1,32 +1,38 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-export const UserContext = createContext();
+export const UserContext = createContext({
+    user: null,
+    login: async (credentials) => {
+    },
+    logout: () => {
+    }
+});
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        // Attempt to hydrate user from localStorage
+        const stored = localStorage.getItem('user');
         const expiry = localStorage.getItem('sessionExpiry');
+        const now = Date.now();
 
-        if (storedUser && expiry) {
-            const now = Date.now();
-            if (now < parseInt(expiry, 10)) {
-                setUser(JSON.parse(storedUser));
-            } else {
-                localStorage.clear();
-                setUser(null);
-            }
+        if (stored && expiry && now < parseInt(expiry, 10)) {
+            setUser(JSON.parse(stored));
+        } else {
+            // Clear expired or absent session
+            localStorage.removeItem('user');
+            localStorage.removeItem('sessionExpiry');
+
         }
     }, []);
 
     const login = (userData) => {
         const sessionStart = Date.now();
         const sessionDuration = 30 * 60 * 1000; // 30 mins
-        const fullUser = { ...userData }; // Add flags like isCourier here if needed
-        localStorage.setItem('user', JSON.stringify(fullUser));
+        localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('sessionExpiry', (sessionStart + sessionDuration).toString());
-        setUser(fullUser);
+        setUser(userData);
     };
 
     const logout = () => {

@@ -23,6 +23,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     useEffect(() => {
         if (!user) return;
       
+
         fetch(`/api/user/${user.user_id}`)
           .then(res => res.json())
           .then(data => {
@@ -35,6 +36,9 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
       
 
       
+
+
+
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {

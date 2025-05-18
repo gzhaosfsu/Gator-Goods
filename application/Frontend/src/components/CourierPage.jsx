@@ -21,6 +21,7 @@ const CourierPage = () => {
   //   console.log("Current messageStates after render:", JSON.stringify(messageStates, null, 2));
   // }, [messageStates]);
 
+  // This function toggles the onShift state when the button is clicked
   const toggleOnOffShift = () => {
     setOnShift(prev => !prev);
   };
@@ -73,25 +74,25 @@ useEffect(() => {
 }, [onShift]);
 
 
-useEffect(() => {
-  if (user && deliveryRequests.length > 0) {
-    const fetchMessageStates = async () => {
-      const newMessageStates = {};
+// useEffect(() => {
+//   if (user && deliveryRequests.length > 0) {
+//     const fetchMessageStates = async () => {
+//       const newMessageStates = {};
 
-      for (const delivery of deliveryRequests) {
-        try {
-          const res = await fetch(`/api/direct_message/listing-sender/get?id=${user.user_id}&listing=${delivery.listing_id}`);
-          const data = await res.json();
-          newMessageStates[delivery.buyer_id] = Array.isArray(data) && data.length > 0;
-        } catch (err) {
-          console.error("Error checking message state for buyer:", delivery.buyer_id, err);
-        }
-      }
-      setMessageStates(newMessageStates);
-    };
-    fetchMessageStates();
-  }
-}, [user, deliveryRequests]);
+//       for (const delivery of deliveryRequests) {
+//         try {
+//           const res = await fetch(`/api/direct_message/listing-sender/get?id=${user.user_id}&listing=${delivery.listing_id}`);
+//           const data = await res.json();
+//           newMessageStates[delivery.buyer_id] = Array.isArray(data) && data.length > 0;
+//         } catch (err) {
+//           console.error("Error checking message state for buyer:", delivery.buyer_id, err);
+//         }
+//       }
+//       setMessageStates(newMessageStates);
+//     };
+//     fetchMessageStates();
+//   }
+// }, [user, deliveryRequests]);
 
 
   const handleAcceptDelivery = async (deliveryReq) => {
@@ -102,12 +103,15 @@ useEffect(() => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          courier_id: user.user_id, 
+          courier_id: user.user_id,
           delivery_status: "Assigned"
         }),
       });
       if (!res.ok) throw new Error("Failed to assign delivery");
-      setSelectedDelivery(deliveryReq);
+      navigate(
+          `/courierNav/${deliveryReq.delivery_id}`,
+          { state: { deliveryReq } }
+      );
     } catch (err) {
     console.error("Error accepting delivery:", err);
   }
@@ -137,16 +141,9 @@ useEffect(() => {
   };
 
 
-  console.log("Current courier user ID:", user.user_id);
-
-const handleSendMessage = async (receiver_id, messageText, listing_id) => {  
-
-  console.log("Sending payload to API:", {
-  sender_id: user.user_id,
-  receiver_id,
-  listing_id,
-  content: messageText
-});
+  //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
+const handleSendMessage = async (receiver_id, messageText, listing_id) => {
+  console.log("handleSendMessage called with:", { receiver_id, messageText, listing_id });
 
   try {
     const response = await fetch("/api/direct_message", {
@@ -186,6 +183,53 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
   }
 };
 
+// const handleSendMessage = async (receiver_id, messageText, listing_id) => {  
+
+//   console.log("Sending payload to API:", {
+//   sender_id: user.user_id,
+//   receiver_id,
+//   listing_id,
+//   content: messageText
+// });
+
+//   try {
+//     const response = await fetch("/api/direct_message", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({
+//         sender_id: user.user_id,
+//         receiver_id,
+//         listing_id,
+//         content: messageText
+//       })
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       console.error("API error:", errorText); // Show server-side error
+//       throw new Error("Failed to send message");
+//     }
+
+//     console.log("Message sent successfully");
+
+//     // Move this into a new try block
+//     try {
+//       setMessageStates((prev) => {
+//         const updated = { ...prev, [receiver_id]: true };
+//         console.log("Updated messageStates:", updated);
+//         return updated;
+//       });
+//     } catch (stateErr) {
+//       console.error("Error updating messageStates:", stateErr);
+//     }
+
+//   } catch (err) {
+//     console.error("Error sending message:", err);
+//   }
+// };
+
 
   return (
     <div className="courier-page">
@@ -193,8 +237,8 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
       <button className={"dashboard-btn"} onClick={() => navigate('/realUserProfile')}>BACK TO PROFILE DASHBOARD</button>
       <div className="courier-header">
       <h2>List of Open Assignments</h2>
-        <button 
-            className={onShift ? "end-shift-btn" : "available-btn"} 
+        <button
+            className={onShift ? "end-shift-btn" : "available-btn"}
             onClick={toggleOnOffShift}
           >
             {onShift ? "END SHIFT" : "Available for Work"}
@@ -215,10 +259,10 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         <div className="delivery-content">
 
           {/* // This is the image of the delivery request */}
-          <img 
+          <img
             src={deliveryReq.imageUrl}
-            alt="Delivery" 
-            className="delivery-image" 
+            alt="Delivery"
+            className="delivery-image"
           />
 
           <div className="delivery-details">
@@ -230,8 +274,9 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
             <div className="delivery-buttons">
               <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
               <MessageBubble
-                id={deliveryReq.listing_id}
-                buyerId={deliveryReq.buyer_id}
+                id={deliveryReq.delivery_id}
+                buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
+                courierId={deliveryReq.courier_id}
                 handleSendMessage={handleSendMessage}
                 messageStates={messageStates}
                 setMessageStates={setMessageStates}
@@ -244,16 +289,16 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         <p>No more delivery requests at this time. Please check again later.</p>
       )
     )}
-        
+
         {selectedDelivery && (
           <div className="delivery-popup">
             <div className="popup-content">
             {/* <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button> */}
               <h3>{selectedDelivery.title}</h3>
-                <img 
+                <img
                 src={selectedDelivery.image_url}
-                alt="Delivery" 
-                className="delivery-image" 
+                alt="Delivery"
+                className="delivery-image"
                 />
               <p><strong>Note from Seller: </strong></p>
               <p>{selectedDelivery.sellerNote}</p>
