@@ -75,7 +75,8 @@ function AppContent() {
         <Route path="/CourierNav" element={<CourierNav/>} />
         <Route path="/OrderStatus" element={<OrderStatus/>} />
         <Route path="/vendorDeliveryRequest" element={<VendorDeliveryRequest/>} />
-        <Route path="/productListing/:id" element={<ProductListing/>} />
+          <Route path="/courierNav/:deliveryId" element={<CourierNav />} />
+          <Route path="/productListing/:id" element={<ProductListing/>} />
       </Routes>
     </>
 )

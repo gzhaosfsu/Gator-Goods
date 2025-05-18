@@ -16,15 +16,24 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
-            `SELECT di.*, p.title AS product_name, p.thumbnail
-            FROM delivery_instruction di
-            JOIN product p ON di.product_id = p.product_id
-            WHERE di.delivery_id = ?`,
-            [id]
-        );
-        if (rows.length === 0) return res.status(404).json({ message: "Not found" });
-        res.json(rows[0]);
+        // const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
+        //     `SELECT di.*, p.title AS product_name, p.thumbnail
+        //     FROM delivery_instruction di
+        //     JOIN product p ON di.product_id = p.product_id
+        //     WHERE di.delivery_id = ?`,
+        //     [id]
+        // );
+        // if (rows.length === 0) return res.status(404).json({ message: "Not found" });
+        // res.json(rows[0]);
+        const [results] = await db.query(
+            `SELECT * 
+              FROM delivery_instruction 
+              WHERE delivery_id = ?`, [id]);
+        if (results.length === 0) {
+            // no such delivery_id
+            return res.status(404).json({ message: "Delivery Instruction not found" });
+        }
+        res.json(results[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

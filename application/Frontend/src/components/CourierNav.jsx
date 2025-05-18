@@ -1,4 +1,3 @@
-// CourierNav.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
@@ -28,43 +27,61 @@ export default function CourierNav() {
     const { deliveryId } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
-    const courierId = user?.user_id;
+    console.log(user);
+    const courierId = user.user_id;
     const [pickupCoords, setPickupCoords]   = useState(SFSU_COORDS);
     const [dropoffCoords, setDropoffCoords] = useState(SFSU_COORDS);
     const [deliveryData, setDeliveryData] = useState(null);
+    const [listing, setListing] = useState(null);
     const [status, setStatus] = useState("Assigned");
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4",
     });
 
-    // // Redirect if not logged in
-    // useEffect(() => {
-    //     if (!user) navigate("/login");
-    // },[user, navigate]);
+    // Redirect if not logged in
+    useEffect(() => {
+        if (!user) navigate("/login");
+    },[user, navigate]);
 
     useEffect(() => {
-        if (!user || !deliveryId) return;
+        if (!deliveryId) return;
         (async () => {
             try {
-                const res = await fetch(`/api/delivery_instruction/${deliveryId}`);
+                const res  = await fetch(`/api/delivery_instruction/${deliveryId}`);
                 if (!res.ok) throw new Error(res.statusText);
                 const data = await res.json();
+
                 if (data.courier_id !== courierId) {
-                    navigate("/CourierPage");
+                    navigate("/courierPage");
+                    return;
                 }
-                else {
-                    setDeliveryData(data);
-                    setStatus(data.delivery_status || "Assigned");
-                    setPickupCoords(PICK_UP_COORDS[data.pickup] || SFSU_COORDS);
-                    setDropoffCoords(DROP_OFF_COORDS[data.dropoff] || SFSU_COORDS);
-                }
+
+                setDeliveryData(data);
+                setStatus(data.delivery_status || "Assigned");
+                setPickupCoords(PICK_UP_COORDS[data.pickup] || SFSU_COORDS);
+                setDropoffCoords(DROP_OFF_COORDS[data.dropoff] || SFSU_COORDS);
             } catch (err) {
                 console.error("Fetch error:", err);
+                navigate("/courierPage");
             }
         })();
-    }, [deliveryId, user, courierId]);
+    }, [deliveryId, courierId, navigate]);
 
+    useEffect(() => {
+        if (!deliveryData?.listing_id) return;
+
+        (async () => {
+            try {
+                const res   = await fetch(`/api/listing/${deliveryData.listing_id}`);
+                if (!res.ok) throw new Error("Listing not found");
+                const item  = await res.json();
+                setListing(item);
+            } catch (err) {
+                console.error("Listing fetch error:", err);
+            }
+        })();
+    }, [deliveryData]);
 
     // Send status updates
     const updateStatus = async (newStatus) => {
@@ -79,9 +96,6 @@ export default function CourierNav() {
             );
             if (!res.ok) throw new Error(res.statusText);
             setStatus(newStatus);
-            if (newStatus === "Delivered") {
-                navigate("/CourierPage");
-            }
         } catch (err) {
             console.error("Update error:", err);
         }
@@ -103,14 +117,21 @@ export default function CourierNav() {
             <div className="map-panel">
                 {isLoaded ? (
                     <GoogleMap
-                        center={centerCoords}
-                        zoom={17}
                         mapContainerStyle={{ width: "100%", height: "100%" }}
+                        onLoad={map => {
+                            const bounds = new window.google.maps.LatLngBounds();
+                            bounds.extend(PICK_UP_COORDS);
+                            bounds.extend(DROP_OFF_COORDS);
+                            map.fitBounds(bounds);
+                        }}
                     >
-                        <Marker position={centerCoords} />
+                        <Marker position={PICK_UP_COORDS}
+                        label="Pick Up Location"
+                        icon={"http://maps.google.com/mapfiles/ms/micons/shopping.png"}
+                        />
                     </GoogleMap>
                 ) : (
-                    <div className="map-placeholder">Loading map...</div>
+                    <div className="map-placeholder">Loading map…</div>
                 )}
             </div>
 
@@ -118,26 +139,61 @@ export default function CourierNav() {
                 <div className="logo-header">
                     <img src={mascot} alt="Logo" />
                 </div>
-                <ReturnHome/>
-                {deliveryData && (
-                    <>
-                        <p><strong>Pickup:</strong> {deliveryData.pickup}</p>
-                        <p><strong>Dropoff:</strong> {deliveryData.dropoff}</p>
-                        <p>
-                            <strong>Status:</strong> {status}
-                        </p>
-                        <div className="courier-button-block">
-                            {nextStage && (
-                                <button onClick={() => updateStatus(nextStage)}>
-                                    {nextStage}
-                                </button>
-                            )}
-                            <button onClick={() => updateStatus("Cancelled")}>
-                                UNABLE TO DELIVER
-                            </button>
+
+                <div className="info-content">
+                    <ReturnHome />
+
+                    {listing && (
+                        <div className="product-card">
+                            {listing.thumbnail
+                                ? <img src={listing.thumbnail} alt={listing.title} className="product-image"/>
+                                : <div className="no-image">No Image</div>
+                            }
+                            <h3>{listing.title}</h3>
                         </div>
-                    </>
-                )}
+                    )}
+
+                    {deliveryData && (
+                        <>
+                            <div className="field-group">
+                                <p><strong>Pick Up Address:</strong></p>
+                                <p>{deliveryData.pickup}</p>
+                            </div>
+
+                            <div className="field-group">
+                                <p><strong>Dropoff Address:</strong></p>
+                                <p>{deliveryData.dropoff}</p>
+                            </div>
+
+                            <p className="field"><strong>Status:</strong> {status}</p>
+
+                            <div className="button-block">
+                                {status === "Assigned" && (
+                                    <button
+                                        className="btn-primary"
+                                        onClick={() => updateStatus("Picked Up")}
+                                    >
+                                        PICKED UP
+                                    </button>
+                                )}
+                                {status === "Picked Up" && (
+                                    <button
+                                        className="btn-success"
+                                        onClick={() => updateStatus("Delivered")}
+                                    >
+                                        FINISH DROP OFF
+                                    </button>
+                                )}
+                                <button
+                                    className="btn-danger"
+                                    onClick={() => updateStatus("Cancelled")}
+                                >
+                                    UNABLE TO DELIVER
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

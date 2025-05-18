@@ -134,7 +134,7 @@ const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        sender_id: user.id,
+        sender_id: user.user_id,
         receiver_id,
         listing_id,
         content: messageText
