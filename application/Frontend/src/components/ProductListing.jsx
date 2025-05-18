@@ -16,6 +16,8 @@ const ProductListing =  () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]); 
     const [reviews, setReviews] = useState([]); 
+    const [alreadyReviewed, setAlreadyReviewed] =useState(false); 
+    const [isSeller, setIsSeller] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [showDeliRequest, setShowDeliRequest] = useState(false);
@@ -44,33 +46,22 @@ const ProductListing =  () => {
                 console.log("DAta : ", data); 
 
                 if(user) {
-                    fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
-                    .then((res) => {
-                        if (!res.ok) throw new Error(res.statusText);
-                        return res.json();
-                    })
-                    .then((data) => {
-                        if (Array.isArray(data) && data.length > 0) {
-                            setHasRequested(true);
-                        } else {
-                            setHasRequested(false);
-                        }   
-                    })}
+                fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
+                .then((res) => {
+                    if (!res.ok) throw new Error(res.statusText);
+                    return res.json();
+                })
+                .then((data) => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        setHasRequested(true);
+                    } else {
+                        setHasRequested(false);
+                    }
                     
-                    fetch(`/api/user/${data[0].vendor_id}`)
-                    .then((res) => {
-                        if (!res.ok) throw new Error(res.statusText);
-                        return res.json();
-                    })
-                    .then((data) => {
-        
-                        console.log("Vendor : ", data)
-                         setVendor({
-                            username: data[0].username,
-                            rating: parseInt(data[0].rating)
-                        });
+                }) 
+                }
 
-                    })    
+                  
                 
             })
             .catch((err) => console.error("Error fetching products:", err));
@@ -91,10 +82,7 @@ const ProductListing =  () => {
                         // console.log("No request found"); 
                     }
 
-                }) 
-
-                
-                
+            }) 
             }
 
               
@@ -116,6 +104,12 @@ const ProductListing =  () => {
             })
             .then((data) => {
                 setReviews(data); 
+
+                if(user) {
+                    const foundReview = data.some(review => review.author_id === user.user_id)
+                    setAlreadyReviewed(foundReview); 
+                }
+                
               
             })
         .catch((err) => console.error("Error fetching products:", err));
@@ -139,29 +133,27 @@ const ProductListing =  () => {
         e.preventDefault();
         
 
-        fetch("/api/direct_message", {
-            mode: "cors",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                sender_id: user.user_id, 
-                receiver_id: product[0].vendor_id, 
-                listing_id: id ,
-                content: text,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("direct message complete");
-            })
-            .catch((err) => {
-              console.error("Error:", err);
-            });
+        // fetch("/api/direct_message", {
+        //     mode: "cors",
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         sender_id: user.user_id, 
+        //         receiver_id: product[0].vendor_id, 
+        //         listing_id: id ,
+        //         content: text,
+        //     }),
+        //   })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         console.log("direct message")
 
-            setText(""); 
-            setMessageSent(true);
+        //     })
+        //     .catch((err) => {
+        //       console.error("Error:", err);
+        //     });
     }
     const handleText = (e) =>{
         setText(e.target.value)
@@ -190,7 +182,7 @@ const ProductListing =  () => {
                 </div>
                 <div className="vendor-reviews-container" >
                     <div className="total-review-container" >
-                        <div className="vendor-username" > <strong>Seller: {vendor.username}</strong></div>
+                        <div className="vendor-username" >Seller: Name here</div>
                         <div className="total-stars" > stars</div>
                         <div className="submit-review" >
                             <button className="btn-create-review"> 
@@ -290,17 +282,12 @@ const ProductListing =  () => {
                 </div>
                 <div className="vendor-reviews-container" >
                     <div className="total-review-container" >
-                        <div className="vendor-username" ><strong>Seller: {vendor.username}</strong></div>
-                        <div className="total-stars" >
-                            {[...Array(vendor.rating)].map((_, i) => (
-                                <StarIcon key={i} style={{ color: '#000' }} />
-                            ))}
-                        </div>
+                        <div className="vendor-username" > <strong>Seller: {vendor.username}</strong></div>
+                        <div className="total-stars" > stars</div>
                         <div className="submit-review" >
-                            <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
-                            {
-                                showForm && (<CreateReviewForm onClose={() => setShowForm(false)} vendorId={product[0].vendor_id}/>)
-                            }
+                            <button className="btn-create-review"> 
+                                <Link to="/login" >Write a review</Link>
+                            </button>
                         </div>
                     </div>
                 
@@ -339,11 +326,9 @@ const ProductListing =  () => {
                 <div className="sendMessage-box">
                     {messageSent ? (
                         <>
-                        <div  > <strong>Message Sent to Seller</strong> </div>
-                        <div className="link-chats">
-                            
-                            <Link to="/chats">See Conversations</Link>
-                             
+                        <div> <strong>Message Sent to Seller</strong> </div>
+                        <div>
+                            See Conversations
                         </div>
                         </>
                     ) : (
@@ -368,11 +353,11 @@ const ProductListing =  () => {
                     {
                         hasRequested ? (
                             <>
-                            <button className="btn-delReq active" >Request Already Sent</button>
+                            <button>Request Already Sent</button>
                             </>
                         ):(
                         <>
-                        <button className="btn-delReq" onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
+                        <button onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
                         {
                             showDeliRequest && (<CreateDeliveryRequest onClose={() => setShowDeliRequest(false)} vendorId={product[0].vendor_id} title={product[0].title} listingId={product[0].listing_id} setHasRequested={setHasRequested}/>)
                         }

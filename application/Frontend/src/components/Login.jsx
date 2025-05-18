@@ -31,7 +31,7 @@ const Login = () => {
             login(data.user);
             navigate('/realUserProfile');
 
-            fetch(`/api/courier/${data.user.user_id}`)
+            fetch(`/api/user/ ${data.user.user_id}`)
                 .then(res => res.json())
                 .then(courierData => {
                     if (courierData.exists) {

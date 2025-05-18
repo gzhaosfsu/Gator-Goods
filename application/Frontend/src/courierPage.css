@@ -177,14 +177,15 @@
   }
 
   .see-convo-btn {
-    padding: 10px 16px;
+    padding: 10px 12px;
     background-color: #D9D9D9;
     color: black;
+    text-align: center;
     border: none;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
   }
   

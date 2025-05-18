@@ -3,9 +3,12 @@ import image from "./images/imageNA.png"
 import {directMessage} from "../chatDummyData"
 import SendIcon from '@mui/icons-material/Send';
 import React, { useState, useEffect } from "react"
+import {UserContext} from "../UserContext"
+import {useContext} from "react"
 
 
 const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
+    const {user} = useContext(UserContext);
     const [conversation, setConversation] = useState([]); // holds the conversation between users 
     const [istyping, setIsTyping] = useState(false); // handles css when user is typing 
     const [drafts, setDrafts] = useState({}); // we want to temporarly store the user conversation when on chat feature only 
@@ -30,6 +33,7 @@ const getConversation = () => {
   
 
           setConversation(filtered);
+          console.log("HERE: ", filtered); 
         })
         .catch(err => {
           console.error("Error fetching messages:", err);
@@ -48,7 +52,7 @@ useEffect(() => {
 
 const handleInputChange = (e) => {
     const newMessage = e.target.value;
-
+    
     // this deals with the holding draft message has typed but not sent 
     setDrafts((prevDrafts) => ({
         ...prevDrafts,
@@ -68,6 +72,7 @@ const handleInputChange = (e) => {
 
     if (currentMessage.trim()) {
         // Send message logic here...
+        const receiver = receiverID !== user.user_id ? receiverID : senderID;
 
         fetch("api/direct_message", {
             mode: "cors",
@@ -76,8 +81,8 @@ const handleInputChange = (e) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              sender_id: senderID,  // Corrected to pass the variable properly
-              receiver_id: receiverID,
+              sender_id: user.user_id,  // Corrected to pass the variable properly
+              receiver_id: receiver,
               listing_id: listingID,
               content: currentMessage,
             }),
@@ -111,14 +116,14 @@ return (
         </div>
 
         <div className="chat-log">
-            {conversation.map((message) => (
-                <div
-                    key={message.message_id}
-                    className={`chat-message ${message.sender_id === senderID ? 'sent' : 'received'}`}
-                >
+            {conversation.map((message) => {
+                const isSentByMe = message.sender_id === user.user_id;
+                return (
+                <div key={message.message_id} className={`chat-message ${isSentByMe ? 'sent' : 'received'}`}>
                     <p>{message.content}</p>
                 </div>
-            ))}
+                );
+            })} 
         </div>
         <div>
             <div className={`message-box ${istyping ? 'typing' : ''}`}>

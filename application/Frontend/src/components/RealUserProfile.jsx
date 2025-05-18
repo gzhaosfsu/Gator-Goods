@@ -10,42 +10,36 @@ const RealUserProfile = () => {
 
     const {user} = useContext(UserContext);
     const [showForm, setShowForm] = useState(false);
-    const [isCourier, setIsCourier] = useState(user?.is_courier ?? false);
-    
+    const [isCourier, setIsCourier] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-      if (user && typeof user.is_courier !== 'undefined' && typeof isCourier === 'undefined') {
-        setIsCourier(user.is_courier);
-      }
-    }, [user]);
+    // useEffect(() => {
+    //   if (user && typeof user.is_courier !== 'undefined' && typeof isCourier === 'undefined') {
+    //      setIsCourier(user.is_courier);
+    //   }
+    // }, [user]);
 
       useEffect(() => {
         const fetchUser = async () => {
           if (!user?.user_id) return;
-      
           try {
             const response = await fetch(`/api/user/${user.user_id}`);
-            
             if (!response.ok) {
               console.error("Fetch failed with status:", response.status);
               return;
             }
-      
             const data = await response.json();
-      
             // Only update if the field exists
-            if (typeof data.is_courier !== 'undefined') {
-              setIsCourier(data.is_courier);
-            } else {
-              console.warn("is_courier field missing in fetched data", data);
-            }
-      
+              const userData = data[0];
+              if (userData?.is_courier !== undefined) {
+                  setIsCourier(userData.is_courier);
+              }
+
           } catch (err) {
             console.error("Failed to fetch user courier status:", err);
           }
         };
-      
+
         fetchUser();
       }, [user?.user_id]);
       
@@ -75,9 +69,6 @@ const RealUserProfile = () => {
         }
       };
 
-      console.log('User:', user);
-      console.log('isCourier:', isCourier);
-
     return (
         <div className="user-dash">
 
@@ -88,11 +79,14 @@ const RealUserProfile = () => {
             <div className="button-row">
                 {/* <button className="order-status-btn">Order Status</button> */}
                 {/* Conditionally render this */}
-
-                    {/* // <button className="courier-dashboard-btn">
-                    // Courier Dashboard
-                    // </button>
-            } */}
+                {isCourier && (
+                    <button
+                        className="courier-dashboard-btn"
+                        onClick={() => navigate("/courierPage")}
+                    >
+                        Courier Dashboard
+                    </button>
+                )}
                 {/* <button className="become-courier-btn">Become a Courier</button> */}
             </div>
         </div>

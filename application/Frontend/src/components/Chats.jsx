@@ -33,6 +33,7 @@ useEffect(() => {
     fetch(`/api/direct_message/${currentUserID}`)
       .then((res) => res.json())
       .then(async (data) => {
+       
 
         if(data.length < 1 ) { // if user does not have chat history 
           setUserMessages(false);  // diplay different message
@@ -43,22 +44,28 @@ useEffect(() => {
             return index === self.findIndex((m) => m.listing_id === msg.listing_id);
           });
 
+       
           // this will gather all information from those unique chats based on the listings
           const chatdisplay = await Promise.all(
             uniqueMessage.map(async (msg) => {
               try {
+                
+
                 const [senderRes, receiverRes, listingRes] = await Promise.all([
                   fetch(`/api/user/${msg.sender_id}`),
                   fetch(`/api/user/${msg.receiver_id}`),
                   fetch(`/api/listing/${msg.listing_id}`),
                 ]);
+
+              
     
                 const [senderData, receiverData, listingData] = await Promise.all([
                   senderRes.json(),
                   receiverRes.json(),
                   listingRes.json(),
                 ]);
-  
+
+                  // console.log("LISTING HERE: " , listingData); 
     
                 return {
                   message_id: msg.message_id,
@@ -66,16 +73,20 @@ useEffect(() => {
                   userId: senderData[0].user_id,
                   receiverUsername: receiverData[0].username || "Unknown",
                   receiverId: receiverData[0].user_id,
-                  productTitle: listingData[0].title || "Unknown",
-                  listingId: listingData[0].product_id,
+                  productTitle: listingData[0]?.title || "Unknown",
+                  listingId: listingData[0]?.product_id,
                 };
               } catch (error) {
                 console.error("Error fetching message details:", error);
                 return null;
               }
             })
+
+            
+
           );
-    
+          
+          console.log("CHAT: ", chatdisplay); 
           
           setUniqueChats(chatdisplay.filter((chat) => chat !== null));
           setLoading(false);
@@ -96,7 +107,7 @@ useEffect(() => {
       // This will handle the selected person the user wants to conitnue chatting with and display 
       // their conversation log
 
-      setIsSelected(receiverId); 
+      setIsSelected(listingId); 
       setListingID(listingId);
       setReceiverID(receiverId); 
       setUsernameReceiver(receiverUsername); 
@@ -124,11 +135,11 @@ useEffect(() => {
                           <div className="sender-listings" >
                             {
                                 uniqueChats.map((chat) => (
-                                    <div className={`individual-chat ${isSelected === chat.receiverId ? 'selected' : ''}`} key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.receiverUsername, chat.userId)}>
+                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.receiverUsername, chat.userId)}>
                                         <img src={image} alt="imgae" width={65} height={65}/>
                                         <div className="indv-chat-name">
                                             <h4>
-                                                {chat.receiverUsername}
+                                                {chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername}
                                             </h4>
                                             <p>
                                                 {chat.productTitle}

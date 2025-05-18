@@ -19,8 +19,9 @@ router.get('/', async (req, res) => {
 // GET message by ID
 router.get('/:id', async (req, res) => {
     try {
+        const userId = req.params.id; 
 
-        const [results] = await db.query('SELECT direct_message.* FROM direct_message WHERE direct_message.sender_id = ?', [req.params.id]);
+        const [results] = await db.query('SELECT direct_message.* FROM direct_message WHERE direct_message.sender_id = ? OR direct_message.receiver_id = ?', [userId, userId]);
         
         res.json(results);
     }

@@ -1,6 +1,7 @@
 // Content.jsx
 import React from "react";
 import homePageImg from "./images/homePage.png";
+import {Link } from 'react-router-dom'
 import FeaturedProducts from "./FeaturedProducts"; // Adjust path if needed
 
 const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {condition: "", priceSort: ""}}) => {
@@ -76,6 +77,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
             </h2>
             <div className="products-list">
               {filteredData.map((product) => (
+                 <Link className="link-prod" to={`/productListing/${product.listing_id}`} >
                 <div key={product.product_id} className="product-card">
                   {product.thumbnail ? (
                   <img
@@ -93,6 +95,7 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
                 )}
                   <p>{product.description}</p>
                 </div>
+                </Link>
               ))}
             </div>
           </div>
