@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="ba322e2d-c4ec-40be-a4df-8172b520f635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Backend/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Backend/socket.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/BuyerNav.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/SearchBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/SearchBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/UserDash.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/UserDash.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +50,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.CourierNav.jsx.executor": "Run",
     "Node.js.Register.jsx.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "gzhao__branch",
@@ -59,12 +68,16 @@
       <recent name="$PROJECT_DIR$/application/Backend" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.CourierNav.jsx">
+    <configuration name="CourierNav.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" working-dir="$PROJECT_DIR$/application/Frontend/src/components">
+      <method v="2" />
+    </configuration>
     <configuration name="Register.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/application/Frontend/src/components/Register.jsx" working-dir="$PROJECT_DIR$/application/Frontend/src/components">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.CourierNav.jsx" />
         <item itemvalue="Node.js.Register.jsx" />
       </list>
     </recent_temporary>
@@ -86,6 +99,7 @@
       <updated>1744873489139</updated>
       <workItem from="1744873490378" duration="1448000" />
       <workItem from="1745868751696" duration="95805000" />
+      <workItem from="1747530311906" duration="6933000" />
     </task>
     <servers />
   </component>
@@ -114,5 +128,17 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx</url>
+          <line>2</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

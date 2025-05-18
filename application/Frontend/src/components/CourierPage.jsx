@@ -9,6 +9,7 @@ import dummyDeliveryRequests from '../dummyDeliveryRequests'; // moved dummyData
 
 const CourierPage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   const [onShift, setOnShift] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState(null);

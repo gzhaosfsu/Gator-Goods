@@ -2,12 +2,9 @@ import React from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react"
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
-=======
 import { Link } from "react-router-dom";
 // import { dummyData } from "../dummyData";
->>>>>>> e71dde19 (Implemented updated rating and fixed the UI, as well as user.js not returning passwords)
 
 
 const SearchBar= ({setSearchResults, selectedCategory, setDataReturned, setIsSearching, setSelectedCategoryName}) => {
