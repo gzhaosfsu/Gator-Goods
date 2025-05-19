@@ -3,7 +3,6 @@ import ChatLog from "./ChatLog"
 import image from "./images/imageNA.png"
 import React, { useState, useEffect } from "react"
 import "../Chat.css"
-import {directMessage, registeredUsers, listings} from "../chatDummyData"; 
 import {UserContext} from "../UserContext"
 import {useContext} from "react"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import Header from "./Header"
 import Footer from "./Footer"
-import portrait from "./images/portrait.png"
+import portrait from "./images/silhoutte.png"
 import linkedin from "./images/linkedin1.png"
 import github from "./images/github1.png"
 

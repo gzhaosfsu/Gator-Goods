@@ -66,6 +66,30 @@ router.get('/courier/unassigned', async (req, res) => {
     }
 });
 
+// GET all delivery instructions for a specific courier
+router.get('/courier/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // run the query with the id in the parameter array
+        const [rows] = await db.query(
+            'SELECT * FROM delivery_instruction WHERE courier_id = ?',
+            [id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "No delivery instructions found for that courier" });
+        }
+
+        // send back the full array of instructions
+        res.json(rows);
+
+    } catch (err) {
+        console.error("Error fetching courier instructions:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // POST a new Delivery Instruction
 router.post('/', async (req, res) => {
     const {
