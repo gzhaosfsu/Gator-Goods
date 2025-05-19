@@ -1,6 +1,6 @@
 // Content.jsx
 import React from "react";
-import homePageImg from "./images/homePage.png";
+import homePageImg from "./images/homepageImg.png";
 import {Link } from 'react-router-dom'
 import FeaturedProducts from "./FeaturedProducts"; // Adjust path if needed
 

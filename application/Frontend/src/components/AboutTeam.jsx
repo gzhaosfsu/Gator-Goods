@@ -4,7 +4,7 @@ import {Link } from 'react-router-dom'
 import Header from "./Header"
 import Navbar from "./Navbar"
 import Footer from "./Footer"
-import homePageImg from "./images/homePage.png"
+import homePageImg from "./images/homeoageImg.png"
 
 
 const AboutTeam= ({}) => {
