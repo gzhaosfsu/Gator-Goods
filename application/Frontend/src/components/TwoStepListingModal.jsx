@@ -26,12 +26,8 @@ const TwoStepListingModal = ({ onClose, onListingCreated }) => {
           </div>
         )}
 
-        {step === 2 && 
-          <CreateListingForm
-            onClose={onClose}
-            onListingCreated={onListingCreated}
-          />}
-        {step === 3 && <ExistingProductForm onClose={onClose} />}
+        {step === 2 && <CreateListingForm onClose={onClose} onListingCreated={onListingCreated} />}
+        {step === 3 && <ExistingProductForm onClose={onClose}/>}
       {/* </div> */}
     </div>
   );
