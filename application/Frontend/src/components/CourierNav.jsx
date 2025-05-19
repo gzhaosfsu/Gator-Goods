@@ -181,12 +181,14 @@ export default function CourierNav() {
                                         FINISH DROP OFF
                                     </button>
                                 )}
-                                <button
-                                    className="btn-danger"
-                                    onClick={() => updateStatus("Cancelled")}
-                                >
-                                    UNABLE TO DELIVER
-                                </button>
+                                {status === "Delivered" && (
+                                    <button
+                                        className="btn-danger"
+                                        onClick={() => updateStatus("Cancelled")}
+                                    >
+                                        UNABLE TO DELIVER
+                                    </button>
+                                )}
                             </div>
                         </>
                     )}
