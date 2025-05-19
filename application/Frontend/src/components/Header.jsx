@@ -4,7 +4,7 @@ import Categories from "./Categories"
 import logo from "./images/LogoGG.png"
 import {Link } from 'react-router-dom'
 import { useState, useEffect } from "react"
-import { dummyData } from "../dummyData";
+
 import Filters from "./Filters"
 import UserDash from "./UserDash";
 import {UserContext} from "../UserContext";

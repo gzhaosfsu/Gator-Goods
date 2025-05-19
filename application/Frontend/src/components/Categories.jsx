@@ -1,7 +1,6 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import "../App.css" // CSS file for styling
-import { dummyData } from "../dummyData";
 
 const Categories = ({ setSelectedCategory, setSelectedCategoryName}) => {
 

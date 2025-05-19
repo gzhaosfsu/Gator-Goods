@@ -4,8 +4,7 @@ import Header from "./Header"
 import FeaturedProducts from "./FeaturedProducts";
 import Content from "./Content"
 import Footer from "./Footer"
-import homePageImg from "./images/homePage.png"
-//import { dummyData } from "../dummyData";
+
 
 
 

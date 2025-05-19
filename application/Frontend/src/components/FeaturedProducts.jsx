@@ -1,7 +1,6 @@
 // FeaturedProducts.jsx
 import React, { useState, useEffect } from "react";
 import {Link } from 'react-router-dom'
-import { dummyData } from "../dummyData";
 import "../FeaturedProducts.css";
 
 export const FeaturedProducts = () => {
