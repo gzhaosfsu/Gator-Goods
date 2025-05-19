@@ -7,6 +7,7 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import {UserContext} from "../UserContext";
 import TwoStepListingModal from './TwoStepListingModal';
+import { useLocation } from 'react-router-dom';
 
 const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
@@ -15,6 +16,8 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     const [rating, setRating] = useState(null); // placeholder until rating is passed by context
     const [soldCount, setSoldCount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         if (!user) {
             navigate("/login");
@@ -38,15 +41,16 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
         if (!user) return;
       
         fetch(`/api/listing/vendor/sold/${user.user_id}`)
-          .then(res => res.json())
-          .then(data => {
-            setSoldCount(Array.isArray(data) ? data.length : 0);
-          })
+        .then(res => res.json())
+        .then(data => {
+          setSoldCount(data.count ?? 0);
+        })
           .catch(err => {
             console.error("Failed to fetch sold items:", err);
             setSoldCount(0);
           });
-      }, [user]);
+      }, [user, location]);
+      
 
       
 

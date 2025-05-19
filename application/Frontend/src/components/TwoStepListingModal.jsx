@@ -3,7 +3,7 @@ import CreateListingForm from './CreateListingForm';
 import ExistingProductForm from './ExistingProductForm';
 import "../TwoStepListingModal.css"
 
-const TwoStepListingModal = ({ onClose }) => {
+const TwoStepListingModal = ({ onClose, onListingCreated }) => {
   const [step, setStep] = useState(1);
 
   const handleNewProductClick = () => setStep(2);
@@ -26,7 +26,11 @@ const TwoStepListingModal = ({ onClose }) => {
           </div>
         )}
 
-        {step === 2 && <CreateListingForm onClose={onClose} />}
+        {step === 2 && 
+          <CreateListingForm
+            onClose={onClose}
+            onListingCreated={onListingCreated}
+          />}
         {step === 3 && <ExistingProductForm onClose={onClose} />}
       {/* </div> */}
     </div>

@@ -17,6 +17,10 @@ const UserListings = () => {
   
   const navigate = useNavigate();
 
+  const handleListingCreated = (newListing) => {
+    setListings((prev) => [newListing, ...prev]);
+  };
+
   useEffect(() => {
     if (user === null) return; // Wait for user to load
     if (!user) {
@@ -103,8 +107,13 @@ const UserListings = () => {
         {/* <div className="button-wrapper"> */}
           <div className="create-button button-wrapper" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></div>
 
-          {showForm && (<TwoStepListingModal onClose={() => setShowForm(false)} />
+          {showForm && (
+            <TwoStepListingModal
+              onClose={() => setShowForm(false)}
+              onListingCreated={handleListingCreated}
+            />
           )}
+
         {/* </div> */}
         <br /> <br /> <br /> <br />
         <div className="listings-container">

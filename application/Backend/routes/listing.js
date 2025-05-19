@@ -136,45 +136,22 @@ router.get('/vendor/:id', async (req, res) => {
     // });
 });
 
-// GET listing by Vendor ID that are marked as sold
+// GET count of sold listings by Vendor ID
 router.get('/vendor/sold/:id', async (req, res) => {
-
   try {
+    const [results] = await db.query(
+      'SELECT COUNT(*) AS count FROM listing WHERE vendor_id = ? AND listing_status = "Sold"',
+      [req.params.id]
+    );
 
-  const [results] = await db.query('SELECT COUNT(*) AS count FROM listing WHERE vendor_id = ? AND listing_status = "Sold"', [req.params.id]);
-
-  const listingsWithImages = results.map(row => {
-      const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
-
-      return {
-          listing_id: row.listing_id,
-          price: row.price,
-          discount: row.discount,
-          listing_date: row.listing_date,
-          title: row.title,
-          description: row.description,
-          product_id: row.product_id,
-          category: row.category,
-          rating: row.rating,
-          conditions: row.conditions,
-          // image: row.image,
-          vendor_id: row.vendor_id,
-          thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
-      };
-  });
-  res.json(listingsWithImages);
-// });
-  
+    const count = results[0]?.count ?? 0;
+    res.json({ count });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Server error' });
-
-  }//);
-  // db.query('SELECT * FROM listing WHERE listing_id = ?', [req.params.id], (err, results) => {
-  //     if (err) return res.status(500).json({ error: err });
-  //     res.json(results[0]);
-  // });
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
+
 
 // POST a new product listing
 router.post('/', async (req, res) => {
