@@ -299,10 +299,11 @@ body {
 
 .products-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
   gap: 1rem;
   justify-items: center;
   width: 100%;
+  grid-auto-rows: 1fr;
 }
 
 .products-list .link-prod{
@@ -319,10 +320,16 @@ body {
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 1rem;
-  width: 100%;
-  max-width: 220px;
+  width: 240px;
+  
   text-align: center;
   box-sizing: border-box;
+  height: 320px;
+  flex-direction: column;
+}
+
+.product-card > *:last-child {
+  margin-top: auto;
 }
 
 .product-image {
