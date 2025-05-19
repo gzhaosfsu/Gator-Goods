@@ -108,10 +108,6 @@ useEffect(() => {
         }),
       });
       if (!res.ok) throw new Error("Failed to assign delivery");
-      navigate(
-          `/courierNav/${deliveryReq.delivery_id}`,
-          { state: { deliveryReq } }
-      );
     } catch (err) {
     console.error("Error accepting delivery:", err);
   }
@@ -138,6 +134,10 @@ useEffect(() => {
         }, 500);
       })
       .catch(err => console.error("Error starting delivery:", err));
+            navigate(
+          `/courierNav/${selectedDelivery.delivery_id}`,
+          { state: { selectedDelivery } }
+      );
   };
 
 
