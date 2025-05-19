@@ -44,6 +44,12 @@ const ExistingProductForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isNaN(formData.price) || formData.price.trim() === '') {
+      alert("Please enter a valid numeric value for the price.");
+      return;
+    }
+
     console.log("Submitting...");
 
     try {
@@ -100,7 +106,7 @@ const ExistingProductForm = ({ onClose }) => {
 
           <label>Price</label>
           <input
-            type="text"
+            type="number"
             name="price"
             value={formData.price}
             onChange={handleChange}
