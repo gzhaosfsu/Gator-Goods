@@ -19,10 +19,21 @@ router.get('/', async (req, res) => {
 router.get('/buyer/:buyer_id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT * FROM delivery_request WHERE delivery_request.buyer_id = ?', [req.query.buyer_id]);
+        const [results] = await db.query(`SELECT delivery_request.*, listing.price, product.title, product.thumbnail, user.username FROM delivery_request 
+            JOIN listing ON listing.listing_id = delivery_request.listing_id 
+            JOIN product on product.product_id = listing.product_id
+            JOIN user ON user.user_id = delivery_request.buyer_id  WHERE delivery_request.vendor_id = ? AND delivery_request.status = "Pending"`, [req.params.vendor_id]);
+
+        const formatted = results.map(row => ({
+            ...row,
+            thumbnail: row.thumbnail
+              ? `data:image/png;base64,${row.thumbnail.toString('base64')}`
+              : null
+          }));
+      
+          res.json(formatted);
         
-        res.json(results);
-    }catch {
+    }catch(err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
@@ -32,10 +43,21 @@ router.get('/buyer/:buyer_id', async (req, res) => {
 router.get('/vendor/:vendor_id', async (req, res) => {
     try {
 
-        const [results] = await db.query('SELECT * FROM delivery_request WHERE delivery_request.vendor_id = ?', [req.query.vendor_id]);
-        
-        res.json(results);
-    }catch {
+        const [results] = await db.query(`SELECT delivery_request.*, listing.price, product.title, product.thumbnail, user.username FROM delivery_request 
+            JOIN listing ON listing.listing_id = delivery_request.listing_id 
+            JOIN product on product.product_id = listing.product_id
+            JOIN user ON user.user_id = delivery_request.buyer_id  WHERE delivery_request.vendor_id = ? AND delivery_request.status = "Pending"`, [req.params.vendor_id]);
+
+        const formatted = results.map(row => ({
+            ...row,
+            thumbnail: row.thumbnail
+              ? `data:image/png;base64,${row.thumbnail.toString('base64')}`
+              : null
+          }));
+      
+          res.json(formatted);
+
+    }catch(err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
@@ -58,7 +80,7 @@ router.get('/combined/:delivery_request_id', async (req, res) => {
         res.json(results);
     }catch {
         console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error' });query
     }
 });
 
@@ -108,6 +130,8 @@ router.post('/', async (req, res) => {
         }
     );
 });
+
+
 
 // UPDATE a Delivery Request by ID
 router.put('/:id', async (req, res) => {
