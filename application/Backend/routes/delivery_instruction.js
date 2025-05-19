@@ -46,7 +46,7 @@ router.get('/buyer/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
-            `SELECT * FROM delivery_instruction WHERE delivery_instruction.buyer_id = ?`,
+            `SELECT delivery_instruction.*, product.thumbnail FROM delivery_instruction JOIN listing ON listing.listing_id = delivery_instruction.listing_id JOIN product ON product.product_id = listing.product_id WHERE delivery_instruction.buyer_id = ?`,
             [id]
         );
         if (rows.length === 0) return res.status(404).json({ message: "Not found" });
@@ -58,8 +58,8 @@ router.get('/buyer/:id', async (req, res) => {
 
 // GET all delivery instructions that dont have couriers
 router.get('/courier/unassigned', async (req, res) => { 
-    try {
-        const [results] = await db.query('SELECT * FROM delivery_instruction WHERE delivery_instruction.delivery_status = "Unassigned"');
+    try { // delivery_instruction.delivery_id = 1 AND 
+        const [results] = await db.query('SELECT delivery_instruction.*, product.thumbnail FROM delivery_instruction JOIN listing ON listing.listing_id = delivery_instruction.listing_id JOIN product ON product.product_id = listing.product_id WHERE delivery_instruction.delivery_status = "Unassigned"');
         res.json(results);
     } catch (err) {
         res.status(500).json({ error: err.message });
