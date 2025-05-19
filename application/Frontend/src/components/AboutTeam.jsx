@@ -13,7 +13,6 @@ const AboutTeam= ({}) => {
     return (
         <>
             <div className='App'>
-                <Header/>
                 <img className="homepage-img" src={homePageImg} />
                 <div className='body-container'>
                     <div className='team-heading-container'>

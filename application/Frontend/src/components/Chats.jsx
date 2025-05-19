@@ -1,4 +1,3 @@
-import Header from "./Header"
 import ChatLog from "./ChatLog"
 import image from "./images/imageNA.png"
 import React, { useState, useEffect } from "react"
@@ -133,8 +132,9 @@ useEffect(() => {
                         {userMessages ? (
                           <div className="sender-listings" >
                             {
-                                uniqueChats.map((chat) => (
-                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.receiverUsername, chat.userId)}>
+                              
+                                [...uniqueChats].reverse().map((chat) => (
+                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername, chat.userId)}>
                                         <img src={image} alt="imgae" width={65} height={65}/>
                                         <div className="indv-chat-name">
                                             <h4>
