@@ -7,9 +7,6 @@
     <list default="true" id="ba322e2d-c4ec-40be-a4df-8172b520f635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Backend/routes/delivery_instruction.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Backend/routes/delivery_instruction.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Frontend/src/DeliveryLayout.css" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/DeliveryLayout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Frontend/src/UserContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/UserContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierPage.jsx" afterDir="false" />
     </list>
