@@ -11,45 +11,42 @@ const OrderStatusPage = () => {
   const [error, setError]       = useState(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.user_id) return;
     let cancelled = false;
   
     const load = async () => {
       try {
         setLoading(true);
-        console.log("Fetching /api/delivery_request...");
-        const res = await fetch(`/api/delivery_request`, { credentials: 'include' });
-        console.log("Response status:", res.status);
-        if (!res.ok) throw new Error('Failed to fetch delivery requests');
-        const ordersData = await res.json();
-        console.log("Orders data:", ordersData);
   
-        // Fetch product names per listing
-        const enrichedOrders = await Promise.all(
-          ordersData.map(async (o) => {
+        // 1) fetch everything
+        const res = await fetch(`/api/delivery_request`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch delivery requests');
+        const allOrders = await res.json();
+  
+        // 2) filter for this user’s orders
+        const userOrders = allOrders.filter(o => o.buyer_id === user.user_id);
+  
+        // 3) enrich only those
+        const enriched = await Promise.all(
+          userOrders.map(async o => {
             try {
               const listingRes = await fetch(`/api/listing/${o.listing_id}`);
               const listingData = await listingRes.json();
-        
               const product = Array.isArray(listingData) ? listingData[0] : listingData;
-        
               return {
                 ...o,
                 product_title: product?.title || '(Unknown Product)',
                 product_image: product?.thumbnail || null,
-                delivery_status: o.status || 'Pending' // fallback if not present
+                delivery_status: o.status || 'Pending'
               };
             } catch {
               return { ...o, product_title: '(Unknown Product)', product_image: null };
             }
           })
         );
-        
-
-        console.log("Enriched orders:", enrichedOrders);
-        if (!cancelled) setOrders(enrichedOrders);
+  
+        if (!cancelled) setOrders(enriched);
       } catch (err) {
-        console.error("Final error:", err);
         if (!cancelled) setError(err);
       } finally {
         if (!cancelled) setLoading(false);
@@ -58,12 +55,12 @@ const OrderStatusPage = () => {
   
     load();
     const interval = setInterval(load, 10000);
-  
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
   }, [user]);
+  
   
   
 
