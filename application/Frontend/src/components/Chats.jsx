@@ -134,7 +134,7 @@ useEffect(() => {
                             {
                               
                                 [...uniqueChats].reverse().map((chat) => (
-                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.receiverId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername, chat.userId)}>
+                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.listingId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername, chat.userId)}>
                                         <img src={image} alt="imgae" width={65} height={65}/>
                                         <div className="indv-chat-name">
                                             <h4>
