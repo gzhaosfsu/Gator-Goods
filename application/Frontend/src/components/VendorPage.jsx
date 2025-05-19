@@ -64,9 +64,13 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <div className="card-grid">
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
-                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
-                        {isCourier === true && (
-                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }} link="/courierPage"/>
+                        <Card title="Delivery Requests" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
+                        {isCourier === 1 && (
+                            <Card
+                                title="Courier Dashboard"
+                                link="/courierPage"
+                                className="courier-card"
+                            />
                         )}
                     </div>
                 </div>
@@ -89,14 +93,23 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     );
 };
 
-const Card = ({ title, icon, link, className = "", style = {} }) => (
-    <Link to={link || "#"} className="card">
-      <div className={`card ${className}`} style={style}>
+const Card = ({ title, icon, link, className = "" }) => (
+    <Link to={link || "#"} className="card-link">
+      <div className={`card ${className}`}>
         <span className="card-title">{title}</span>
         {icon}
       </div>
     </Link>
   );
+
+// const Card = ({ title, icon, link, className = "", style = {} }) => (
+//     <Link to={link || "#"} className="card">
+//       <div className={`card ${className}`} style={style}>
+//         <span className="card-title">{title}</span>
+//         {icon}
+//       </div>
+//     </Link>
+//   );
 
     // const Card = ({ title, icon }) => (
     //     <div className="card">

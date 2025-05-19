@@ -75,7 +75,7 @@ const UserListings = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ availability: 'Out of Stock', listing_status: 'Delisted' })
+      body: JSON.stringify({ availability: 'Out of Stock', listing_status: 'Sold' })
     })
     .then(res => {
       if (res.ok) {
@@ -92,7 +92,12 @@ const UserListings = () => {
   return (
     
     <div className="listings-page">
-      <ReturnProfile />
+        <button
+          className="os-back-btn"
+          onClick={() => navigate('/RealUserProfile')}
+        >
+          ← Back to Profile
+        </button>
       <div className="listing-formatting">
         <h1 className="title">Active Listings</h1>
         {/* <div className="button-wrapper"> */}

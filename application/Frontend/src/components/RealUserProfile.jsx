@@ -79,14 +79,14 @@ const RealUserProfile = () => {
             <div className="button-row">
                 {/* <button className="order-status-btn">Order Status</button> */}
                 {/* Conditionally render this */}
-                {isCourier && (
+                {/* {isCourier && (
                     <button
                         className="courier-dashboard-btn"
                         onClick={() => navigate("/courierPage")}
                     >
                         Courier Dashboard
                     </button>
-                )}
+                )} */}
                 {/* <button className="become-courier-btn">Become a Courier</button> */}
             </div>
         </div>
