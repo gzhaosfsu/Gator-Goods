@@ -26,7 +26,7 @@ CREATE TABLE product (
     category ENUM('clothing', 'food', 'furniture', 'electronics', 'stationary', 'books', 'other'),
     title VARCHAR(100),
     image BLOB,
-    thumbnail BLOB,
+    thumbnail MEDIUMBLOB,
     mimetype VARCHAR(50),
     vendor_id INT,
     FOREIGN KEY (vendor_id) REFERENCES user(user_id)
@@ -104,7 +104,7 @@ CREATE TABLE delivery_instruction (
     quantity INT,
     buyer_special_request TEXT,
     vendor_special_request TEXT,
-    delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered'),
+    delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered') DEFAULT 'Unassigned',
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (courier_id) REFERENCES user(user_id),

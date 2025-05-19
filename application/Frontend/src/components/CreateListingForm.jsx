@@ -27,7 +27,15 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
     const { name, value, files } = e.target;
 
     if (name === "image") {
-      setImageFile(files[0]);
+      const file = files[0];
+      const maxSize = 10 * 1024 * 1024; // 10 MB
+    
+      if (file.size > maxSize) {
+        alert("Image must be 10MB or less.");
+        return;
+      }
+    
+      setImageFile(file);
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -50,12 +58,18 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting...");
+
+    if (isNaN(formData.price) || formData.price.trim() === '') {
+      alert("Please enter a valid numeric value for the price.");
+      return;
+    }
 
     if (!imageFile) {
       alert("Please upload an image.");
       return;
     }
+
+    console.log("Submitting...");
 
     try {
       console.log("Reading file...");
@@ -131,7 +145,7 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
 
           <label>Price</label>
           <input
-            type="text"
+            type="number"
             name="price"
             value={formData.price}
             onChange={handleChange}

@@ -138,3 +138,28 @@
     }
   }
   
+  @media screen and (max-width: 768px) {
+    .user-profile-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 1rem;
+    }
+  
+    .info-name-update {
+      flex-direction: column;
+    }
+  
+    .button-container {
+      width: 100%;
+    }
+  
+    .button-container button {
+      font-size: 16px;
+      padding: 10px;
+    }
+  
+    .profile-title h2 {
+      font-size: 1.25rem;
+    }
+  }
