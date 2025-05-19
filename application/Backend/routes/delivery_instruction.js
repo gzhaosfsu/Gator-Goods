@@ -94,23 +94,79 @@ router.get('/courier/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const {
         vendor_id, courier_id, buyer_id, product_id,
-        pickup, dropoff, quantity, buyer_special_request,
-        vendor_special_request, delivery_status
+        pickup, dropoff, buyer_special_request,
+        vendor_special_request, delivery_status, listing_id
     } = req.body;
     try {
     const [results] = await db.query(
-        `INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, product_id, pickup, dropoff,
-         quantity, buyer_special_request, vendor_special_request, delivery_status)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity,
-            buyer_special_request, vendor_special_request, delivery_status]
+        `INSERT INTO delivery_instruction (
+          vendor_id, buyer_id,
+          pickup, dropoff, buyer_special_request,
+          vendor_special_request, delivery_status, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff,
+            buyer_special_request, vendor_special_request, delivery_status, listing_id]
         );
             res.status(201).json({ delivery_id: results.insertId });
     } catch (err) {
         console.error("Error inserting delivery instruction:", err);
         res.status(500).json({ error: err.message });
         }
-    });
+});
+
+// POST a new Delivery Instruction after accepting
+router.post('/request/accept/:id', async (req, res) => {
+    const deliveryRequestId = req.params.id;
+    const { pickup, vendor_special_request, delivery_status } = req.body;
+  
+    try {
+      // Get info from delivery_request by ID
+      const [requests] = await db.query(
+        `SELECT * FROM delivery_request WHERE delivery_request_id = ?`,
+        [deliveryRequestId]
+      );
+  
+      if (requests.length === 0) {
+        return res.status(404).json({ error: "Delivery request not found" });
+      }
+
+      
+  
+      const request = requests[0];
+
+      console.log("Delivery request fetched:", request);
+  
+      // Insert into delivery_instruction
+      const [results] = await db.query(
+        `INSERT INTO delivery_instruction (
+          vendor_id, buyer_id,
+          pickup, dropoff, buyer_special_request,
+          vendor_special_request, delivery_status, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          request.vendor_id,
+          request.buyer_id,
+          pickup,
+          request.dropoff,
+          request.buyer_special_request,
+          vendor_special_request,
+          delivery_status,
+          request.listing_id
+        ]
+      );
+
+      // Update delivery_request status to Approved
+      await db.query(
+        `UPDATE delivery_request SET status = 'Approved' WHERE delivery_request_id = ?`,
+        [deliveryRequestId]
+      );
+  
+      res.status(201).json({ delivery_id: results.insertId });
+    } catch (err) {
+      console.error("Error inserting delivery instruction:", err);
+      res.status(500).json({ error: err.message });
+    }
+  });
 
 // UPDATE a Delivery Instruction by ID
 router.put('/:id', async (req, res) => {
