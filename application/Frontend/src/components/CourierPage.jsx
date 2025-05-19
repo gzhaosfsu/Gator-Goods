@@ -226,7 +226,6 @@ const CourierPage = () => {
 
     return (
         <div className="courier-page">
-            <Header/>
             <div className="courier-body">
                 <button className={"dashboard-btn"} onClick={() => navigate('/realUserProfile')}>BACK TO PROFILE
                     DASHBOARD
