@@ -1,6 +1,5 @@
 import "../Chat.css"
 import image from "./images/imageNA.png"
-import {directMessage} from "../chatDummyData"
 import SendIcon from '@mui/icons-material/Send';
 import React, { useState, useEffect } from "react"
 import {UserContext} from "../UserContext"
