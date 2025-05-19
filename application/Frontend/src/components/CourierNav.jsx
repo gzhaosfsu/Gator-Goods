@@ -27,7 +27,6 @@ export default function CourierNav() {
     const { deliveryId } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
-    console.log(user);
     const courierId = user.user_id;
     const [pickupCoords, setPickupCoords]   = useState(SFSU_COORDS);
     const [dropoffCoords, setDropoffCoords] = useState(SFSU_COORDS);
@@ -118,16 +117,14 @@ export default function CourierNav() {
                 {isLoaded ? (
                     <GoogleMap
                         mapContainerStyle={{ width: "100%", height: "100%" }}
-                        onLoad={map => {
-                            const bounds = new window.google.maps.LatLngBounds();
-                            bounds.extend(PICK_UP_COORDS);
-                            bounds.extend(DROP_OFF_COORDS);
-                            map.fitBounds(bounds);
-                        }}
+                            center={SFSU_COORDS}
+                            zoom = {17}
                     >
-                        <Marker position={PICK_UP_COORDS}
-                        label="Pick Up Location"
-                        icon={"http://maps.google.com/mapfiles/ms/micons/shopping.png"}
+                        <Marker position={pickupCoords}
+                                icon={"https://maps.google.com/mapfiles/ms/micons/shopping.png"}
+                        />
+                        <Marker position={dropoffCoords}
+                                icon={"https://maps.google.com/mapfiles/ms/micons/red-dot.png"}
                         />
                     </GoogleMap>
                 ) : (
