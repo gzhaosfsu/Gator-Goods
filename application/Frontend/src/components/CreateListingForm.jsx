@@ -3,7 +3,7 @@ import '../CreateListingForm.css';
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 
-const CreateListingForm = ({ onClose }) => {
+const CreateListingForm = ({ onClose, onListingCreated }) => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -84,7 +84,18 @@ const CreateListingForm = ({ onClose }) => {
 
       if (!res.ok) throw new Error('Failed to create listing');
       const responseData = await res.json();
+      // Update the page with the new listing
+
       console.log('Listing created:', responseData);
+      if (onListingCreated) {
+        onListingCreated({
+          listing_id: responseData.listing_id,
+          title: payload.title,
+          price: payload.price,
+          listing_date: new Date(),
+          thumbnail: `data:${payload.mimetype};base64,${payload.thumbnail}`
+        });
+      }
       alert("Listing created!");
       onClose();
     } catch (error) {

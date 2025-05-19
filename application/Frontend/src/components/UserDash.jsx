@@ -72,7 +72,7 @@ const UserDash = ({ username }) => {
               <div className="dropdown-menu">
                 <Link to="/RealUserProfile" onClick={() => setOpen(false)}>Profile</Link>
                 <Link to="/Chats" onClick={() => setOpen(false)}>Message</Link>
-                  {user?.isCourier && (
+                  {user?.is_courier && (
                       <Link to="/CourierPage" onClick={() => setOpen(false)}>Courier</Link>
                   )}
                 <button onClick={handleSignOut}>Sign Out</button>

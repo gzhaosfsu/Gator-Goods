@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
         
         res.json(results);
     }
-    catch {
+    catch (err){
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }

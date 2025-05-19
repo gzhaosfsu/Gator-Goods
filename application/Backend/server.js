@@ -9,17 +9,11 @@ const app = express();
 const server = http.createServer(app);
 // Setup CORS based on environment
 const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? ["https://gatorgoods.sfsu.edu", "http://100.26.194.201"]
+    ? ["https://server.gatorgoods.com", "http://100.26.194.201","https://sfsu.gatorgoods.com"]
     : ["http://localhost:3000"];
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});
 app.use(cors({ origin: allowedOrigins }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static('public'));
 
 // Routes
@@ -36,9 +30,6 @@ app.use('/api/all', require('./routes/search/all_search'));
 app.use('/api/combined', require('./routes/search/combined_search'));
 app.use('/api/login', require('./routes/login'));
 app.use('/api/register', require('./routes/register'));
-
-// Initialize Socket.IO handlers
-require('./socket')(io);
 
 // Server listening
 const PORT = process.env.PORT || 3001;

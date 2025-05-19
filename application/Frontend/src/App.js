@@ -18,7 +18,6 @@ import UserListings from './components/UserListings'
 import RealUserProfile from './components/RealUserProfile'
 import UserProfile from './components/UserProfile'
 import CourierNav from "./components/CourierNav";
-import BuyerNav from "./components/BuyerNav";
 import OrderStatus from "./components/OrderStatus";
 import VendorDeliveryRequest from "./components/VendorDeliveryRequest"
 import ProductListing from './components/ProductListing'
@@ -74,10 +73,10 @@ function AppContent() {
         <Route path="/realUserProfile" element={<RealUserProfile/>} />
         <Route path="/userProfile" element={<UserProfile/>} />
         <Route path="/CourierNav" element={<CourierNav/>} />
-        <Route path="/BuyerNav" element={<BuyerNav/>} />
         <Route path="/OrderStatus" element={<OrderStatus/>} />
         <Route path="/vendorDeliveryRequest" element={<VendorDeliveryRequest/>} />
-        <Route path="/productListing/:id" element={<ProductListing/>} />
+          <Route path="/courierNav/:deliveryId" element={<CourierNav />} />
+          <Route path="/productListing/:id" element={<ProductListing/>} />
       </Routes>
     </>
 )

@@ -7,13 +7,17 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import MessageIcon from '@mui/icons-material/Message';
 import {UserContext} from "../UserContext";
 import TwoStepListingModal from './TwoStepListingModal';
+import { useLocation } from 'react-router-dom';
 
 const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
     const {user} = useContext(UserContext);
     const [rating, setRating] = useState(null); // placeholder until rating is passed by context
+    const [soldCount, setSoldCount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         if (!user) {
             navigate("/login");
@@ -23,6 +27,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     useEffect(() => {
         if (!user) return;
       
+
         fetch(`/api/user/${user.user_id}`)
           .then(res => res.json())
           .then(data => {
@@ -32,9 +37,25 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
           .catch(err => console.error('Failed to load rating:', err));
       }, [user]);
 
+      useEffect(() => {
+        if (!user) return;
+      
+        fetch(`/api/listing/vendor/sold/${user.user_id}`)
+        .then(res => res.json())
+        .then(data => {
+          setSoldCount(data.count ?? 0);
+        })
+          .catch(err => {
+            console.error("Failed to fetch sold items:", err);
+            setSoldCount(0);
+          });
+      }, [user, location]);
       
 
       
+
+
+
 
     // const [onShift, setOnShift] = React.useState(false);
     // const toggleOnOffShift = () => {
@@ -60,9 +81,13 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                     <div className="card-grid">
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
-                        <Card title="Ready for delivery" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} />
-                        {isCourier && (
-                            <Card title="Courier Dashboard" style={{ backgroundColor: "#3A8659", color: 'white' }} link="/courierPage"/>
+                        <Card title="Delivery Requests" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
+                        {isCourier === 1 && (
+                            <Card
+                                title="Courier Dashboard"
+                                link="/courierPage"
+                                className="courier-card"
+                            />
                         )}
                     </div>
                 </div>
@@ -72,7 +97,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                 <div className="section-inner">
                     <h2 className="section-title stats-title">Stats</h2>
                     <div className="stat-grid">
-                        <StatCard label="Sold Items" value="5" />
+                        <StatCard label="Sold Items" value={soldCount} />
                         <StatCard label="Rating" value={rating !== null ? rating.toFixed(1) : "Loading..." | 500} />
 
                     </div>
@@ -85,14 +110,23 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     );
 };
 
-const Card = ({ title, icon, link, className = "", style = {} }) => (
-    <Link to={link || "#"} className="card">
-      <div className={`card ${className}`} style={style}>
+const Card = ({ title, icon, link, className = "" }) => (
+    <Link to={link || "#"} className="card-link">
+      <div className={`card ${className}`}>
         <span className="card-title">{title}</span>
         {icon}
       </div>
     </Link>
   );
+
+// const Card = ({ title, icon, link, className = "", style = {} }) => (
+//     <Link to={link || "#"} className="card">
+//       <div className={`card ${className}`} style={style}>
+//         <span className="card-title">{title}</span>
+//         {icon}
+//       </div>
+//     </Link>
+//   );
 
     // const Card = ({ title, icon }) => (
     //     <div className="card">

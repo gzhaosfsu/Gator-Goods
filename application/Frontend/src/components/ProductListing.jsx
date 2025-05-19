@@ -44,40 +44,24 @@ const ProductListing =  () => {
                 setLoading(false); 
 
                 console.log("DAta : ", data); 
-                
 
                 if(user) {
-                    if(data[0].vendor_id === user.user_id) {
-                        setIsSeller(true); 
+                fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
+                .then((res) => {
+                    if (!res.ok) throw new Error(res.statusText);
+                    return res.json();
+                })
+                .then((data) => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        setHasRequested(true);
+                    } else {
+                        setHasRequested(false);
                     }
-
-                    fetch(`/api/delivery_request/listing-buyer?userId=${user.user_id}&listingId=${data[0].listing_id}`)
-                    .then((res) => {
-                        if (!res.ok) throw new Error(res.statusText);
-                        return res.json();
-                    })
-                    .then((data) => {
-                        if (Array.isArray(data) && data.length > 0) {
-                            setHasRequested(true);
-                        } else {
-                            setHasRequested(false);
-                        }   
-                    })}
                     
-                    fetch(`/api/user/${data[0].vendor_id}`)
-                    .then((res) => {
-                        if (!res.ok) throw new Error(res.statusText);
-                        return res.json();
-                    })
-                    .then((data) => {
-        
-                        console.log("Vendor : ", data)
-                         setVendor({
-                            username: data[0].username,
-                            rating: parseInt(data[0].rating)
-                        });
+                }) 
+                }
 
-                    })    
+                  
                 
             })
             .catch((err) => console.error("Error fetching products:", err));
@@ -98,10 +82,7 @@ const ProductListing =  () => {
                         // console.log("No request found"); 
                     }
 
-                }) 
-
-                
-                
+            }) 
             }
 
               
@@ -152,29 +133,27 @@ const ProductListing =  () => {
         e.preventDefault();
         
 
-        fetch("/api/direct_message", {
-            mode: "cors",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                sender_id: user.user_id, 
-                receiver_id: product[0].vendor_id, 
-                listing_id: id ,
-                content: text,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("direct message complete");
-            })
-            .catch((err) => {
-              console.error("Error:", err);
-            });
+        // fetch("/api/direct_message", {
+        //     mode: "cors",
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         sender_id: user.user_id, 
+        //         receiver_id: product[0].vendor_id, 
+        //         listing_id: id ,
+        //         content: text,
+        //     }),
+        //   })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         console.log("direct message")
 
-            setText(""); 
-            setMessageSent(true);
+        //     })
+        //     .catch((err) => {
+        //       console.error("Error:", err);
+        //     });
     }
     const handleText = (e) =>{
         setText(e.target.value)
@@ -183,6 +162,106 @@ const ProductListing =  () => {
 
     if(!user){
         return (
+        <>
+        {loading ? (
+            <div>Loading...</div> // Or a spinner, skeleton, etc.
+        ) : (
+
+        <div className="container-prodListing">
+            <div className="left-container">
+                <div className="prod-img-container">
+                    {
+                        product[0].thumbnail ? (
+                            <img src={product[0].thumbnail} alt="product image" />
+                        ) : 
+                        (
+                            <img src={image} alt="product image" />
+                        )
+                    }
+                    
+                </div>
+                <div className="vendor-reviews-container" >
+                    <div className="total-review-container" >
+                        <div className="vendor-username" >Seller: Name here</div>
+                        <div className="total-stars" > stars</div>
+                        <div className="submit-review" >
+                            <button className="btn-create-review"> 
+                                <Link to="/login" >Write a review</Link>
+                            </button>
+                        </div>
+                    </div>
+                
+                    { [...reviews].reverse().map((review) => (
+                        <div className="customer-review-container" key={review.review_id}> 
+                            <div className="customer-stars" >
+                            {[...Array(review.rating)].map((_, i) => (
+                                <StarIcon key={i} style={{ color: '#000' }} />
+                            ))}
+                            </div>
+                            <div className="customer-comment" > 
+                                {review.comment}
+                            </div>
+                            <div className="reviewer-info">
+                                <p className="reviewer-username" >
+                                    Reviwer: {review.username}
+                                </p>
+                                <p className="review-date" >
+                                    Date: {formatDate(review.review_date)}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                    <br/>
+                    <br/>
+                </div>
+
+            </div>
+            <div className="right-container">
+                <div className="prod-price" >
+                    <h2>${product[0].price}</h2>    
+                </div>
+                <div className="prod-title" >
+                    <h3>{product[0].title}</h3>
+                </div>
+                <div className="sendMessage-box">
+                        <div> <strong>Send Seller a Message</strong> </div>
+                        <div className="send-message-container">
+                                <input
+                                    type="text"
+                                    value={text}
+                                    onChange={handleText}
+                                    placeholder="Type a message"
+                                />
+                                <button>
+                                    <Link to="/login" >Send</Link>
+                                </button>
+        
+                        </div>         
+                </div>
+                <div className="deliver-request-box" >
+                    <button>
+                        <Link className="link-btn"  to="/login"> Get Item Delivered</Link> 
+                    </button>
+                        
+                </div>
+                <div className="description-container">
+                    <h2>Description</h2>
+                    <p> <strong>Type:</strong> {product[0].category}</p>
+                    <p> <strong>Condition:</strong> {product[0].conditions}</p>
+                    <p>{product[0].description}</p>
+                </div>
+            </div>
+        </div>
+
+        )}
+       
+        </>
+    )
+
+         
+    }
+ 
+    return (
         <>
         {loading ? (
             <div>Loading...</div> // Or a spinner, skeleton, etc.
@@ -245,122 +324,11 @@ const ProductListing =  () => {
                     <h3>{product[0].title}</h3>
                 </div>
                 <div className="sendMessage-box">
-                        <div> <strong>Send Seller a Message</strong> </div>
-                        <div className="send-message-container">
-                                <input
-                                    type="text"
-                                    value={text}
-                                    onChange={handleText}
-                                    placeholder="Type a message"
-                                />
-                                <button>
-                                    <Link to="/login" >Send</Link>
-                                </button>
-        
-                        </div>         
-                </div>
-                <div className="deliver-request-box" >
-                    <div className="link-btn-container" >
-                        <Link className="link-btn"  to="/login"> Get Item Delivered</Link> 
-                    </div>         
-                </div>
-                <div className="description-container">
-                    <h2>Description</h2>
-                    <p> <strong>Type:</strong> {product[0].category}</p>
-                    <p> <strong>Condition:</strong> {product[0].conditions}</p>
-                    <p>{product[0].description}</p>
-                </div>
-            </div>
-        </div>
-
-        )}
-       
-        </>
-    )
-
-         
-    }
- 
-    return (
-        <>
-        {loading ? (
-            <div>Loading...</div> // Or a spinner, skeleton, etc.
-        ) : (
-
-        <div className="container-prodListing">
-            <div className="left-container">
-                <div className="prod-img-container">
-                    {
-                        product[0].thumbnail ? (
-                            <img src={product[0].thumbnail} alt="product image" />
-                        ) : 
-                        (
-                            <img src={image} alt="product image" />
-                        )
-                    }
-                    
-                </div>
-                <div className="vendor-reviews-container" >
-                    <div className="total-review-container" >
-                        <div className="vendor-username" ><strong>Seller: {vendor.username}</strong></div>
-                        <div className="total-stars" >
-                            {[...Array(vendor.rating)].map((_, i) => (
-                                <StarIcon key={i} style={{ color: '#000' }} />
-                            ))}
-                        </div>
-                        <div className="submit-review" >
-                            { !alreadyReviewed && !isSeller  && (
-                                <>  
-                                <button className="btn-create-review" onClick={() => setShowForm(true)} > Write a review</button>
-                                {
-                                    showForm && (<CreateReviewForm onClose={() => setShowForm(false)} vendorId={product[0].vendor_id}/>)
-                                }
-                                </>
-                            )}
-                            
-                        </div>
-                    </div>
-                
-                    { [...reviews].reverse().map((review) => (
-                        <div className="customer-review-container" key={review.review_id}> 
-                            <div className="customer-stars" >
-                            {[...Array(review.rating)].map((_, i) => (
-                                <StarIcon key={i} style={{ color: '#000' }} />
-                            ))}
-                            </div>
-                            <div className="customer-comment" > 
-                                {review.comment}
-                            </div>
-                            <div className="reviewer-info">
-                                <p className="reviewer-username" >
-                                    Reviwer: {review.username}
-                                </p>
-                                <p className="review-date" >
-                                    Date: {formatDate(review.review_date)}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                    <br/>
-                    <br/>
-                </div>
-
-            </div>
-            <div className="right-container">
-                <div className="prod-price" >
-                    <h2>${product[0].price}</h2>    
-                </div>
-                <div className="prod-title" >
-                    <h3>{product[0].title}</h3>
-                </div>
-                <div className="sendMessage-box">
                     {messageSent ? (
                         <>
-                        <div  > <strong>Message Sent to Seller</strong> </div>
-                        <div className="link-chats">
-                            
-                            <Link to="/chats">See Conversations</Link>
-                             
+                        <div> <strong>Message Sent to Seller</strong> </div>
+                        <div>
+                            See Conversations
                         </div>
                         </>
                     ) : (
@@ -385,11 +353,11 @@ const ProductListing =  () => {
                     {
                         hasRequested ? (
                             <>
-                            <button className="btn-delReq active" >Request Already Sent</button>
+                            <button>Request Already Sent</button>
                             </>
                         ):(
                         <>
-                        <button className="btn-delReq" onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
+                        <button onClick={() => setShowDeliRequest(true)} > Get Item Delivered</button>
                         {
                             showDeliRequest && (<CreateDeliveryRequest onClose={() => setShowDeliRequest(false)} vendorId={product[0].vendor_id} title={product[0].title} listingId={product[0].listing_id} setHasRequested={setHasRequested}/>)
                         }

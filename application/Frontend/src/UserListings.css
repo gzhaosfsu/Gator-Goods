@@ -91,3 +91,13 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.os-back-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 1.5rem; 
+}

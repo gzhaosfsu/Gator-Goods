@@ -136,6 +136,23 @@ router.get('/vendor/:id', async (req, res) => {
     // });
 });
 
+// GET count of sold listings by Vendor ID
+router.get('/vendor/sold/:id', async (req, res) => {
+  try {
+    const [results] = await db.query(
+      'SELECT COUNT(*) AS count FROM listing WHERE vendor_id = ? AND listing_status = "Sold"',
+      [req.params.id]
+    );
+
+    const count = results[0]?.count ?? 0;
+    res.json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 // POST a new product listing
 router.post('/', async (req, res) => {
   try {

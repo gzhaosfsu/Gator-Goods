@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import '../UserListings.css';
-import Header from './Header';
 import Footer from './Footer';
 // import CreateListingForm from './CreateListingForm'
 import TwoStepListingModal from './TwoStepListingModal';
@@ -17,6 +16,10 @@ const UserListings = () => {
   const [listings, setListings] = useState([]);
   
   const navigate = useNavigate();
+
+  const handleListingCreated = (newListing) => {
+    setListings((prev) => [newListing, ...prev]);
+  };
 
   useEffect(() => {
     if (user === null) return; // Wait for user to load
@@ -76,7 +79,7 @@ const UserListings = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ availability: 'Out of Stock', listing_status: 'Delisted' })
+      body: JSON.stringify({ availability: 'Out of Stock', listing_status: 'Sold' })
     })
     .then(res => {
       if (res.ok) {
@@ -93,15 +96,24 @@ const UserListings = () => {
   return (
     
     <div className="listings-page">
-      <Header />
-      <ReturnProfile />
+        <button
+          className="os-back-btn"
+          onClick={() => navigate('/RealUserProfile')}
+        >
+          ← Back to Profile
+        </button>
       <div className="listing-formatting">
         <h1 className="title">Active Listings</h1>
         {/* <div className="button-wrapper"> */}
           <div className="create-button button-wrapper" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></div>
 
-          {showForm && (<TwoStepListingModal onClose={() => setShowForm(false)} />
+          {showForm && (
+            <TwoStepListingModal
+              onClose={() => setShowForm(false)}
+              onListingCreated={handleListingCreated}
+            />
           )}
+
         {/* </div> */}
         <br /> <br /> <br /> <br />
         <div className="listings-container">
