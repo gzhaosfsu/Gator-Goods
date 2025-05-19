@@ -141,7 +141,7 @@ router.get('/vendor/sold/:id', async (req, res) => {
 
   try {
 
-  const [results] = await db.query('SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.vendor_id = ? AND listing.listing_status = "Sold"', [req.params.id]);
+  const [results] = await db.query('SELECT COUNT(*) AS count FROM listing WHERE vendor_id = ? AND listing_status = "Sold"', [req.params.id]);
 
   const listingsWithImages = results.map(row => {
       const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;

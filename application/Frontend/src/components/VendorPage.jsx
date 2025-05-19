@@ -13,6 +13,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
     const [showForm, setShowForm] = useState(false);
     const {user} = useContext(UserContext);
     const [rating, setRating] = useState(null); // placeholder until rating is passed by context
+    const [soldCount, setSoldCount] = useState(0);
     const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
@@ -33,7 +34,19 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
           .catch(err => console.error('Failed to load rating:', err));
       }, [user]);
 
+      useEffect(() => {
+        if (!user) return;
       
+        fetch(`/api/listing/vendor/sold/${user.user_id}`)
+          .then(res => res.json())
+          .then(data => {
+            setSoldCount(Array.isArray(data) ? data.length : 0);
+          })
+          .catch(err => {
+            console.error("Failed to fetch sold items:", err);
+            setSoldCount(0);
+          });
+      }, [user]);
 
       
 
@@ -80,7 +93,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                 <div className="section-inner">
                     <h2 className="section-title stats-title">Stats</h2>
                     <div className="stat-grid">
-                        <StatCard label="Sold Items" value="5" />
+                        <StatCard label="Sold Items" value={soldCount} />
                         <StatCard label="Rating" value={rating !== null ? rating.toFixed(1) : "Loading..." | 500} />
 
                     </div>
