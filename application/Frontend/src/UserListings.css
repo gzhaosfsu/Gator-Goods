@@ -120,6 +120,16 @@
   padding-left: 1rem;
 }
 
+.delivery-info {
+  color: #828282;
+  margin-left: 1rem;
+}
+
+.listing-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 @media screen and (max-width: 768px) {
   .title {
     font-size: 2rem;
@@ -205,7 +215,3 @@
   }
 }
 
-.delivery-info {
-  color: #828282;
-  margin-left: 1rem;
-}
