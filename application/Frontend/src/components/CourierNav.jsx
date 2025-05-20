@@ -3,16 +3,24 @@ import { useParams, useNavigate } from "react-router-dom";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { UserContext } from "../UserContext";
 import mascot from "./images/LogoGG.png";
+import courierMascot from "./images/GG_Delivery_Gator.PNG";
 import "../DeliveryLayout.css";
 import ReturnHome from "./ReturnHome";
 
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
 const PICK_UP_COORDS = {
-    "SFSU Bookstore":      { lat: 37.7224, lng: -122.4784 },
-    "Quickly":             { lat: 37.7226, lng: -122.4788 },
-    "Halal Shop":          { lat: 37.7226, lng: -122.4786 },
-    "Cafe 101":            { lat: 37.7223, lng: -122.4785 },
-    "Nizario's Pizza":     { lat: 37.7225, lng: -122.4783 },
+    "SFSU Bookstore":                   { lat: 37.7224, lng: -122.4784 },
+    "Quickly":                          { lat: 37.7226, lng: -122.4788 },
+    "Halal Shop":                       { lat: 37.7226, lng: -122.4786 },
+    "Cafe 101":                         { lat: 37.7223, lng: -122.4785 },
+    "Nizario's Pizza":                  { lat: 37.7225, lng: -122.4783 },
+    "Station Cafe":                     { lat: 37.7223, lng: -122.4784 },
+    "Cesar Chavez":                     { lat: 37.7225, lng: -122.4786 },
+    "Student Services":                 { lat: 37.7234, lng: -122.4808 },
+    "Library":                          { lat: 37.7214, lng: -122.4778 },
+    "Hensill Hall":                     { lat: 37.7235, lng: -122.4755 },
+    "The Village at Centennial Square": { lat: 37.7233, lng: -122.4820 },
+    "Annex 1":                          { lat: 37.7268, lng: -122.4821 },
 };
 const DROP_OFF_COORDS = {
     "Cesar Chavez":                     { lat: 37.7225, lng: -122.4786 },
@@ -165,7 +173,7 @@ export default function CourierNav() {
         <>
             {loading && (
                 <div className="full-page-loading">
-                    <img src={mascot} alt="Loading Mascot" className="mascot-loader-full" />
+                    <img src={courierMascot} alt="Loading Mascot" className="mascot-loader-full" />
                     <p>Loading your delivery...</p>
                 </div>
             )}

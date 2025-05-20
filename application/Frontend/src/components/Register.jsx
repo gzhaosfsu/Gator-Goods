@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import mascot from './images/LogoGG.png';
+import mascot from './images/GG_Sign_Up.PNG';
 import ReturnHome from "./ReturnHome"; // Update path as needed
 import {UserContext} from "../UserContext";
 
