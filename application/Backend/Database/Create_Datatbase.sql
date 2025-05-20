@@ -104,7 +104,7 @@ CREATE TABLE delivery_instruction (
     quantity INT,
     buyer_special_request TEXT,
     vendor_special_request TEXT,
-    delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered') DEFAULT 'Unassigned',
+    delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered'),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (courier_id) REFERENCES user(user_id),
