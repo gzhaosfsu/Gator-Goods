@@ -98,8 +98,8 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
 
       if (!res.ok) throw new Error('Failed to create listing');
       const responseData = await res.json();
-      // Update the page with the new listing
 
+      // Update the page with the new listing
       console.log('Listing created:', responseData);
       if (onListingCreated) {
         onListingCreated({

@@ -87,11 +87,15 @@ const VendorDeliveryRequest = () => {
 
   const handleDecline = async (requestId) => {
     try {
-      const res = await fetch(`/api/delivery/decline/${requestId}`, {
-        method: 'POST',
-      });
+      const res = await fetch(`/api/delivery_request/${requestId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'Denied'})
+      })
       if (res.ok) {
-        setRequests(prev => prev.filter(req => req.request_id !== requestId));
+        setRequests(prev => prev.filter(req => req.delivery_request_id !== requestId));
       }
     } catch (error) {
       console.error("Error declining request:", error);
@@ -116,11 +120,14 @@ const VendorDeliveryRequest = () => {
               <div className="listing-info">
                 &emsp;
                 <strong>{item.title || "No Title"}</strong>
+                <br /> <br />
                 <p className="delivery-info">
-                  ${item.price} <br />
+                  ${item.price} &emsp; &emsp;
                   Buyer: {item.username}
                 </p>
+                <br />
                 <div className="buttons">
+                &emsp;
                 <button className="accept-btn" onClick={() => handleAcceptClick(item)}>Accept</button>
                   <button className="decline-btn" onClick={() => handleDecline(item.delivery_request_id)}>Decline</button>
                 </div>

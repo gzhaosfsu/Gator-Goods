@@ -2,7 +2,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* padding: 40px; */
     gap: 100px;
     max-width: 3200px;
     width: 100%;
@@ -55,9 +54,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /* align-items: center; */
     margin-top: 20px;
-    align-items: stretch; /* <<< stretch buttons full width */
+    align-items: stretch;
     width: 400px;
     height: 150px;
 }
