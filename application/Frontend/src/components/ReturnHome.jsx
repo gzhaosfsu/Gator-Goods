@@ -32,7 +32,7 @@ const ReturnHome = () => {
             }}
         >
             <button
-                onClick={() => navigate("/courierPage")}
+                onClick={() => navigate("/")}
                 style={hover ? { ...buttonStyle, ...hoverStyle } : buttonStyle}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}

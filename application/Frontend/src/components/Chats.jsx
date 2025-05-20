@@ -19,6 +19,7 @@ const Chats = () => {
     const [uniqueChats, setUniqueChats] = useState([]); // this holds all the unque chats the user has talked to
     const [loading, setLoading] = useState(true); // We have to make sure we are able to fetch all requiremts before it renders the page 
     const [isSelected, setIsSelected] = useState(null); // handles css highlight 
+    const [listingImage, setListingImage] = useState(null);
 
   
 
@@ -73,6 +74,7 @@ useEffect(() => {
                   receiverId: receiverData[0].user_id,
                   productTitle: listingData[0]?.title || "Unknown",
                   listingId: listingData[0]?.product_id,
+                  listingImg: listingData[0]?.thumbnail,
                 };
               } catch (error) {
                 console.error("Error fetching message details:", error);
@@ -101,7 +103,7 @@ useEffect(() => {
 
   
 
-    const handleClick = (receiverId, listingId, receiverUsername, userId) => {
+    const handleClick = (receiverId, listingId, receiverUsername, userId, listingImg) => {
       // This will handle the selected person the user wants to conitnue chatting with and display 
       // their conversation log
 
@@ -111,6 +113,7 @@ useEffect(() => {
       setUsernameReceiver(receiverUsername); 
       setSenderID(userId); 
       setIsChatting(true); 
+      setListingImage(listingImg); 
        
         
 
@@ -134,8 +137,8 @@ useEffect(() => {
                             {
                               
                                 [...uniqueChats].reverse().map((chat) => (
-                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.listingId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername, chat.userId)}>
-                                        <img src={image} alt="imgae" width={65} height={65}/>
+                                    <div className={`individual-chat ${isSelected === chat.listingId ? 'selected' : ''}`} key={chat.listingId} onClick={() =>handleClick(chat.receiverId, chat.listingId, chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername, chat.userId, chat.listingImg)}>
+                                        <img src={chat.listingImg ? chat.listingImg : image} alt="imgae" width={65} height={65}/>
                                         <div className="indv-chat-name">
                                             <h4>
                                                 {chat.userId === currentUserID ? chat.receiverUsername : chat.senderUsername}
@@ -167,6 +170,7 @@ useEffect(() => {
                               listingID={listingID} 
                               usernameReceiver={usernameReceiver} 
                               senderID={senderID} 
+                              listingImage={listingImage}
                             />
                           ) : (
                               <div>

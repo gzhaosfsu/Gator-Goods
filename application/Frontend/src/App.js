@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import {BrowserRouter, Route, Routes, useLocation, matchPath } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
 import Header from './components/Header';
@@ -28,10 +28,13 @@ function AppContent() {
    const hideHeaderRoutes = [
     '/login',
     '/register',
-    '/CourierNav',
-    '/BuyerNav',
+    '/courierNav/:deliveryId',
   ];
-  const showHeader = !hideHeaderRoutes.includes(location.pathname);
+   const shouldHideHeader = hideHeaderRoutes.some((path) =>
+    matchPath({ path, end: true }, location.pathname)
+  );
+
+  const showHeader = !shouldHideHeader;
 
   const [isSearching, setIsSearching] = useState(false); // deals with toggeling the display body if we using Category or Search bar or Both or none 
   const [dataReturned, setDataReturned] = useState([]); // This is returns an array of data from fetch request that Header.jsx deals with
