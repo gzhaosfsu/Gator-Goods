@@ -7,11 +7,6 @@ router.get('/', async (req, res) => {
     try {
         const query = " SELECT listing.*, product.*, user.* FROM listing JOIN product ON listing.product_id = product.product_id JOIN user ON listing.vendor_id = user.user_id WHERE listing.listing_status = 'Active'"
         const [results] = await db.query(query);
-        // db.query(query, (err, results) => {
-        //     if (err) {
-        //         console.error("Database query failed:", err);
-        //         return res.status(500).json({ error: "Database query failed" });
-        //     }
 
 
             const listingsWithImages = results.map(row => {
@@ -27,14 +22,12 @@ router.get('/', async (req, res) => {
                     product_id: row.product_id,
                     category: row.category,
                     conditions: row.conditions,
-                    // image: row.image,
                     vendor_id: row.vendor_id,
                     rating: row.rating,
                     thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
                 };
             });
             res.json(listingsWithImages);
-        // });
     }
     catch (err) {
         console.error("Database query failed:", err);

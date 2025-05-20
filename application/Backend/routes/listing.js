@@ -37,23 +37,17 @@ router.get('/:id', async (req, res) => {
             category: row.category,
             rating: row.rating,
             conditions: row.conditions,
-            // image: row.image,
             vendor_id: row.vendor_id,
             thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
         };
     });
     res.json(listingsWithImages);
-// });
     
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
 
-    }//);
-    // db.query('SELECT * FROM listing WHERE listing_id = ?', [req.params.id], (err, results) => {
-    //     if (err) return res.status(500).json({ error: err });
-    //     res.json(results[0]);
-    // });
+    }
 });
 
 // GET listing by vendor ID and active
@@ -61,7 +55,7 @@ router.get('/active/:id', async (req, res) => {
 
     try {
 
-    const [results] = await db.query('SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.vendor_id = ? AND listing.listing_status = ?', [req.params.id, 'Active']);
+    const [results] = await db.query('SELECT listing.*, product.* FROM listing JOIN product ON listing.product_id = product.product_id WHERE listing.vendor_id = ? AND listing.listing_status = "Active"', [req.params.id]);
 
     const listingsWithImages = results.map(row => {
         const base64Thumbnail = row.thumbnail ? row.thumbnail.toString('base64') : null;
@@ -77,23 +71,17 @@ router.get('/active/:id', async (req, res) => {
             category: row.category,
             rating: row.rating,
             conditions: row.conditions,
-            // image: row.image,
             vendor_id: row.vendor_id,
             thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
         };
     });
     res.json(listingsWithImages);
-// });
     
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
 
-    }//);
-    // db.query('SELECT * FROM listing WHERE listing_id = ?', [req.params.id], (err, results) => {
-    //     if (err) return res.status(500).json({ error: err });
-    //     res.json(results[0]);
-    // });
+    }
 });
 
 // GET listing by Vendor ID
@@ -117,23 +105,17 @@ router.get('/vendor/:id', async (req, res) => {
             category: row.category,
             rating: row.rating,
             conditions: row.conditions,
-            // image: row.image,
             vendor_id: row.vendor_id,
             thumbnail: base64Thumbnail ? `data:thumbnail/png;base64,${base64Thumbnail}` : null
         };
     });
     res.json(listingsWithImages);
-// });
     
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
 
-    }//);
-    // db.query('SELECT * FROM listing WHERE listing_id = ?', [req.params.id], (err, results) => {
-    //     if (err) return res.status(500).json({ error: err });
-    //     res.json(results[0]);
-    // });
+    }
 });
 
 // GET count of sold listings by Vendor ID
@@ -165,7 +147,7 @@ router.post('/', async (req, res) => {
       mimetype,
       price,
       conditions,
-      vendor_id  // now passed from the frontend
+      vendor_id
     } = req.body;
 
     if (!vendor_id) {
@@ -189,9 +171,9 @@ router.post('/', async (req, res) => {
 
     // 2. Insert into listing
     const [listingResult] = await db.query(
-      `INSERT INTO listing (product_id, vendor_id, availability, price, discount, conditions, listing_status, approval_status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [productId, vendor_id, 'In Stock', price, 0.00, conditions, 'Active', 'Pending']
+      `INSERT INTO listing (product_id, vendor_id, availability, price, discount, conditions)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [productId, vendor_id, 'In Stock', price, 0.00, conditions]
     );
 
     res.status(201).json({
