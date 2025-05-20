@@ -108,7 +108,6 @@ const UserListings = () => {
           {showForm && (
             <TwoStepListingModal
               onClose={() => setShowForm(false)}
-              onListingCreated={handleListingCreated}
             />
           )}
         <br /> <br /> <br /> <br />
@@ -117,21 +116,20 @@ const UserListings = () => {
             <div className="listing-card" key={index}>
               <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
               <div className="listing-info">
-                &emsp;
-                <strong>{item.title || "No Title"}</strong>
-                <br /> <br /> <br />
-                <font color="#828282">
-                  
-                  <div>${parseFloat(item.price.toFixed(2))} &emsp;&emsp;&emsp;&emsp; Listed on: {new Date(item.listing_date).toLocaleDateString()}</div>
-                </font>
+                <strong style={{ fontSize: "1.25rem" }}> {item.title || "No Title"}</strong>
+                <br /><br />
+                <p className="delivery-info">
+                  ${parseFloat(item.price.toFixed(2))} &nbsp;&nbsp;&nbsp;&nbsp;
+                  Listed on: {new Date(item.listing_date).toLocaleDateString()}
+                </p>
                 <br />
-                <div className="buttons">
-                &emsp;
+                <div className="buttons right-align">
                   <button className="delete-btn" onClick={() => handleDelete(item.listing_id)}>Delete</button>
                   <button className="sold-btn" onClick={() => handleSold(item.listing_id)}>Mark as Sold</button>
                 </div>
               </div>
             </div>
+
           ))}
         </div>
       </div>
