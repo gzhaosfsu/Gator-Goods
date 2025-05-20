@@ -5,7 +5,6 @@ import { UserContext } from "../UserContext";
 import mascot from "./images/LogoGG.png";
 import courierMascot from "./images/GG_Delivery_Gator.PNG";
 import "../DeliveryLayout.css";
-import ReturnHome from "./ReturnHome";
 
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
 const PICK_UP_COORDS = {
@@ -212,8 +211,6 @@ export default function CourierNav() {
                 <div className="info-content">
                     <button onClick={() => navigate('/courierPage')} >Back to Courier Dashboard</button>
                     <br/>
-                    <ReturnHome onClickto="/courierPage"/>
-
                     {listing && (
                         <div className="product-card">
                             {listing.thumbnail

@@ -6,7 +6,6 @@ const UserDash = ({ username }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const { user, logout } = useContext(UserContext);
-    const courier = useContext(UserContext);
 
     const handleSignOut = () => {
         logout();
