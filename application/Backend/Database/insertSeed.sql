@@ -46,8 +46,8 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) 
 (1, 1, 'Pending', 'Library', 1);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request, delivery_status) VALUES
-(1, 1, 1, 'Library', 'Student Services', 'Leave at front desk.', 'Assigned');
+INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request) VALUES
+(1, 1, 1, 'SFSU Bookstore', 'Student Services', 'Leave at front desk.');
 
 -- Insert Users (IDs 4 to 9)
 INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_verified) VALUES
@@ -110,10 +110,10 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, buyer_specia
 (2, 5, 'Pending', 'Annex 1',"NOthing here", 10);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request, delivery_status) VALUES
-(3, 4, 5, 'Dining Center', 'Cesar Chavez', 'No contact delivery.', 'Picked up'),
-(3, 5, 6, 'Main Library', 'Student Services', '', 'Assigned'),
-(4, 6, 7, 'Rec Center', 'Library', 'Need it before 5pm.', 'Assigned'),
-(4, 1, 8, 'Garage', 'Hensill Hall', '', 'Delivered'),
-(5, 4, 9, 'Bookstore', 'The Village at Centennial Square', 'Deliver after 3pm.', 'Unassigned'),
-(5, 2, 10, 'Student Union', 'Annex 1', 'Careful with scratches.', 'Assigned');
+INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request) VALUES
+(3, 4, 5, 'Quickly', 'Cesar Chavez', 'No contact delivery.'),
+(3, 5, 6, 'Halal Shop', 'Student Services', ''),
+(4, 6, 7, 'Cafe 101', 'Library', 'Need it before 5pm.'),
+(4, 1, 8, 'Nizario\'s Pizza', 'Hensill Hall', ''),
+(5, 4, 9, 'SFSU Bookstore', 'The Village at Centennial Square', 'Deliver after 3pm.'),
+(5, 2, 10, 'Quickly', 'Annex 1', 'Careful with scratches.');
