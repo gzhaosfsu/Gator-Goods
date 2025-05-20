@@ -145,8 +145,8 @@ const UserListings = () => {
                     <button
                       className="delete-btn"
                       onClick={(e) => {
-                        e.preventDefault();      // Prevent <Link> navigation
-                        e.stopPropagation();     // Prevent event bubbling
+                        e.preventDefault();     
+                        e.stopPropagation();    
                         handleDelete(item.listing_id);
                       }}
                     >
