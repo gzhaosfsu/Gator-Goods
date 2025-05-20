@@ -71,7 +71,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Delivery Requests" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
-                        {user?.is_courier === 1 && (
+                        {user?.is_courier === true && (
                             <Card
                                 title="Courier Dashboard"
                                 link="/courierPage"
