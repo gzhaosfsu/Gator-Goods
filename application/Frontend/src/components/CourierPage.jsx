@@ -212,7 +212,7 @@ const CourierPage = () => {
 
                 {section === "InProgress" && (
                   <>
-                    <button className="start-btn" onClick={() => setSelectedDelivery(deliveryReq)}>
+                    <button className="start-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>
                         START DELIVERY
                     </button>
                     <MessageBubble
@@ -289,30 +289,6 @@ const CourierPage = () => {
                     </>
                 ) : (
                     <p>No more delivery requests at this time. Please check again later.</p>
-                )}
-                {selectedDelivery && (
-                    <div className="delivery-popup">
-                        <div className="popup-content">
-                            <button className="close-btn" onClick={() => setSelectedDelivery(null)}>X</button>
-                            <h3>{selectedDelivery.title}</h3>
-                            <img
-                                src={selectedDelivery.image_url}
-                                alt="Delivery"
-                                className="delivery-image"
-                            />
-                            <p><strong>Note from Seller: </strong></p>
-                            <p>{selectedDelivery.sellerNote}</p>
-                            <p><strong>Note from Buyer: </strong></p>
-                            <p>{selectedDelivery.buyerNote}</p>
-                            <div className="popup-details">
-                                <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
-                                <p><strong>Dropoff Address</strong> {selectedDelivery.dropoffAddress}</p>
-                            </div>
-                            <button className="start-btn" onClick={() => handleAcceptDelivery(selectedDelivery)}>Start
-                                Delivery
-                            </button>
-                        </div>
-                    </div>
                 )}
             </div>
             <Footer/>

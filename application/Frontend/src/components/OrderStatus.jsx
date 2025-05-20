@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
+import { Link } from 'react-router-dom';
 import '../OrderStatus.css';
 
 const OrderStatusPage = () => {
@@ -96,7 +97,8 @@ const OrderStatusPage = () => {
         ) : (
           <div className="os-list">
             {orders.map(o => (
-            <div className="os-card" key={o.delivery_request_id}>
+            <Link to={`/productListing/${o.listing_id}`} key={o.delivery_request_id} className="os-card-link">
+            <div className="os-card">
               <div className="os-thumb">
                 {o.product_image ? (
                   <img src={o.product_image} alt={o.product_title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -106,23 +108,23 @@ const OrderStatusPage = () => {
               </div>
               <div className="os-info">
                 <h2 className="os-title">{o.product_title}</h2>
-
+          
                 <p className="os-detail">
                   <strong>Drop-off:</strong> {o.dropoff}
                 </p>
-
+          
                 <p className={`os-detail status ${o.delivery_status.replace(/\s+/g, '-')}`}>
                   <strong>Status:</strong> {o.delivery_status}
                 </p>
-
+          
                 {o.buyer_special_request && (
                   <p className="os-detail">
                     <strong>Note:</strong> {o.buyer_special_request}
                   </p>
                 )}
               </div>
-
             </div>
+          </Link>
           ))}
 
           </div>
