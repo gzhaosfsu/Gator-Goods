@@ -133,6 +133,8 @@ const CourierPage = () => {
             .catch(err => console.error("Error starting delivery:", err));
     };
 
+
+    //THIS NEEDS TROUBLESHOOTING, NEEDS A LOGIN USER ID???
     const handleSendMessage = async (receiver_id, messageText, listing_id) => {
         console.log("handleSendMessage called with:", {receiver_id, messageText, listing_id});
 

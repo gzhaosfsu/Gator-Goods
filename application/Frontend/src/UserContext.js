@@ -2,14 +2,14 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext({
     user: null,
-    login: async (credentials) => {
-    },
-    logout: () => {
-    }
+    login: (credentials) => {},
+    logout: () => {},
+    updateCourier: () => {}
 });
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         // Attempt to hydrate user from localStorage
@@ -23,8 +23,8 @@ export const UserProvider = ({ children }) => {
             // Clear expired or absent session
             localStorage.removeItem('user');
             localStorage.removeItem('sessionExpiry');
-
         }
+        setLoading(true);
     }, []);
 
     const login = (userData) => {
@@ -40,9 +40,14 @@ export const UserProvider = ({ children }) => {
         setUser(null);
     };
 
-    return (
-        <UserContext.Provider value={{ user, login, logout, setUser }}>
+    const updateCourier = (is_courier) => {
+        const update = {...user, is_courier: is_courier};
+        localStorage.setItem('user', JSON.stringify(update));
+        setUser(update);
+    };
+    return loading ? (
+        <UserContext.Provider value={{ user, login, logout, updateCourier }}>
             {children}
         </UserContext.Provider>
-    );
+    ) : null;
 };

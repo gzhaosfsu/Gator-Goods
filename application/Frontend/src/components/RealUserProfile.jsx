@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 
 const RealUserProfile = () => {
 
-  const { user, setUser } = useContext(UserContext);
+    const {user, updateCourier} = useContext(UserContext);
     const [showForm, setShowForm] = useState(false);
     const [isCourier, setIsCourier] = useState(false);
     const navigate = useNavigate();
@@ -49,8 +49,11 @@ const RealUserProfile = () => {
           });
       
           if (response.ok) {
-            // Directly update the user object
-            setUser({ ...user, is_courier: 1 });
+              setIsCourier(true); // Update frontend state
+              updateCourier(true);
+          } else {
+            const text = await response.text();
+            console.error('Failed to update user. Response:', text);
           }
         } catch (err) {
           console.error('Failed to promote to courier:', err);
