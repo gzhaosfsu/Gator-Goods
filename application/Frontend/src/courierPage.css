@@ -99,8 +99,8 @@
   
   .accept-btn {
     padding: 10px;
-    background-color: #3A8659;
     color: white;
+    background-color: #3A8659;
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -169,7 +169,7 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    width: 50%;
+    width: 60%;
   }
 
   .send-btn:hover {
@@ -206,56 +206,14 @@
 
   
   /* CSS for CourierPage Pop-up */
-  .delivery-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .popup-content {
-    background: white;
-    padding: 20px;
-    width: 80%;
-    max-width: 500px;
-    max-height: 80vh; /* Set max height relative to viewport */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border-radius: 10px;
-    text-align: left;
-  }
-  
-  .popup-content h3 {
-    margin-top: 0;
-  }
-  
-  .popup-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
-  }
-  
-  .start-btn{
-    margin-top: 10px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    .start-btn {
+    padding: 10px;
+    color: white;
     font-weight: bold;
-  }
-  
-  .close-btn {
-    margin-top: 10px;
-    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 150px;
   }
   
   .start-btn {
@@ -266,25 +224,57 @@
   .start-btn:hover {
     background-color: #4e40c5;
   }
-  
-  .close-btn {
-    background-color: #ff4d4d;
-    color: white;
-    float: right;
+
+.three-column-layout {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.status-column {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+  /* overflow: hidden; */
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.08);
+}
+
+.status-column h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.scrollable-column {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 0.5rem;
+}
+
+/* stack columns on mobile */
+@media (max-width: 780px) {
+  .three-column-layout {
+    flex-direction: column;
   }
-  
-  .close-btn:hover {
-    background-color: #a30000;
+
+  .status-column {
+    margin-bottom: 1rem;
   }
-  
-  .whoosh-out {
-    animation: slideOut 0.5s ease forwards;
-  }
-  
-  @keyframes slideOut {
-    to {
-      transform: translateX(100%);
-      opacity: 0;
-    }
+}
+
+.comp-btn {
+    padding: 10px;
+    background-color: #BFBDC7;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
   }
   
