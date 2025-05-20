@@ -114,7 +114,12 @@ const VendorDeliveryRequest = () => {
       <div className="listing-formatting">
         <h1 className="title">Delivery Requests</h1>
         <div className="listings-container">
-          {requests.map((item, index) => (
+        {requests.length === 0 ? (
+          <p style={{ fontStyle: "italic", color: "#888", textAlign: "center", marginTop: "2rem" }}>
+            No more delivery requests at this time. Please check again later.
+          </p>
+        ) : (
+          requests.map((item, index) => (
             <div className="listing-card" key={index}>
               <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
               <div className="listing-info">
@@ -127,13 +132,15 @@ const VendorDeliveryRequest = () => {
                 </p>
                 <br />
                 <div className="buttons">
-                &emsp;
-                <button className="accept-btn" onClick={() => handleAcceptClick(item)}>Accept</button>
+                  &emsp;
+                  <button className="accept-btn" onClick={() => handleAcceptClick(item)}>Accept</button>
                   <button className="decline-btn" onClick={() => handleDecline(item.delivery_request_id)}>Decline</button>
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
+
         </div>
       </div>
       {showAcceptModal && selectedRequest && (
