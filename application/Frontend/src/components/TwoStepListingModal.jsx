@@ -11,7 +11,6 @@ const TwoStepListingModal = ({ onClose, onListingCreated }) => {
 
   return (
     <div className="modal-overlay">
-      {/* <div className="modal-content"> */}
         <button className="close-btn" onClick={onClose}>&times;</button>
 
         {step === 1 && (
@@ -27,8 +26,7 @@ const TwoStepListingModal = ({ onClose, onListingCreated }) => {
         )}
 
         {step === 2 && <CreateListingForm onClose={onClose} onListingCreated={onListingCreated} />}
-        {step === 3 && <ExistingProductForm onClose={onClose}/>}
-      {/* </div> */}
+        {step === 3 && <ExistingProductForm onClose={onClose} onListingCreated={onListingCreated} />}
     </div>
   );
 };

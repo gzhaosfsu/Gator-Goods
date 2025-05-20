@@ -13,7 +13,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
 
     const [showForm, setShowForm] = useState(false);
     const {user} = useContext(UserContext);
-    const [rating, setRating] = useState(null); // placeholder until rating is passed by context
+    const [rating, setRating] = useState(null); 
     const [soldCount, setSoldCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
@@ -52,21 +52,10 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
       }, [user, location]);
       
 
-      
-
-
-
-
-    // const [onShift, setOnShift] = React.useState(false);
-    // const toggleOnOffShift = () => {
-    //     setOnShift(prev => !prev);
-    //   };
-
     console.log("are they a courier: ", isCourier);
 
     return (
         <div className="vendorPage">
-          {/* <Header /> */}
           <div className="vendor-formatting">
             {/* Create Listing */}
             <div className="center">
@@ -82,7 +71,7 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                         <Card title="Messages" icon={<MessageIcon style={{ fontSize: 80, color: 'gray' }} />} link="/chats"/>
                         <Card title="Active Listings" icon={<ChecklistIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/userListings" />
                         <Card title="Delivery Requests" icon={<LocalShippingIcon style={{ fontSize: 80, color: 'gray' }}/>} link="/vendorDeliveryRequest"/>
-                        {isCourier === 1 && (
+                        {user?.is_courier === 1 && (
                             <Card
                                 title="Courier Dashboard"
                                 link="/courierPage"
@@ -104,8 +93,6 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
                 </div>
             </section>
         </div>
-        
-        {/* <Footer /> */}
         </div>
     );
 };
@@ -119,22 +106,6 @@ const Card = ({ title, icon, link, className = "" }) => (
     </Link>
   );
 
-// const Card = ({ title, icon, link, className = "", style = {} }) => (
-//     <Link to={link || "#"} className="card">
-//       <div className={`card ${className}`} style={style}>
-//         <span className="card-title">{title}</span>
-//         {icon}
-//       </div>
-//     </Link>
-//   );
-
-    // const Card = ({ title, icon }) => (
-    //     <div className="card">
-    //       <span className="card-title">{title}</span>
-    //       <div className="card-icon">{icon}</div>
-    //     </div>
-    // );
-    
 const StatCard = ({ label, value }) => (
     <div className="stat-card">
         <span className="stat-label">{label}</span>

@@ -135,15 +135,46 @@ router.post('/', async (req, res) => {
 
 // UPDATE a Delivery Request by ID
 router.put('/:id', async (req, res) => {
-    const { buyer_id, vendor_id, status, dropoff, listing_id } = req.body;
-    db.query(
-        'UPDATE delivery_request SET buyer_id = ?, vendor_id = ?, status = ?, dropoff = ?, listing_id = ? WHERE delivery_request_id = ?',
-        [buyer_id, vendor_id, status, dropoff, listing_id, req.params.id],
-        (err) => {
-            if (err) return res.status(500).json({ error: err });
-            res.sendStatus(204);
+    try {
+        const fields = [
+            'buyer_id',
+            'vendor_id',
+            'status',
+            'dropoff',
+            'buyer_special_request',
+            'listing_id'
+        ];
+    
+        const updates = [];
+        const values = [];
+    
+        // Building the SET
+        fields.forEach(field => {
+          if (req.body[field] !== undefined) {
+            updates.push(`${field} = ?`);
+            values.push(req.body[field]);
+          }
+        });
+    
+        if (updates.length === 0) {
+          return res.status(400).json({ error: 'No fields provided for update' });
         }
-    );
+    
+        values.push(req.params.id); // Add the ID for the WHERE
+    
+        const sql = `UPDATE delivery_request SET ${updates.join(', ')} WHERE delivery_request_id = ?`;
+        const [result] = await db.query(sql, values);
+    
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ error: 'Request not found or no changes made' });
+        }
+    
+        res.status(200).json({ message: 'Request updated successfully' });
+    
+      } catch (err) {
+        console.error('Error during DB update:', err);
+        res.status(500).json({ error: err.message });
+      }
 });
 
 // DELETE a Delivery Request by ID

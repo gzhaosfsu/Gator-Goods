@@ -87,11 +87,15 @@ const VendorDeliveryRequest = () => {
 
   const handleDecline = async (requestId) => {
     try {
-      const res = await fetch(`/api/delivery/decline/${requestId}`, {
-        method: 'POST',
-      });
+      const res = await fetch(`/api/delivery_request/${requestId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'Denied'})
+      })
       if (res.ok) {
-        setRequests(prev => prev.filter(req => req.request_id !== requestId));
+        setRequests(prev => prev.filter(req => req.delivery_request_id !== requestId));
       }
     } catch (error) {
       console.error("Error declining request:", error);
@@ -110,23 +114,33 @@ const VendorDeliveryRequest = () => {
       <div className="listing-formatting">
         <h1 className="title">Delivery Requests</h1>
         <div className="listings-container">
-          {requests.map((item, index) => (
+        {requests.length === 0 ? (
+          <p style={{ fontStyle: "italic", color: "#888", textAlign: "center", marginTop: "2rem" }}>
+            No more delivery requests at this time. Please check again later.
+          </p>
+        ) : (
+          requests.map((item, index) => (
             <div className="listing-card" key={index}>
               <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
               <div className="listing-info">
                 &emsp;
                 <strong>{item.title || "No Title"}</strong>
+                <br /> <br />
                 <p className="delivery-info">
-                  ${item.price} <br />
+                  ${item.price} &emsp; &emsp;
                   Buyer: {item.username}
                 </p>
+                <br />
                 <div className="buttons">
-                <button className="accept-btn" onClick={() => handleAcceptClick(item)}>Accept</button>
+                  &emsp;
+                  <button className="accept-btn" onClick={() => handleAcceptClick(item)}>Accept</button>
                   <button className="decline-btn" onClick={() => handleDecline(item.delivery_request_id)}>Decline</button>
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
+
         </div>
       </div>
       {showAcceptModal && selectedRequest && (
