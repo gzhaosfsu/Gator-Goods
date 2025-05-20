@@ -69,10 +69,7 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
       return;
     }
 
-    console.log("Submitting...");
-
     try {
-      console.log("Reading file...");
       const result = await readFileAsDataURL(imageFile);
       const base64Data = result.split(',')[1];
       const mimetype = imageFile.type;
@@ -88,8 +85,6 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
         vendor_id: user.user_id,
       };
 
-      console.log("Heres the payload: ", payload);
-
       const res = await fetch('/api/listing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,7 +95,6 @@ const CreateListingForm = ({ onClose, onListingCreated }) => {
       const responseData = await res.json();
 
       // Update the page with the new listing
-      console.log('Listing created:', responseData);
       if (onListingCreated) {
         onListingCreated({
           listing_id: responseData.listing_id,
