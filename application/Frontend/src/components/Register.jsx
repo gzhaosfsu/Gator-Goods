@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import mascot from './images/LogoGG.png';
 import ReturnHome from "./ReturnHome"; // Update path as needed
+import {UserContext} from "../UserContext";
 
 const Register = () => {
+    const {login} = useContext(UserContext);
     const navigate = useNavigate();
     const [form, setForm] = useState({
         firstName: '',
@@ -12,10 +14,13 @@ const Register = () => {
         username: '',
         password: '',
         confirmPassword: '',
+        TermsandConditions: false,
     });
 
-    const handleChange = (e) =>
-        setForm({...form, [e.target.name]: e.target.value});
+    const handleChange = (e) => {
+        const { name, type, checked, value } = e.target;
+        setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,6 +29,10 @@ const Register = () => {
         }
         if (form.password !== form.confirmPassword) {
             alert("Passwords don't match");
+            return;
+        }
+        if (!form.TermsandConditions) {
+            alert("You must agree to the Terms of Service and User Agreement");
             return;
         }
         try {
@@ -47,7 +56,8 @@ const Register = () => {
                 return;
             }
             alert('Registered successfully!');
-            navigate('/');
+            login(data.user);
+            navigate('/RealUserProfile');
         } catch (error) {
             console.error('Registration error:', error);
             alert('Something went wrong. Please try again.');
@@ -121,6 +131,11 @@ const Register = () => {
   .auth-form-section input:focus:invalid {
     border-color: red;
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  }
+  
+  .auth-form-section input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 10px;
   }
 
   .auth-form-section button {
@@ -281,7 +296,23 @@ const Register = () => {
                                 onChange={handleChange}
                             />
                         </div>
-
+                        <div className="form-group">
+                            <label htmlFor="TermsandConditions">
+                                <input
+                                    type="checkbox"
+                                    name="TermsandConditions"
+                                    id="TermsandConditions"
+                                    checked={form.TermsandConditions}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                I agree to the{' '}
+                                <a href="/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a>{' '}
+                                and{' '}
+                                <a href="/user-agreement" target="_blank" rel="noopener noreferrer">User Agreement</a>
+                                <span className="required-asterisk">*</span>
+                            </label>
+                        </div>
                         <button type="submit">Submit</button>
                     </form>
                     <hr/>

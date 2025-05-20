@@ -69,7 +69,7 @@ router.get('/courier/:id', async (req, res) => {
         );
 
         if (rows.length === 0) {
-            return res.status(404).json({ message: "No delivery instructions found for that courier" });
+            return res.json([]);
         }
 
         // send back the full array of instructions
