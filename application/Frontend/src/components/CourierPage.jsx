@@ -227,14 +227,19 @@ const CourierPage = () => {
                 )}
 
                 {section === "Delivered" && (
+                    <>
+                    <button className="comp-btn">
+                        COMPLETED
+                    </button>
                     <MessageBubble
-                        id={deliveryReq.delivery_id}
-                        buyerId={deliveryReq.buyer_id}
-                        courierId={deliveryReq.courier_id}
-                        handleSendMessage={handleSendMessage}
-                        messageStates={messageStates}
-                        setMessageStates={setMessageStates}
-                    />
+                            id={deliveryReq.delivery_id}
+                            buyerId={deliveryReq.buyer_id}
+                            courierId={deliveryReq.courier_id}
+                            handleSendMessage={handleSendMessage}
+                            messageStates={messageStates}
+                            setMessageStates={setMessageStates}
+                        />
+                    </>
                 )}
             </div>
         </div>
@@ -271,21 +276,32 @@ const CourierPage = () => {
                 {!onShift && <p>Click button to start shift.</p>}
                 {onShift ? (
                     <>
+                <div className="three-column-layout">
+                    <div className="status-column">
                         <h2 style={{ color: "#5f0ebc" }}>Available</h2>
+                        <div className="scrollable-column">
                         {deliveryRequests.length > 0
                             ? deliveryRequests.map(req => renderReq(req, "Available"))
                             : <p>No available deliveries.</p>
-                        }
+                        } </div>
+                    </div>
+                        <div className="status-column">
                         <h2 style={{ color: "#5f0ebc" }}>In Progress</h2>
+                        <div className="scrollable-column">
                         {inProgress.length > 0
                             ? inProgress.map(req => renderReq(req, "InProgress"))
                             : <p>No in-progress deliveries.</p>
-                        }
+                        }</div>
+                    </div>
+                        <div className="status-column">
                         <h2 style={{ color: "#5f0ebc" }}>Delivered</h2>
+                        <div className="scrollable-column">
                         {delivered.length > 0
                             ? delivered.map(req => renderReq(req, "Delivered"))
                             : <p>No completed deliveries.</p>
-                        }
+                        }</div>
+                    </div>
+                    </div>
                     </>
                 ) : (
                     <p>No more delivery requests at this time. Please check again later.</p>
