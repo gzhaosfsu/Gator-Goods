@@ -78,12 +78,12 @@ const Content = ({dataReturned,selectedCategoryName, isSearching, filters = {con
             <div className="products-list">
               {filteredData.map((product) => (
                  <Link className="link-prod" to={`/productListing/${product.listing_id}`} >
-                <div key={product.product_id} className="product-card">
+                <div key={product.product_id} className="product-card-content">
                   {product.thumbnail ? (
                   <img
                     src={product.thumbnail} // Assumes each product has an "image" property
                     alt={product.title}
-                    className="product-image"
+                    className="product-image-content"
                   />
                   ) : ( 
                     <div className="no-image">No Image</div>
