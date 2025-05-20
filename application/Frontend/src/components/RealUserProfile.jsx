@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 
 const RealUserProfile = () => {
 
-    const {user} = useContext(UserContext);
+    const {user, updateCourier} = useContext(UserContext);
     const [showForm, setShowForm] = useState(false);
     const [isCourier, setIsCourier] = useState(false);
     const navigate = useNavigate();
@@ -59,7 +59,8 @@ const RealUserProfile = () => {
           console.log('Heres the user id: ', user.user_id);
       
           if (response.ok) {
-            setIsCourier(true); // Update frontend state
+              setIsCourier(true); // Update frontend state
+              updateCourier(isCourier);
           } else {
             const text = await response.text();
             console.error('Failed to update user. Response:', text);

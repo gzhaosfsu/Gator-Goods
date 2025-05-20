@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         );
 
         if (existing.length > 0) {
-            return res.status(409).json({ message: 'Email or username already exists' });
+            return res.status(409).json({message: 'Email or username already exists'});
         }
 
         // 4. Hash password
@@ -37,6 +37,26 @@ router.post('/', async (req, res) => {
             [firstName, lastName, username, hashedPassword, sfsu_email]
         );
 
+        // 6. Fetch user by email
+        const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', [email]);
+
+        if (rows.length === 0) {
+            return res.status(400).json({message: 'Invalid email or password'});
+        }
+
+        const user = rows[0];
+
+            res.json({
+                message: 'Login successful',
+                user: {
+                    user_id: user.user_id,
+                    username: user.username,
+                    sfsu_email: user.sfsu_email,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    is_courier: user.is_courier
+                }
+            });
         return res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
         console.error('Registration error:', err);

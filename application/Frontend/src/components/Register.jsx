@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import mascot from './images/LogoGG.png';
 import ReturnHome from "./ReturnHome"; // Update path as needed
+import {UserContext} from "../UserContext";
 
 const Register = () => {
+    const {login} = useContext(UserContext);
     const navigate = useNavigate();
     const [form, setForm] = useState({
         firstName: '',
@@ -47,7 +49,8 @@ const Register = () => {
                 return;
             }
             alert('Registered successfully!');
-            navigate('/');
+            login(data.user);
+            navigate('/RealUserProfile');
         } catch (error) {
             console.error('Registration error:', error);
             alert('Something went wrong. Please try again.');

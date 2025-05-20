@@ -2,10 +2,9 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext({
     user: null,
-    login: async (credentials) => {
-    },
-    logout: () => {
-    }
+    login: (credentials) => {},
+    logout: () => {},
+    updateUser: () => {}
 });
 
 export const UserProvider = ({ children }) => {
@@ -40,8 +39,14 @@ export const UserProvider = ({ children }) => {
         setUser(null);
     };
 
+    const updateCourier = (is_courier) => {
+        const update = {...user, is_courier: is_courier};
+        localStorage.setItem('user', JSON.stringify(update));
+        setUser(update);
+    };
+
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, updateCourier }}>
             {children}
         </UserContext.Provider>
     );
