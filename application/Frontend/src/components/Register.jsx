@@ -14,7 +14,7 @@ const Register = () => {
         username: '',
         password: '',
         confirmPassword: '',
-        agreeToTerms: false,
+        TermsandConditions: false,
     });
 
     const handleChange = (e) => {
@@ -31,7 +31,7 @@ const Register = () => {
             alert("Passwords don't match");
             return;
         }
-        if (!form.agreeToTerms) {
+        if (!form.TermsandConditions) {
             alert("You must agree to the Terms of Service and User Agreement");
             return;
         }
@@ -300,9 +300,9 @@ const Register = () => {
                             <label htmlFor="TermsandConditions">
                                 <input
                                     type="checkbox"
-                                    name="agreeToTerms"
-                                    id="agreeToTerms"
-                                    checked={form.agreeToTerms}
+                                    name="TermsandConditions"
+                                    id="TermsandConditions"
+                                    checked={form.TermsandConditions}
                                     onChange={handleChange}
                                     required
                                 />

@@ -7,7 +7,9 @@
     <list default="true" id="ba322e2d-c4ec-40be-a4df-8172b520f635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Backend/routes/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Backend/routes/register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/DeliveryLayout.css" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/DeliveryLayout.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Frontend/src/UserContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/UserContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/CourierNav.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/RealUserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/RealUserProfile.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Frontend/src/components/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/application/Frontend/src/components/Register.jsx" afterDir="false" />
     </list>

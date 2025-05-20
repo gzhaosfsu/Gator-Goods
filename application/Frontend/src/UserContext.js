@@ -4,11 +4,12 @@ export const UserContext = createContext({
     user: null,
     login: (credentials) => {},
     logout: () => {},
-    updateUser: () => {}
+    updateCourier: () => {}
 });
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         // Attempt to hydrate user from localStorage
@@ -22,8 +23,8 @@ export const UserProvider = ({ children }) => {
             // Clear expired or absent session
             localStorage.removeItem('user');
             localStorage.removeItem('sessionExpiry');
-
         }
+        setLoading(true);
     }, []);
 
     const login = (userData) => {
@@ -44,9 +45,9 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(update));
         setUser(update);
     };
-    return (
+    return loading ? (
         <UserContext.Provider value={{ user, login, logout, updateCourier }}>
             {children}
         </UserContext.Provider>
-    );
+    ) : null;
 };

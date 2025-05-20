@@ -8,19 +8,19 @@ import ReturnHome from "./ReturnHome";
 
 const SFSU_COORDS = { lat: 37.7219, lng: -122.4782 };
 const PICK_UP_COORDS = {
-    "SFSU Bookstore":      { lat: 37.7213, lng: -122.4780 },
-    "Quickly":             { lat: 37.7211, lng: -122.4767 },
-    "Halal Shop":          { lat: 37.7217, lng: -122.4774 },
-    "Cafe 101":            { lat: 37.7218, lng: -122.4783 },
-    "Nizario's Pizza":     { lat: 37.7208, lng: -122.4766 },
+    "SFSU Bookstore":      { lat: 37.7224, lng: -122.4784 },
+    "Quickly":             { lat: 37.7226, lng: -122.4788 },
+    "Halal Shop":          { lat: 37.7226, lng: -122.4786 },
+    "Cafe 101":            { lat: 37.7223, lng: -122.4785 },
+    "Nizario's Pizza":     { lat: 37.7225, lng: -122.4783 },
 };
 const DROP_OFF_COORDS = {
-    "Cesar Chavez":                     { lat: 37.7214, lng: -122.4780 },
-    "Student Services":                 { lat: 37.7221, lng: -122.4769 },
-    "Library":                          { lat: 37.7229, lng: -122.4810 },
-    "Hensill Hall":                     { lat: 37.7237, lng: -122.4787 },
-    "The Village at Centennial Square": { lat: 37.7212, lng: -122.4753 },
-    "Annex 1":                          { lat: 37.7208, lng: -122.4770 },
+    "Cesar Chavez":                     { lat: 37.7225, lng: -122.4786 },
+    "Student Services":                 { lat: 37.7234, lng: -122.4808 },
+    "Library":                          { lat: 37.7214, lng: -122.4778 },
+    "Hensill Hall":                     { lat: 37.7235, lng: -122.4755 },
+    "The Village at Centennial Square": { lat: 37.7233, lng: -122.4820 },
+    "Annex 1":                          { lat: 37.7268, lng: -122.4821 },
 };
 
 export default function CourierNav() {
@@ -33,6 +33,8 @@ export default function CourierNav() {
     const [deliveryData, setDeliveryData] = useState(null);
     const [listing, setListing] = useState(null);
     const [status, setStatus] = useState("Assigned");
+    const [courierCoords, setCourierCoords] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyBR4Mm33pFrku02bflPHV_KSL79imyUOg4",
@@ -42,6 +44,14 @@ export default function CourierNav() {
     useEffect(() => {
         if (!user) navigate("/login");
     },[user, navigate]);
+
+    useEffect(() => {
+        if (isLoaded && deliveryData && listing !== null) {
+            const delay = 3000;
+            const timer = setTimeout(() => setLoading(false), delay);
+            return () => clearTimeout(timer);
+        }
+    }, [isLoaded, deliveryData, listing]);
 
     useEffect(() => {
         if (!deliveryId) return;
@@ -82,6 +92,22 @@ export default function CourierNav() {
         })();
     }, [deliveryData]);
 
+    useEffect(() => {
+        const watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                setCourierCoords({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+            },
+            (error) => console.error("Geolocation error:", error),
+            { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+        );
+
+        return () => navigator.geolocation.clearWatch(watchId);
+    }, []);
+
+
     // Send status updates
     const updateStatus = async (newStatus) => {
         try {
@@ -99,6 +125,30 @@ export default function CourierNav() {
             console.error("Update error:", err);
         }
     };
+
+    const handleUnableToDeliver = async () => {
+        if (!window.confirm("Are you sure you can't deliver this item?")) return;
+
+        try {
+            const res = await fetch(`/api/delivery_instruction/${deliveryId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    delivery_status: "Unassigned",
+                    courier_id: null,
+                }),
+            });
+
+            if (!res.ok) throw new Error(res.statusText);
+
+            alert("Delivery marked as unassigned.");
+            navigate("/courierPage");
+        } catch (err) {
+            console.error("Failed to unassign delivery:", err);
+            alert("Could not update delivery.");
+        }
+    };
+
     // Determine which marker & center to show
     const centerCoords = status === "Assigned"
         ? pickupCoords
@@ -112,14 +162,28 @@ export default function CourierNav() {
             : null;
 
     return (
-        <div className="delivery-layout">
+        <>
+            {loading && (
+                <div className="full-page-loading">
+                    <img src={mascot} alt="Loading Mascot" className="mascot-loader-full" />
+                    <p>Loading your delivery...</p>
+                </div>
+            )}
+
+        <div className="delivery-layout" style={{ visibility: loading ? 'hidden' : 'visible' }}>
             <div className="map-panel">
                 {isLoaded ? (
                     <GoogleMap
                         mapContainerStyle={{ width: "100%", height: "100%" }}
-                            center={SFSU_COORDS}
-                            zoom = {17}
+                            center={centerCoords}
+                            zoom = {18}
                     >
+                        {courierCoords && (
+                            <Marker
+                                position={courierCoords}
+                                icon="https://maps.google.com/mapfiles/ms/micons/blue-dot.png"
+                            />
+                        )}
                         <Marker position={pickupCoords}
                                 icon={"https://maps.google.com/mapfiles/ms/micons/shopping.png"}
                         />
@@ -138,7 +202,7 @@ export default function CourierNav() {
                 </div>
 
                 <div className="info-content">
-                    <ReturnHome />
+                    <ReturnHome onClickto="/courierPage"/>
 
                     {listing && (
                         <div className="product-card">
@@ -162,38 +226,34 @@ export default function CourierNav() {
                                 <p>{deliveryData.dropoff}</p>
                             </div>
 
-                            <p className="field"><strong>Status:</strong> {status}</p>
-
+                            <div className="progress-bar">
+                                <span className={status === "Assigned" ? "active" : ""}>Assigned</span>
+                                <span className={status === "Picked Up" ? "active" : ""}>Picked Up</span>
+                                <span className={status === "Delivered" ? "active" : ""}>Delivered</span>
+                            </div>
                             <div className="button-block">
-                                {status === "Assigned" && (
-                                    <button
-                                        className="btn-primary"
-                                        onClick={() => updateStatus("Picked Up")}
-                                    >
-                                        PICKED UP
-                                    </button>
-                                )}
-                                {status === "Picked Up" && (
-                                    <button
-                                        className="btn-success"
-                                        onClick={() => updateStatus("Delivered")}
-                                    >
-                                        FINISH DROP OFF
-                                    </button>
-                                )}
-                                {status === "Delivered" && (
-                                    <button
-                                        className="btn-danger"
-                                        onClick={() => updateStatus("Cancelled")}
-                                    >
-                                        UNABLE TO DELIVER
-                                    </button>
-                                )}
+                            {nextStage && (
+                                <button
+                                    className={status === "Assigned" ? "btn-primary" : "btn-success"}
+                                    onClick={() => updateStatus(nextStage)}
+                                >
+                                    {nextStage === "Picked Up" ? "PICKED UP" : "FINISH DROP OFF"}
+                                </button>
+                            )}
+                            {status === "Assigned" && (
+                                <button
+                                    className="btn-danger"
+                                    onClick={handleUnableToDeliver}
+                                >
+                                    UNABLE TO DELIVER
+                                </button>
+                            )}
                             </div>
                         </>
                     )}
                 </div>
             </div>
         </div>
+        </>
     );
 }

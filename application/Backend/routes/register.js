@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
         );
 
         // 6. Fetch user by email
-        const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', [email]);
+        const [rows] = await db.execute('SELECT * FROM user WHERE sfsu_email = ?', [sfsu_email]);
 
         if (rows.length === 0) {
             return res.status(400).json({message: 'Invalid email or password'});
@@ -57,7 +57,6 @@ router.post('/', async (req, res) => {
                     is_courier: user.is_courier
                 }
             });
-        return res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
         console.error('Registration error:', err);
         res.status(500).json({ message: 'Server error during registration' });

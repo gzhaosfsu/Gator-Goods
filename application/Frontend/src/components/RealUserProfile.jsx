@@ -60,7 +60,7 @@ const RealUserProfile = () => {
       
           if (response.ok) {
               setIsCourier(true); // Update frontend state
-              updateCourier(isCourier);
+              updateCourier(true);
           } else {
             const text = await response.text();
             console.error('Failed to update user. Response:', text);
