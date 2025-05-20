@@ -1,5 +1,4 @@
 import React from "react"
-import Header from "./Header"
 import Footer from "./Footer"
 import portrait from "./images/jaceportrait.png"
 import linkedin from "./images/linkedin1.png"
@@ -11,7 +10,6 @@ const AboutJace= ({}) => {
     return (
         <>
         <div className="App"> 
-                <Header/>
                 <div className="about-container">
                     <div className="about-info">
                         <div className='team-heading-container'>

@@ -41,8 +41,8 @@ export const FeaturedProducts = () => {
       <h2>Shop Our Most Popular Products</h2>
       <div className="featured-products-list">
         {featuredItems.map((item) => (
-        <Link to={`/productListing/${item.listing_id}`} >
-          <div key={item.listing_id} className="featured-product-card">
+        <Link to={`/productListing/${item.listing_id}`} key={item.listing_id} >
+          <div className="featured-product-card">
             {item.thumbnail ? (
               <img 
                 src={item.thumbnail} 

@@ -133,11 +133,11 @@
     cursor: pointer;
 }
 
-/* .deliver-request-box .btn-delReq.active,
+.deliver-request-box .btn-delReq.active,
 .link-btn {
     background-color: #FFDC70;
     color: black;
-} */
+}
 
 .sendMessage-box {
     width: 100%;

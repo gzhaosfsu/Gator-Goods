@@ -6,12 +6,13 @@ import {UserContext} from "../UserContext"
 import {useContext} from "react"
 
 
-const ChatLog = ({receiverID, listingID, usernameReceiver, senderID}) => {
+const ChatLog = ({receiverID, listingID, usernameReceiver, senderID, listingImage}) => {
     const {user} = useContext(UserContext);
     const [conversation, setConversation] = useState([]); // holds the conversation between users 
     const [istyping, setIsTyping] = useState(false); // handles css when user is typing 
     const [drafts, setDrafts] = useState({}); // we want to temporarly store the user conversation when on chat feature only 
 
+        
     
 const getConversation = () => {
 
@@ -110,7 +111,7 @@ const handleInputChange = (e) => {
 return (
     <>
         <div className="chat-log-title">
-            <img src={image} alt="image" width={70} height={70} />
+            <img src={listingImage ? listingImage : image} alt="image" width={70} height={70} />
             <h2 className="reciever-username">{usernameReceiver}</h2>
         </div>
 

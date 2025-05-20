@@ -202,6 +202,8 @@ export default function CourierNav() {
                 </div>
 
                 <div className="info-content">
+                    <button onClick={() => navigate('/courierPage')} >Back to Courier Dashboard</button>
+                    <br/>
                     <ReturnHome onClickto="/courierPage"/>
 
                     {listing && (
