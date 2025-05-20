@@ -133,8 +133,7 @@
     cursor: pointer;
 }
 
-.deliver-request-box .btn-delReq.active,
-.link-btn {
+.deliver-request-box .btn-delReq.active{
     background-color: #FFDC70;
     color: black;
 }
