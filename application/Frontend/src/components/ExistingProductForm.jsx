@@ -50,8 +50,6 @@ const ExistingProductForm = ({ onClose, onListingCreated }) => {
       return;
     }
 
-    console.log("Submitting...");
-
     try {
 
       const payload = {
@@ -60,8 +58,6 @@ const ExistingProductForm = ({ onClose, onListingCreated }) => {
         conditions: formData.condition,  
         vendor_id: user.user_id,
       };
-
-      console.log("Heres the payload: ", payload);
 
       const res = await fetch('/api/listing/existing', {
         method: 'POST',
@@ -83,7 +79,6 @@ const ExistingProductForm = ({ onClose, onListingCreated }) => {
       }
       onClose();
       
-      console.log('Listing created:', responseData);
       alert("Listing created!");
     } catch (error) {
       console.error("Error submitting form:", error);
