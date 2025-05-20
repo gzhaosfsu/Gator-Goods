@@ -8,16 +8,10 @@ import {useNavigate} from "react-router-dom";
 
 const RealUserProfile = () => {
 
-    const {user} = useContext(UserContext);
+    const {user, updateCourier} = useContext(UserContext);
     const [showForm, setShowForm] = useState(false);
     const [isCourier, setIsCourier] = useState(false);
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //   if (user && typeof user.is_courier !== 'undefined' && typeof isCourier === 'undefined') {
-    //      setIsCourier(user.is_courier);
-    //   }
-    // }, [user]);
 
       useEffect(() => {
         const fetchUser = async () => {
@@ -44,28 +38,25 @@ const RealUserProfile = () => {
       }, [user?.user_id]);
       
 
-    const handleBecomeCourier = async () => {
+      
+
+      const handleBecomeCourier = async () => {
         try {
           const response = await fetch(`/api/user/${user.user_id}`, {
             method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                is_courier: true
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ is_courier: true })
           });
-
-          console.log('Heres the user id: ', user.user_id);
       
           if (response.ok) {
-            setIsCourier(true); // Update frontend state
+              setIsCourier(true); // Update frontend state
+              updateCourier(true);
           } else {
             const text = await response.text();
             console.error('Failed to update user. Response:', text);
           }
-        } catch (error) {
-          console.error('Error in PUT request:', error);
+        } catch (err) {
+          console.error('Failed to promote to courier:', err);
         }
       };
 
@@ -77,30 +68,10 @@ const RealUserProfile = () => {
             <UserProfile isCourier={isCourier} handleBecomeCourier={handleBecomeCourier}/>
             {/* Order Status and Become a Courier buttons */}
             <div className="button-row">
-                {/* <button className="order-status-btn">Order Status</button> */}
-                {/* Conditionally render this */}
-                {/* {isCourier && (
-                    <button
-                        className="courier-dashboard-btn"
-                        onClick={() => navigate("/courierPage")}
-                    >
-                        Courier Dashboard
-                    </button>
-                )} */}
-                {/* <button className="become-courier-btn">Become a Courier</button> */}
             </div>
         </div>
 
         <hr className="divider" />
-
-        {/* Create Listing Button */}
-        {/* <div className="center">
-            <button className="create-listing-btn" onClick={() => setShowForm(true)}>
-            Create Listing <span className="plus">+</span>
-            </button>
-
-            {showForm && <CreateListingForm onClose={() => setShowForm(false)} />}
-        </div> */}
 
         {/* Bottom Section (Overview, Stats) */}
         <VendorPage isCourier={isCourier} handleBecomeCourier={handleBecomeCourier}/>

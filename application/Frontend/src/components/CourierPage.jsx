@@ -14,8 +14,7 @@ const CourierPage = () => {
     const [onShift, setOnShift] = React.useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState(null);
 
-    const [deliveryRequests, setDeliveryRequests] = useState([]); //uncomment when using backend data
-    // const [deliveryRequests, setDeliveryRequests] = useState(dummyDeliveryRequests); //dummyData, comment out when using backend data
+    const [deliveryRequests, setDeliveryRequests] = useState([]);
 
     // this is the ID of the delivery request that is being removed
     // which is used to trigger the animation when a delivery request is accepted
@@ -35,10 +34,6 @@ const CourierPage = () => {
         if (!user) navigate("/login");
     },[user, navigate]);
 
-    //UNCOMMENT TO USE BACKEND DATA
-    // This useEffect fetches the delivery requests from the backend when the component mounts or when the onShift state changes
-    // It formats the data to match the expected structure and sets it to the deliveryRequests state
-    // It also handles the case when the onShift state is false, in which case it clears the delivery requests
     useEffect(() => {
         if (onShift) {
             const fetchAvailable = fetch("/api/delivery_instruction/courier/unassigned")
@@ -56,19 +51,19 @@ const CourierPage = () => {
             Promise.all([fetchAvailable, fetchMine])
                 .then(([availableData, myData]) => {
                     const transform = (arr) => arr.map(({
-                                                            delivery_id,
-                                                            pickup,
-                                                            dropoff,
-                                                            seller_special_request,
-                                                            buyer_special_request,
-                                                            buyer_id,
-                                                            vendor_id,
-                                                            courier_id,
-                                                            product_id,
-                                                            quantity,
-                                                            delivery_status,
-                                                            timestamp
-                                                        }) => ({
+                      delivery_id,
+                      pickup,
+                      dropoff,
+                      seller_special_request,
+                      buyer_special_request,
+                      buyer_id,
+                      vendor_id,
+                      courier_id,
+                      product_id,
+                      quantity,
+                      delivery_status,
+                      timestamp
+                  }) => ({
                         delivery_id,
                         pickupAddress: pickup,
                         dropoffAddress: dropoff,
@@ -165,7 +160,6 @@ const CourierPage = () => {
 
             console.log("Message sent successfully");
 
-            // Move this into a new try block
             try {
                 setMessageStates((prev) => {
                     const updated = {...prev, [receiver_id]: true};
@@ -184,10 +178,10 @@ const CourierPage = () => {
     const inProgress = myRequests.filter(r => r.status === 'Assigned' || r.status === 'Picked Up');
     const delivered = myRequests.filter(r => r.status === 'Delivered');
 
-    const renderReq = deliveryReq => (
+    const renderReq = (deliveryReq, section) => (
         <div
             key={deliveryReq.delivery_id}
-            className={`delivery-request ${removingId === deliveryReq.delivery_id ? "whoosh-out" : ""}`}
+            className={`delivery-request`}
         >
             <h3 className="delivery-title">
                 Delivery Request #{deliveryReq.delivery_id}
@@ -199,19 +193,53 @@ const CourierPage = () => {
                     alt="Product Image"
                     className="product-image"
                 />
-                {/* This is where the delivery buttons are-- WIP for Message Buyer */}
                 <div className="delivery-buttons">
-                    <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>ACCEPT</button>
+                {section === "Available" && (
+                    <>
+                        <button className="accept-btn" onClick={() => handleAcceptDelivery(deliveryReq)}>
+                            ACCEPT
+                        </button>
+                        <MessageBubble
+                            id={deliveryReq.delivery_id}
+                            buyerId={deliveryReq.buyer_id}
+                            courierId={deliveryReq.courier_id}
+                            handleSendMessage={handleSendMessage}
+                            messageStates={messageStates}
+                            setMessageStates={setMessageStates}
+                        />
+                    </>
+                )}
+
+                {section === "InProgress" && (
+                  <>
+                    <button className="start-btn" onClick={() => setSelectedDelivery(deliveryReq)}>
+                        START DELIVERY
+                    </button>
+                    <MessageBubble
+                            id={deliveryReq.delivery_id}
+                            buyerId={deliveryReq.buyer_id}
+                            courierId={deliveryReq.courier_id}
+                            handleSendMessage={handleSendMessage}
+                            messageStates={messageStates}
+                            setMessageStates={setMessageStates}
+                        />
+                    </>
+                )}
+
+                {section === "Delivered" && (
                     <MessageBubble
                         id={deliveryReq.delivery_id}
-                        buyerId={deliveryReq.buyer_id} // assuming buyer_id is part of the deliveryReq
+                        buyerId={deliveryReq.buyer_id}
                         courierId={deliveryReq.courier_id}
                         handleSendMessage={handleSendMessage}
                         messageStates={messageStates}
                         setMessageStates={setMessageStates}
                     />
-                </div>
+                )}
             </div>
+        </div>
+
+
             <div className="delivery-details">
                 <p><strong>Delivery Status:</strong>{deliveryReq.status}</p>
                 <p><strong>Pickup at: </strong>{deliveryReq.pickupAddress}</p>
@@ -243,19 +271,19 @@ const CourierPage = () => {
                 {!onShift && <p>Click button to start shift.</p>}
                 {onShift ? (
                     <>
-                        <h3>Available</h3>
+                        <h2 style={{ color: "#5f0ebc" }}>Available</h2>
                         {deliveryRequests.length > 0
-                            ? deliveryRequests.map(renderReq)
+                            ? deliveryRequests.map(req => renderReq(req, "Available"))
                             : <p>No available deliveries.</p>
                         }
-                        <h3>In Progress</h3>
+                        <h2 style={{ color: "#5f0ebc" }}>In Progress</h2>
                         {inProgress.length > 0
-                            ? inProgress.map(renderReq)
+                            ? inProgress.map(req => renderReq(req, "InProgress"))
                             : <p>No in-progress deliveries.</p>
                         }
-                        <h3>Delivered</h3>
+                        <h2 style={{ color: "#5f0ebc" }}>Delivered</h2>
                         {delivered.length > 0
-                            ? delivered.map(renderReq)
+                            ? delivered.map(req => renderReq(req, "Delivered"))
                             : <p>No completed deliveries.</p>
                         }
                     </>
@@ -280,7 +308,7 @@ const CourierPage = () => {
                                 <p><strong>Pickup Address: </strong> {selectedDelivery.pickupAddress}</p>
                                 <p><strong>Dropoff Address</strong> {selectedDelivery.dropoffAddress}</p>
                             </div>
-                            <button className="start-btn" onClick={() => handleStartDelivery(selectedDelivery)}>Start
+                            <button className="start-btn" onClick={() => handleAcceptDelivery(selectedDelivery)}>Start
                                 Delivery
                             </button>
                         </div>

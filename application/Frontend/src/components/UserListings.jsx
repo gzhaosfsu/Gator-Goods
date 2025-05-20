@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import '../UserListings.css';
 import Footer from './Footer';
-// import CreateListingForm from './CreateListingForm'
 import TwoStepListingModal from './TwoStepListingModal';
 import {UserContext} from '../UserContext';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link } from "react-router-dom";
 
 import ReturnProfile from "./ReturnProfile";
 
@@ -104,35 +103,72 @@ const UserListings = () => {
         </button>
       <div className="listing-formatting">
         <h1 className="title">Active Listings</h1>
-        {/* <div className="button-wrapper"> */}
           <div className="create-button button-wrapper" onClick={() => setShowForm(true)}>Create Listing <span className="plus">+</span></div>
 
           {showForm && (
             <TwoStepListingModal
               onClose={() => setShowForm(false)}
-              onListingCreated={handleListingCreated}
             />
           )}
-
-        {/* </div> */}
         <br /> <br /> <br /> <br />
         <div className="listings-container">
           {listings.map((item, index) => (
-            <div className="listing-card" key={index}>
-              {/* <div className="listing-img" /> */}
-              <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
-              <div className="listing-info">
-                <strong>{item.title || "No Title"}</strong>
-                <br /> <br /> <br />
-                <font color="#828282">
-                  <div>${parseFloat(item.price.toFixed(2))} &emsp;&emsp;&emsp;&emsp; Listed on: {new Date(item.listing_date).toLocaleDateString()}</div>
-                </font>
-                <div className="buttons">
-                  <button className="delete-btn" onClick={() => handleDelete(item.listing_id)}>Delete</button>
-                  <button className="sold-btn" onClick={() => handleSold(item.listing_id)}>Mark as Sold</button>
+            // <div className="listing-card" key={index}>
+            //   <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
+            //   <div className="listing-info">
+            //     <strong style={{ fontSize: "1.25rem" }}> {item.title || "No Title"}</strong>
+            //     <br /><br />
+            //     <p className="delivery-info">
+            //       ${parseFloat(item.price.toFixed(2))} &nbsp;&nbsp;&nbsp;&nbsp;
+            //       Listed on: {new Date(item.listing_date).toLocaleDateString()}
+            //     </p>
+            //     <br />
+            //     <div className="buttons right-align">
+            //       <button className="delete-btn" onClick={() => handleDelete(item.listing_id)}>Delete</button>
+            //       <button className="sold-btn" onClick={() => handleSold(item.listing_id)}>Mark as Sold</button>
+            //     </div>
+            //   </div>
+            // </div>
+
+            <Link to={`/productListing/${item.listing_id}`} className="listing-link" key={index}>
+              <div className="listing-card">
+                <img src={item.thumbnail} width="300" height="200" alt="Thumbnail" />
+                <div className="listing-info">
+                  <strong style={{ fontSize: "1.25rem" }}>{item.title || "No Title"}</strong>
+                  <br /><br />
+                  <p className="delivery-info">
+                    ${parseFloat(item.price.toFixed(2))} &nbsp;&nbsp;&nbsp;&nbsp;
+                    Listed on: {new Date(item.listing_date).toLocaleDateString()}
+                  </p>
+                  <br />
+                  <div className="buttons right-align">
+                    <button
+                      className="delete-btn"
+                      onClick={(e) => {
+                        e.preventDefault();     
+                        e.stopPropagation();    
+                        handleDelete(item.listing_id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="sold-btn"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSold(item.listing_id);
+                      }}
+                    >
+                      Mark as Sold
+                    </button>
+
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
+
+
           ))}
         </div>
       </div>

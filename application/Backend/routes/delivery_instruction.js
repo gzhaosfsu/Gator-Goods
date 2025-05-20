@@ -16,15 +16,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        // const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
-        //     `SELECT di.*, p.title AS product_name, p.thumbnail
-        //     FROM delivery_instruction di
-        //     JOIN product p ON di.product_id = p.product_id
-        //     WHERE di.delivery_id = ?`,
-        //     [id]
-        // );
-        // if (rows.length === 0) return res.status(404).json({ message: "Not found" });
-        // res.json(rows[0]);
         const [results] = await db.query(
             `SELECT * 
               FROM delivery_instruction 
@@ -45,7 +36,7 @@ router.get('/:id', async (req, res) => {
 router.get('/buyer/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const [rows] = await db.query( // p.condition isnt in products, its in listings, would need to join listing too
+        const [rows] = await db.query( 
             `SELECT delivery_instruction.*, product.thumbnail FROM delivery_instruction JOIN listing ON listing.listing_id = delivery_instruction.listing_id JOIN product ON product.product_id = listing.product_id WHERE delivery_instruction.buyer_id = ?`,
             [id]
         );
@@ -58,7 +49,7 @@ router.get('/buyer/:id', async (req, res) => {
 
 // GET all delivery instructions that dont have couriers
 router.get('/courier/unassigned', async (req, res) => { 
-    try { // delivery_instruction.delivery_id = 1 AND 
+    try {  
         const [results] = await db.query('SELECT delivery_instruction.*, product.thumbnail FROM delivery_instruction JOIN listing ON listing.listing_id = delivery_instruction.listing_id JOIN product ON product.product_id = listing.product_id WHERE delivery_instruction.delivery_status = "Unassigned"');
         res.json(results);
     } catch (err) {
@@ -78,7 +69,7 @@ router.get('/courier/:id', async (req, res) => {
         );
 
         if (rows.length === 0) {
-            return res.status(404).json({ message: "No delivery instructions found for that courier" });
+            return res.json([]);
         }
 
         // send back the full array of instructions
@@ -94,23 +85,78 @@ router.get('/courier/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const {
         vendor_id, courier_id, buyer_id, product_id,
-        pickup, dropoff, quantity, buyer_special_request,
-        vendor_special_request, delivery_status
+        pickup, dropoff, buyer_special_request,
+        vendor_special_request, delivery_status, listing_id
     } = req.body;
     try {
     const [results] = await db.query(
-        `INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, product_id, pickup, dropoff,
-         quantity, buyer_special_request, vendor_special_request, delivery_status)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff, quantity,
-            buyer_special_request, vendor_special_request, delivery_status]
+        `INSERT INTO delivery_instruction (
+          vendor_id, buyer_id,
+          pickup, dropoff, buyer_special_request,
+          vendor_special_request, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff,
+            buyer_special_request, vendor_special_request, listing_id]
         );
             res.status(201).json({ delivery_id: results.insertId });
     } catch (err) {
         console.error("Error inserting delivery instruction:", err);
         res.status(500).json({ error: err.message });
         }
-    });
+});
+
+// POST a new Delivery Instruction after accepting
+router.post('/request/accept/:id', async (req, res) => {
+    const deliveryRequestId = req.params.id;
+    const { pickup, vendor_special_request, delivery_status } = req.body;
+  
+    try {
+      // Get info from delivery_request by ID
+      const [requests] = await db.query(
+        `SELECT * FROM delivery_request WHERE delivery_request_id = ?`,
+        [deliveryRequestId]
+      );
+  
+      if (requests.length === 0) {
+        return res.status(404).json({ error: "Delivery request not found" });
+      }
+
+      
+  
+      const request = requests[0];
+
+      console.log("Delivery request fetched:", request);
+  
+      // Insert into delivery_instruction
+      const [results] = await db.query(
+        `INSERT INTO delivery_instruction (
+          vendor_id, buyer_id,
+          pickup, dropoff, buyer_special_request,
+          vendor_special_request, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          request.vendor_id,
+          request.buyer_id,
+          pickup,
+          request.dropoff,
+          request.buyer_special_request,
+          vendor_special_request,
+          request.listing_id
+        ]
+      );
+
+      // Update delivery_request status to Approved
+      await db.query(
+        `UPDATE delivery_request SET status = 'Approved' WHERE delivery_request_id = ?`,
+        [deliveryRequestId]
+      );
+  
+      res.status(201).json({ delivery_id: results.insertId });
+    } catch (err) {
+      console.error("Error inserting delivery instruction:", err);
+      res.status(500).json({ error: err.message });
+    }
+  });
 
 // UPDATE a Delivery Instruction by ID
 router.put('/:id', async (req, res) => {

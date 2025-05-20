@@ -2,7 +2,7 @@ import React from "react"
 import SearchBar from "./SearchBar"
 import Categories from "./Categories"
 import logo from "./images/LogoGG.png"
-import {Link } from 'react-router-dom'
+import {Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from "react"
 
 import Filters from "./Filters"
@@ -15,7 +15,7 @@ const Header = ({ setSelectedCategoryName, setDataReturned, setIsSearching, isSe
     const [searchResults, setSearchResults] = useState (""); // holds the search bar text 
     const [selectedCategory, setSelectedCategory] = useState("");// holds the selected category
     const {user} = useContext(UserContext);
-
+    const location = useLocation()
 
     
     // When user clicks on logo it resets the entire values of search bar and categories
@@ -60,7 +60,7 @@ const Header = ({ setSelectedCategoryName, setDataReturned, setIsSearching, isSe
                 )}
             </div>
         </div>
-           {isSearching && (
+            {isSearching && location.pathname === '/' && (
                <div className="filters-row">
                    <Filters
                        filters={filters}

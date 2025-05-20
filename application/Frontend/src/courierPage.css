@@ -241,13 +241,13 @@
     margin: 10px 0;
   }
   
-  .details-btn,
   .start-btn{
     margin-top: 10px;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
   }
   
   .close-btn {
@@ -259,12 +259,12 @@
   }
   
   .start-btn {
-    background-color: #4CAF50;
+    background-color: #231697;
     color: white;
   }
   
   .start-btn:hover {
-    background-color: #218838;
+    background-color: #4e40c5;
   }
   
   .close-btn {
