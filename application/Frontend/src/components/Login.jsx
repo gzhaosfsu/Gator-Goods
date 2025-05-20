@@ -29,7 +29,7 @@ const Login = () => {
             }
             alert('Logged in!');
             login(data.user);
-            navigate('/realUserProfile');
+            navigate('/');
 
             fetch(`/api/user/ ${data.user.user_id}`)
                 .then(res => res.json())

@@ -41,8 +41,6 @@ const UserListings = () => {
           listing_date: new Date(item.listing_date),
           thumbnail: item.thumbnail
         }));
-        console.log('Heres the user id: ', user.user_id);
-        console.log("Rendering item:", cleanedData);
         setListings(cleanedData);
     })
       .catch(err => console.error('Failed to load listings:', err));
@@ -55,7 +53,6 @@ const UserListings = () => {
   // Delete button 
   const handleDelete = async (listing_id) => {
     try {
-      console.log("Attempting to delete listing with ID:", listing_id);
       const response = await fetch(`/api/listing/${listing_id}`, {
         method: 'DELETE',
       });
@@ -72,7 +69,6 @@ const UserListings = () => {
 
   // Update button
   const handleSold = (listing_id) => {
-    console.log("Attempting to mark listing as sold:", listing_id);
     fetch(`/api/listing/${listing_id}`, {
       method: 'PUT',
       headers: {

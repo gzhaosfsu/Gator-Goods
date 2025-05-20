@@ -14,8 +14,6 @@ const UserProfile = ({ isCourier, handleBecomeCourier }) => {
         }
     }, [user, navigate]);
 
-    console.log("are they a courier in userprofile: ", isCourier);
-
     return (
         <>
             <div className='user-profile-container'>

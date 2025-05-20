@@ -31,7 +31,6 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
         fetch(`/api/user/${user.user_id}`)
           .then(res => res.json())
           .then(data => {
-            console.log("Fetched user data:", data);
             setRating(parseFloat(data[0]?.rating) || 1);
           })
           .catch(err => console.error('Failed to load rating:', err));
@@ -50,9 +49,6 @@ const VendorPage = ({ isCourier, handleBecomeCourier }) => {
             setSoldCount(0);
           });
       }, [user, location]);
-      
-
-    console.log("are they a courier: ", isCourier);
 
     return (
         <div className="vendorPage">

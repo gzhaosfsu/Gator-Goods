@@ -42,8 +42,6 @@ const VendorDeliveryRequest = () => {
       return;
     }
 
-    console.log("Fetching delivery requests for vendor ID:", user.user_id);
-
     fetch(`/api/delivery_request/vendor/${user.user_id}`)
       .then(res => res.json())
       .then(data => {
@@ -60,13 +58,10 @@ const VendorDeliveryRequest = () => {
             price: item.price,
             username: item.username
         }));
-        console.log("Rendering item:", cleanedData);
         setRequests(cleanedData);
     })
       .catch(err => console.error("Failed to fetch requests:", err));
   }, [user, navigate]);
-
-  console.log("heres the requests: ", requests);
 
 
   const handleAccept = async (requestId, payload) => {
