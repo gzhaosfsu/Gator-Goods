@@ -93,10 +93,10 @@ router.post('/', async (req, res) => {
         `INSERT INTO delivery_instruction (
           vendor_id, buyer_id,
           pickup, dropoff, buyer_special_request,
-          vendor_special_request, delivery_status, listing_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          vendor_special_request, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [vendor_id, courier_id, buyer_id, product_id, pickup, dropoff,
-            buyer_special_request, vendor_special_request, delivery_status, listing_id]
+            buyer_special_request, vendor_special_request, listing_id]
         );
             res.status(201).json({ delivery_id: results.insertId });
     } catch (err) {
@@ -132,8 +132,8 @@ router.post('/request/accept/:id', async (req, res) => {
         `INSERT INTO delivery_instruction (
           vendor_id, buyer_id,
           pickup, dropoff, buyer_special_request,
-          vendor_special_request, delivery_status, listing_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          vendor_special_request, listing_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [
           request.vendor_id,
           request.buyer_id,
@@ -141,7 +141,6 @@ router.post('/request/accept/:id', async (req, res) => {
           request.dropoff,
           request.buyer_special_request,
           vendor_special_request,
-          delivery_status,
           request.listing_id
         ]
       );
