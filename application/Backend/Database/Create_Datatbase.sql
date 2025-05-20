@@ -6,11 +6,11 @@ USE gator_goods;
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     username VARCHAR(50) UNIQUE,
-    password VARCHAR(255),
-    sfsu_email VARCHAR(100) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    sfsu_email VARCHAR(100) UNIQUE NOT NULL,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
 	image BLOB,
@@ -23,12 +23,11 @@ DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     description TEXT,
-    category ENUM('clothing', 'food', 'furniture', 'electronics', 'stationary', 'books', 'other'),
-    title VARCHAR(100),
-    image BLOB,
+    category ENUM('clothing', 'food', 'furniture', 'electronics', 'stationary', 'books', 'other') NOT NULL,
+    title VARCHAR(100) NOT NULL,
     thumbnail MEDIUMBLOB,
     mimetype VARCHAR(50),
-    vendor_id INT,
+    vendor_id INT NOT NULL,
     FOREIGN KEY (vendor_id) REFERENCES user(user_id)
 );
 
@@ -36,7 +35,7 @@ CREATE TABLE product (
 DROP TABLE IF EXISTS listing;
 CREATE TABLE listing (
     listing_id INT AUTO_INCREMENT PRIMARY KEY,
-    listing_status ENUM('Active', 'Sold', 'Delisted') DEFAULT 'Active',
+    listing_status ENUM('Active', 'Sold', 'Delisted') DEFAULT 'Delisted',
     product_id INT NOT NULL,
     vendor_id INT NOT NULL,
     availability ENUM('In Stock', 'Out of Stock') DEFAULT 'In Stock',
@@ -53,8 +52,8 @@ CREATE TABLE listing (
 DROP TABLE IF EXISTS review;
 CREATE TABLE review (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
-    author_id INT,
-    vendor_id INT,
+    author_id INT NOT NULL,
+    vendor_id INT NOT NULL,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -66,9 +65,9 @@ CREATE TABLE review (
 DROP TABLE IF EXISTS direct_message;
 CREATE TABLE direct_message (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT,
-    receiver_id INT,
-    listing_id INT,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    listing_id INT NOT NULL,
     content TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES user(user_id),
@@ -80,12 +79,12 @@ CREATE TABLE direct_message (
 DROP TABLE IF EXISTS delivery_request;
 CREATE TABLE delivery_request (
     delivery_request_id INT AUTO_INCREMENT PRIMARY KEY,
-    buyer_id INT,
-    vendor_id INT,
-    status ENUM('Pending', 'Approved', 'Denied'),
-    dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
+    buyer_id INT NOT NULL,
+    vendor_id INT NOT NULL,
+    status ENUM('Pending', 'Approved', 'Denied') DEFAULT 'Pending',
+    dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1') NOT NULL,
     buyer_special_request TEXT,
-    listing_id INT,
+    listing_id INT NOT NULL,
     FOREIGN KEY (buyer_id) REFERENCES user(user_id),
     FOREIGN KEY (vendor_id) REFERENCES user(user_id),
     FOREIGN KEY (listing_id) REFERENCES listing(listing_id)
@@ -95,13 +94,12 @@ CREATE TABLE delivery_request (
 DROP TABLE IF EXISTS delivery_instruction;
 CREATE TABLE delivery_instruction (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
-    vendor_id INT,
+    vendor_id INT NOT NULL,
     courier_id INT,
-    buyer_id INT,
-    listing_id INT,
-    pickup TEXT,
+    buyer_id INT NOT NULL,
+    listing_id INT NOT NULL,
+    pickup TEXT NOT NULL,
     dropoff ENUM('Cesar Chavez', 'Student Services', 'Library', 'Hensill Hall', 'The Village at Centennial Square', 'Annex 1'),
-    quantity INT,
     buyer_special_request TEXT,
     vendor_special_request TEXT,
     delivery_status ENUM('Assigned', 'Unassigned', 'Picked Up', 'Delivered') DEFAULT 'Unassigned',

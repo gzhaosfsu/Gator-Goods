@@ -6,24 +6,20 @@ INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_veri
 ('Alice', 'Johnson', 'alicej', 'mypassword', 'alicej@mail.sfsu.edu', FALSE);
 
 -- Insert Products
-INSERT INTO product (description, category, title, image, thumbnail, vendor_id) VALUES
-('Comfortable cotton t-shirt', 'clothing', 'SF State T-Shirt', 	
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
+INSERT INTO product (description, category, title, thumbnail, vendor_id) VALUES
+('Comfortable cotton t-shirt', 'clothing', 'SF State T-Shirt',
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),1),
 ('Laptop with 16GB RAM', 'electronics', 'Gaming Laptop', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),2),
 ('Cellphone', 
     'electronics', 
     'iPhone 12', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     1
 ),
 ('Harry Potter',
     'books',
     'big book',
-    LOAD_FILE('/home/student/Downloads/648BLOBsample.png'),
     LOAD_FILE('/home/student/Downloads/648BLOBsample.png'),
     1
 );
@@ -50,8 +46,8 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, listing_id) 
 (1, 1, 'Pending', 'Library', 1);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, listing_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
-(1, 1, 1, 1, 'Library', 'Student Services', 1, 'Leave at front desk.', 'Assigned');
+INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request, delivery_status) VALUES
+(1, 1, 1, 'Library', 'Student Services', 'Leave at front desk.', 'Assigned');
 
 -- Insert Users (IDs 4 to 9)
 INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_verified) VALUES
@@ -63,24 +59,18 @@ INSERT INTO user (first_name, last_name, username, password, sfsu_email, is_veri
 ('Grace', 'Hopper', 'ghopper', 'debug123', 'ghopper@mail.sfsu.edu', TRUE);
 
 -- Insert Products (IDs 5 to 10)
-INSERT INTO product (description, category, title, image, thumbnail, vendor_id) VALUES
+INSERT INTO product (description, category, title, thumbnail, vendor_id) VALUES
 ('Organic avocado toast', 'food', 'Avocado Toast', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 3),
 ('Noise cancelling headphones', 'electronics', 'Bose QC45', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 3),
 ('Office Chair', 'furniture', 'Ergonomic Chair', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 4),
 ('Bike', 'Other', 'Mountain Bike', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 4),
 ('Calculus Textbook', 'books', 'Calculus Early Transcendentals', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 5),
 ('Water Bottle', 'Other', 'Hydro Flask', 
-	LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'),
     LOAD_FILE('/var/lib/mysql-files/648BLOBsample.png'), 5);
 
 -- Insert Listings (IDs 5 to 10)
@@ -120,10 +110,10 @@ INSERT INTO delivery_request (buyer_id, vendor_id, status, dropoff, buyer_specia
 (2, 5, 'Pending', 'Annex 1',"NOthing here", 10);
 
 -- Insert Delivery Instructions
-INSERT INTO delivery_instruction (vendor_id, courier_id, buyer_id, listing_id, pickup, dropoff, quantity, buyer_special_request, delivery_status) VALUES
-(3, 2, 4, 5, 'Dining Center', 'Cesar Chavez', 1, 'No contact delivery.', 'Picked up'),
-(3, 4, 5, 6, 'Main Library', 'Student Services', 1, '', 'Assigned'),
-(4, 5, 6, 7, 'Rec Center', 'Library', 1, 'Need it before 5pm.', 'Assigned'),
-(4, 6, 1, 8, 'Garage', 'Hensill Hall', 1, '', 'Delivered'),
-(5, 2, 4, 9, 'Bookstore', 'The Village at Centennial Square', 1, 'Deliver after 3pm.', 'Unassigned'),
-(5, 5, 2, 10, 'Student Union', 'Annex 1', 1, 'Careful with scratches.', 'Assigned');
+INSERT INTO delivery_instruction (vendor_id, buyer_id, listing_id, pickup, dropoff, buyer_special_request, delivery_status) VALUES
+(3, 4, 5, 'Dining Center', 'Cesar Chavez', 'No contact delivery.', 'Picked up'),
+(3, 5, 6, 'Main Library', 'Student Services', '', 'Assigned'),
+(4, 6, 7, 'Rec Center', 'Library', 'Need it before 5pm.', 'Assigned'),
+(4, 1, 8, 'Garage', 'Hensill Hall', '', 'Delivered'),
+(5, 4, 9, 'Bookstore', 'The Village at Centennial Square', 'Deliver after 3pm.', 'Unassigned'),
+(5, 2, 10, 'Student Union', 'Annex 1', 'Careful with scratches.', 'Assigned');
