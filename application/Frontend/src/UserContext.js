@@ -44,7 +44,6 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(update));
         setUser(update);
     };
-
     return (
         <UserContext.Provider value={{ user, login, logout, updateCourier }}>
             {children}

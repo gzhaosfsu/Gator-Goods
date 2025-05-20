@@ -14,10 +14,13 @@ const Register = () => {
         username: '',
         password: '',
         confirmPassword: '',
+        agreeToTerms: false,
     });
 
-    const handleChange = (e) =>
-        setForm({...form, [e.target.name]: e.target.value});
+    const handleChange = (e) => {
+        const { name, type, checked, value } = e.target;
+        setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,6 +29,10 @@ const Register = () => {
         }
         if (form.password !== form.confirmPassword) {
             alert("Passwords don't match");
+            return;
+        }
+        if (!form.agreeToTerms) {
+            alert("You must agree to the Terms of Service and User Agreement");
             return;
         }
         try {
@@ -124,6 +131,11 @@ const Register = () => {
   .auth-form-section input:focus:invalid {
     border-color: red;
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  }
+  
+  .auth-form-section input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 10px;
   }
 
   .auth-form-section button {
@@ -284,7 +296,23 @@ const Register = () => {
                                 onChange={handleChange}
                             />
                         </div>
-
+                        <div className="form-group">
+                            <label htmlFor="TermsandConditions">
+                                <input
+                                    type="checkbox"
+                                    name="agreeToTerms"
+                                    id="agreeToTerms"
+                                    checked={form.agreeToTerms}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                I agree to the{' '}
+                                <a href="/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a>{' '}
+                                and{' '}
+                                <a href="/user-agreement" target="_blank" rel="noopener noreferrer">User Agreement</a>
+                                <span className="required-asterisk">*</span>
+                            </label>
+                        </div>
                         <button type="submit">Submit</button>
                     </form>
                     <hr/>
