@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { sendAnalyticsEvent } = require('./analytics');
 const db = require('../DB');
 
 // GET all listings
@@ -176,6 +177,12 @@ router.post('/', async (req, res) => {
       [productId, vendor_id, 'In Stock', price, 0.00, conditions]
     );
 
+    await sendAnalyticsEvent(vendor_id.toString(), 'listing_created', {
+      category,
+      price,
+      title
+    });
+
     res.status(201).json({
       message: 'Listing created',
       listing_id: listingResult.insertId,
@@ -208,6 +215,12 @@ router.post('/existing', async (req, res) => {
        VALUES (?, ?, ?, ?, ?)`,
       [product_id, vendor_id, 'In Stock', price, conditions]
     );
+
+    await sendAnalyticsEvent(vendor_id.toString(), 'listing_created', {
+      category,
+      price,
+      title
+    });
 
     res.status(201).json({
       message: 'Listing created',
